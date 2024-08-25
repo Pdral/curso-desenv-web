@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Comunidade</title>
+    <link rel="stylesheet" href="../views/comunidade.css">
+</head>
+
+<body id="es">
+    <div class="user-icon">
+        <img src="../data/gato.png" alt="User Icon">
+    </div>
+
+    <div class="container">
+
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar...">
+            <button id="filterButton">Filtrar</button>
+            <div class="dropdown-content" id="dropdownContent">
+                <a href="#" onclick="filter('magic')">Magic</a>
+                <a href="#" onclick="filter('pokemon')">Pokémon</a>
+                <a href="#" onclick="filter('star-wars')">Star Wars</a>
+                <a href="#" onclick="filter('one-piece')">One Piece</a>
+                <a href="#" onclick="filter('fab')">Flash and Blood</a>
+                <a href="#" onclick="filter('digimon')">Digimon</a>
+                <a href="#" onclick="filter('dragon-ball')">Dragon Ball</a>
+            </div>
+        </div>
+
+        <a href="post" class="post-link">
+            <div class="post">
+                <div class="post-header">
+                    <img src="../data/cachorro.png" alt="Imagem do Usuário">
+                    <div class="nickname">nickname1</div>
+                </div>
+                <h2>Título do Post 1</h2>
+                <span class="tags">Magic</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <div class="post-actions">
+                    <button class="like"><svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+                    <button class="comment"><svg class="comment-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M21 6h-18v12h14l4 4z"/></svg></button>
+                    <button class="share"><svg class="share-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77l-7.11-4.07c.05-.25.07-.5.07-.78s-.03-.53-.07-.78l7.09-4.05c.54.5 1.24.83 2.01.83 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .28.04.55.1.81l-7.04 4.02c-.54-.5-1.24-.81-2-.81-1.66 0-3 1.34-3 3s1.34 3 3 3c.77 0 1.47-.31 2.01-.81l7.05 4.04c-.06.26-.1.53-.1.81 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </a>
+
+        <div class="post">
+            <div class="post-header">
+                <img src="../data/gato.png" alt="Imagem do Usuário">
+                <div class="nickname">nickname2</div>
+            </div>
+            <h2>Título do Post 2</h2>
+            <span class="tags">Pokémon</span>
+            <p>Curabitur vel tellus at velit consequat faucibus. Vestibulum nec orci eu urna tincidunt auctor.</p>
+            <div class="post-actions">
+                <button class="like"><svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+                <button class="comment"><svg class="comment-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M21 6h-18v12h14l4 4z"/></svg></button>
+                <button class="share"><svg class="share-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M18 16.08c-.76 0-1.44.3-1.96.77l-7.11-4.07c.05-.25.07-.5.07-.78s-.03-.53-.07-.78l7.09-4.05c.54.5 1.24.83 2.01.83 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .28.04.55.1.81l-7.04 4.02c-.54-.5-1.24-.81-2-.81-1.66 0-3 1.34-3 3s1.34 3 3 3c.77 0 1.47-.31 2.01-.81l7.05 4.04c-.06.26-.1.53-.1.81 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="post">
+            <div class="post-header">
+                <img src="../data/panda.png" alt="Imagem do Usuário">
+                <div class="nickname">nickname3</div>
+            </div>
+            <h2>Título do Post 3</h2>
+            <span class="tags">Star Wars</span>
+            <p>Sed nec eros at purus sollicitudin vestibulum ac eu nunc. Donec auctor leo sed mi tristique.</p>
+            <div class="post-actions">
+                <button class="like"><svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+                <button class="comment"><svg class="comment-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M21 6h-18v12h14l4 4z"/></svg></button>
+                <button class="share"><svg class="share-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M18 16.08c-.76 0-1.44.3-1.96.77l-7.11-4.07c.05-.25.07-.5.07-.78s-.03-.53-.07-.78l7.09-4.05c.54.5 1.24.83 2.01.83 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .28.04.55.1.81l-7.04 4.02c-.54-.5-1.24-.81-2-.81-1.66 0-3 1.34-3 3s1.34 3 3 3c.77 0 1.47-.31 2.01-.81l7.05 4.04c-.06.26-.1.53-.1.81 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="chat-icon">
+        <img src="../data/chat.png" alt="Chat Icon">
+    </div>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h4>Mensagens</h4>
+            <span id="closeChat">X</span>
+        </div>
+        <div class="chat-messages">
+            <div class="chat-message">
+                <img src="../data/panda.png" alt="User Avatar">
+                <div class="chat-details">
+                    <span class="nickname">nickname3</span>
+                    <p>Olá! Tudo bem?</p>
+                </div>
+            </div>
+            <div class="chat-message">
+                <img src="../data/cachorro.png" alt="User Avatar">
+                <div class="chat-details">
+                    <span class="nickname">nickname1</span>
+                    <p>Olá! Tudo bem?</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../src/script.js"></script> 
+</body>
+
+</html>
