@@ -53,8 +53,8 @@ header {
 .search-bar button {
     padding: 10px 15px;
     font-size: 16px;
-    background-color: #5322ad;
-    color: #fff;
+    background-color: #fff;
+    color: #5322ad;
     border: none;
     border-radius: 20px;
     cursor: pointer;
@@ -286,4 +286,53 @@ header {
     font-weight: bold;
     margin-bottom: 5px;
     display: block;
+}
+
+.header {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 200px;
+    background-color: #5322ad; 
+    color: #fff;
+    padding: 20px 20px;
+}
+.logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    padding-left: 25px;
+}
+.logo img {
+    height: 75px; /* Ajuste o tamanho do logo conforme necessário */
+    vertical-align: middle;
+    width: 90px;
+}
+.nav {
+    display: flex;
+    gap: 100px;
+    background-color: #9a6eec; 
+    color: #fff;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 15px 50px;
+}
+.nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.5em;
+    transition: color 0.3s ease;
+}
+.nav a:hover {
+    color: #c8e6c9;
+}
+.nav .active {
+    border-bottom: 2px solid #c8e6c9;
+}
+
+.header .login{
+    color: #ffffff;
+    font-size: 1.8em;
+    font-weight: bold;
+    padding-right: 80px;
 }
