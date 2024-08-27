@@ -5,6 +5,7 @@ body, html {
     height: 100%;
 }
 .header {
+    text-align: center;
     display: flex;
     justify-content: start;
     align-items: center;
@@ -19,7 +20,8 @@ body, html {
     padding-left: 25px;
 }
 .logo img {
-    height: 75px; /* Ajuste o tamanho do logo conforme necessário */
+    height: 75px; 
+    border-radius: 50%;
     vertical-align: middle;
     width: 90px;
 }
@@ -46,9 +48,14 @@ body, html {
     border-bottom: 2px solid #c8e6c9;
 }
 
-.header .login{
+.header .acesso{
+    justify-content: start;
+    display: flex;
+}
+
+.header .acesso a{
     color: #ffffff;
-    font-size: 1.8em;
+    font-size: 1.0em;
     font-weight: bold;
     padding-right: 80px;
 }

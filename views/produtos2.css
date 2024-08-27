@@ -22,7 +22,8 @@ body, html {
     padding-left: 25px;
 }
 .logo img {
-    height: 75px; /* Ajuste o tamanho do logo conforme necessário */
+    height: 75px; 
+    border-radius: 50%;
     vertical-align: middle;
     width: 90px;
 }
@@ -71,12 +72,16 @@ body, html {
 .header .perfil{
     justify-content: start;
     display: flex;
-    gap: 200px;
+    gap: 150px;
 }
 
 .header .perfil .moedas .simbolo-moeda{
     font-size: 2.5em;
     margin-bottom: 10px;
+}
+
+.header .perfil .usuario{
+    margin-right: 60px;
 }
 
 .header .perfil .usuario .username{
@@ -217,7 +222,14 @@ body, html {
 
 .carta-a-venda .nome{
     text-align: center;
-    color: #2b2b2b;
+    color: #9a6eec;
+    width: 450px;
+    margin: auto;
+}
+
+.carta-a-venda .input-nome{
+    text-align: center;
+    color: #2B2B2B;
     width: 450px;
     margin: auto;
 }
