@@ -48,11 +48,53 @@ body, html {
     border-bottom: 2px solid #c8e6c9;
 }
 
-.header .login{
+.header .acesso{
+    justify-content: start;
+    display: flex;
+}
+
+.header .acesso a{
     color: #ffffff;
     font-size: 1.8em;
     font-weight: bold;
     padding-right: 80px;
+}
+
+.header .perfil{
+    justify-content: start;
+    display: flex;
+}
+
+.header .perfil{
+    justify-content: start;
+    display: flex;
+    gap: 200px;
+}
+
+.header .perfil .moedas .simbolo-moeda{
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.header .perfil .usuario .username{
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.user-icon {
+    background-color: #ffffff;
+    width: 40px; 
+    margin: auto;
+    height: 40px; 
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.user-icon img {
+    width: 100%; 
+    height: 100%; 
+    border-radius: 50%; 
+    object-fit: cover; 
 }
 
 .publicidade{
@@ -213,7 +255,7 @@ body, html {
     width: 100px;
 }
 
-.perfil{
+.cabecalho{
     display: flex;
     align-items: center;
     padding: 15px;        
@@ -223,11 +265,11 @@ body, html {
     gap: 25px;
 }
 
-.perfil h1{
+.cabecalho h1{
     font-size: 4.0em;
 }
 
-.perfil img{
+.cabecalho img{
     width: 75px;
 }
 

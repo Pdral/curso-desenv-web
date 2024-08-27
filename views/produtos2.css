@@ -49,15 +49,57 @@ body, html {
     border-bottom: 2px solid #0d0e0d;
 }
 
-.header .login{
+.header .acesso{
+    justify-content: start;
+    display: flex;
+}
+
+.header .acesso a{
     color: #2B2B2B;
     font-size: 1.8em;
     font-weight: bold;
     padding-right: 80px;
 }
 
+
+
+.header .perfil{
+    justify-content: start;
+    display: flex;
+}
+
+.header .perfil{
+    justify-content: start;
+    display: flex;
+    gap: 200px;
+}
+
+.header .perfil .moedas .simbolo-moeda{
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.header .perfil .usuario .username{
+    color: #2B2B2B;
+}
+
+.user-icon {
+    width: 40px; 
+    margin: auto;
+    height: 40px; 
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.user-icon img {
+    width: 100%; 
+    height: 100%; 
+    border-radius: 50%; 
+    object-fit: cover; 
+}
+
 .publicidade{
-    text-align: center;
+    text-align: left;
     padding-top: 25px;
 }
 
@@ -152,12 +194,6 @@ body, html {
     background-color: white;
 }
 
-.publicidade{
-    padding: 15px;        
-    width: 80%;
-    margin: 20px auto;
-}
-
 .produto-editavel{
     display: flex;
     justify-content: start;
@@ -232,7 +268,7 @@ body, html {
     background-color: #CBB7F1;
 }
 
-.perfil{
+.cabecalho{
     display: flex;
     align-items: center;
     padding: 15px;        
@@ -242,12 +278,12 @@ body, html {
     gap: 25px;
 }
 
-.perfil h1{
+.cabecalho h1{
     font-size: 4.0em;
     color: #9a6eec;
 }
 
-.perfil img{
+.cabecalho img{
     width: 75px;
 }
 
