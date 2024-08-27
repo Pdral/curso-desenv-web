@@ -21,7 +21,7 @@ body, html {
     padding-left: 25px;
 }
 .logo img {
-    height: 75px; /* Ajuste o tamanho do logo conforme necessário */
+    height: 75px; 
     vertical-align: middle;
     width: 90px;
 }
@@ -56,7 +56,7 @@ body, html {
 }
 
 .publicidade{
-    text-align: center;
+    text-align: left;
     padding-top: 25px;
 }
 
@@ -141,12 +141,6 @@ body, html {
     background-color: #ddd;
 }
 
-.publicidade{
-    padding: 15px;        
-    width: 80%;
-    margin: 20px auto;
-}
-
 .produto-editavel{
     display: flex;
     justify-content: start;
@@ -170,12 +164,21 @@ body, html {
 .carta-a-venda .nome{
     text-align: center;
     color: #424141;
+    width: 450px;
+    margin: auto;
+}
+
+.input-editar{
+    width: 700px;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .frente-verso{
-    margin-left: 275px;
     padding: 10px;
     width: 700px;
+    margin: auto;
     text-align: center;
     display: flex;
     justify-content: space-between;
