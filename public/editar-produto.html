@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Editar</title>
+    <link rel="stylesheet" href="../views/produtos.css">
+</head>
+
+<body id="es">
+
+    <header class="header">
+        <div class="logo">
+            <img src="../data/logo.png" alt="Logo"> 
+            GrapeCards
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar...">
+            <button id="filterButton">Filtrar</button>
+            <div class="dropdown-content" id="dropdownContent">
+                <a href="#" onclick="filter('magic')">Magic</a>
+                <a href="#" onclick="filter('pokemon')">Pokémon</a>
+                <a href="#" onclick="filter('Yu-Gi-Oh')">Yu-Gi-Oh</a>
+            </div>
+        </div>
+        <a href="login.html" class="login">LOGIN</a>
+    </header>
+
+    
+    <nav class="nav">
+        <a href="index.html">Produtos</a>
+        <a href="meus-produtos.html" class="active">Meus Produtos</a>
+        <a href="comunidade.html">Comunidade</a>
+        <a href="editar-produto-dark.html">Dark mode</a>
+    </nav>
+
+    <div class="container">
+        
+        <div class="carta-a-venda">
+            <input class="nome" value="Vampiro Esquelético"></input>
+            <div class="frente-verso">
+                <img class="carta-grande" src="../data/magic1.png">
+                <img class="carta-grande" src="../data/magic-verso.png">
+            </div>
+        </div>
+
+        <div class="descricao-produto">
+            <h3 class="cabecalho-descricao">Vendedor: </h3>
+            <a href="meus-produtos.html">
+                <h3 class="descricao">Carla Mariana</h3>
+            </a>
+        </div>
+
+        <div class="descricao-produto">
+            <h3 class="cabecalho-descricao">Preço: </h3>
+            <input value="R$ 1,27" class="descricao"></input>
+        </div>
+
+        <div class="botoes-editar">
+            <button class="botao-salvar">Salvar</button>
+            <button class="botao-excluir">Excluir</button>
+        </div>
+
+    <script src="../src/script.js"></script> 
+</body>
+
+</html>
