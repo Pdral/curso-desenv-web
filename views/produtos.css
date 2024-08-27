@@ -21,7 +21,7 @@ body, html {
     padding-left: 25px;
 }
 .logo img {
-    height: 75px; 
+    height: 75px; /* Ajuste o tamanho do logo conforme necessário */
     vertical-align: middle;
     width: 90px;
 }
@@ -48,57 +48,15 @@ body, html {
     border-bottom: 2px solid #c8e6c9;
 }
 
-.header .acesso{
-    justify-content: start;
-    display: flex;
-}
-
-.header .acesso a{
+.header .login{
     color: #ffffff;
     font-size: 1.0em;
     font-weight: bold;
     padding-right: 80px;
 }
 
-.header .perfil{
-    justify-content: start;
-    display: flex;
-}
-
-.header .perfil{
-    justify-content: start;
-    display: flex;
-    gap: 200px;
-}
-
-.header .perfil .moedas .simbolo-moeda{
-    font-size: 2.5em;
-    margin-bottom: 10px;
-}
-
-.header .perfil .usuario .username{
-    color: #ffffff;
-    font-weight: bold;
-}
-
-.user-icon {
-    background-color: #ffffff;
-    width: 40px; 
-    margin: auto;
-    height: 40px; 
-    padding: 5px;
-    margin-bottom: 5px;
-}
-
-.user-icon img {
-    width: 100%; 
-    height: 100%; 
-    border-radius: 50%; 
-    object-fit: cover; 
-}
-
 .publicidade{
-    text-align: left;
+    text-align: center;
     padding-top: 25px;
 }
 
@@ -183,6 +141,12 @@ body, html {
     background-color: #ddd;
 }
 
+.publicidade{
+    padding: 15px;        
+    width: 80%;
+    margin: 20px auto;
+}
+
 .produto-editavel{
     display: flex;
     justify-content: start;
@@ -206,21 +170,12 @@ body, html {
 .carta-a-venda .nome{
     text-align: center;
     color: #424141;
-    width: 450px;
-    margin: auto;
-}
-
-.input-editar{
-    width: 700px;
-    margin: auto;
-    text-align: center;
-    margin-bottom: 20px;
 }
 
 .frente-verso{
+    margin-left: 275px;
     padding: 10px;
     width: 700px;
-    margin: auto;
     text-align: center;
     display: flex;
     justify-content: space-between;
@@ -255,7 +210,7 @@ body, html {
     width: 100px;
 }
 
-.cabecalho{
+.perfil{
     display: flex;
     align-items: center;
     padding: 15px;        
@@ -265,11 +220,11 @@ body, html {
     gap: 25px;
 }
 
-.cabecalho h1{
+.perfil h1{
     font-size: 4.0em;
 }
 
-.cabecalho img{
+.perfil img{
     width: 75px;
 }
 

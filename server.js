@@ -124,7 +124,7 @@ http.createServer(function (req, res) {
                 });
                 break;
 
-            case '/esquecersenha':
+            case '/esquecer-senha':
                 fs.readFile("public/esquecersenha.html", (err, data) => {
                     if (err) {
                         console.log(`Error reading file: ${err.message}`);
@@ -137,7 +137,7 @@ http.createServer(function (req, res) {
                 });
                 break;
 
-            case '/esquecersenha-dark':
+            case '/esquecer-senha-dark':
                 fs.readFile("public/esquecersenha-dark.html", (err, data) => {
                     if (err) {
                         console.log(`Error reading file: ${err.message}`);
@@ -150,16 +150,16 @@ http.createServer(function (req, res) {
                 });
                 break;
 
-            case '/form':
-                res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-                res.write("<h2> Os dados que você enviou foram: </h2>");
-                const param = u.searchParams;
-                res.write("<p> nome: " + param.get("nome") + "</p>");
-                res.write("<p> senha: " + param.get("senha") + "</p>");
-                const ad = param.get("add");
-                ad ? res.write("<p> add: " + ad + "</p>") : null;
-                res.end();
-                break;
+            //case '/form':
+                //res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                //res.write("<h2> Os dados que você enviou foram: </h2>");
+                //const param = u.searchParams;
+                //res.write("<p> nome: " + param.get("nome") + "</p>");
+                //res.write("<p> senha: " + param.get("senha") + "</p>");
+                //const ad = param.get("add");
+                //ad ? res.write("<p> add: " + ad + "</p>") : null;
+                //res.end();
+                //break;
 
             case '/comunidade':
                 fs.readFile("public/comunidade.html", (err, data) => {
