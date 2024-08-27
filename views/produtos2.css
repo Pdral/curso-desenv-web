@@ -6,6 +6,7 @@ body, html {
 }
 
 .header {
+    text-align: center;
     display: flex;
     justify-content: start;
     align-items: center;
@@ -45,7 +46,7 @@ body, html {
     color: #c8e6c9;
 }
 .nav .active {
-    border-bottom: 2px solid #c8e6c9;
+    border-bottom: 2px solid #0d0e0d;
 }
 
 .header .login{
@@ -61,24 +62,21 @@ body, html {
 }
 
 .jogo{
+    padding: 15px;        
+    width: 80%;
+    margin: 20px auto;
     text-align: center;
-    padding: 68px;
-    padding-top: 30px;
-    padding-bottom: 30px;
 }
 
-.jogo .nome-jogo{
+.jogo h2{
     text-align: left;
-    font-size: 1.8em;
     padding-bottom: 10px;
     color: #9a6eec;
 }
 
 .jogo .cartas{
     display: flex;
-    gap: 100px;
-    display: flex;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -93,12 +91,6 @@ body, html {
 
 .preco{
     color: #9a6eec;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #2B2B2B;
 }
 
 .container {
@@ -158,4 +150,26 @@ body {
 
 .dropdown-content a:hover {
     background-color: white;
+}
+
+.publicidade{
+    padding: 15px;        
+    width: 80%;
+    margin: 20px auto;
+}
+
+.produto-editavel{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.botao-editar{
+    margin-left: 15px;
+    margin-top: -250px;
+}
+
+.editar{
+    width: 40px;
+    height: 40px;
 }
