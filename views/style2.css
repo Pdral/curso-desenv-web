@@ -1,142 +1,160 @@
 body, html {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    height: 100%;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+}
   
-  /* Estilo para o container das colunas */
-  .container {
-    display: flex;  
-    min-height: 100vh;  
-    font-family: 'Verdana', sans-serif;
-  }
+/* Estilo para o container das colunas */
+.container {
+  display: flex;  
+  min-height: 100vh;  
+  font-family: 'Verdana', sans-serif;
+}
   
   /* Estilo para a coluna da esquerda */
-  .coluna-esquerda {
-    flex: 1;
-    background-color: #CBB7F1;
-  }
-  
-  /* Estilo para a coluna da direita */
-  .coluna-direita {
-    flex: 2;
-    background-color: #2B2B2B;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.coluna-esquerda {
+  flex: 1;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../data/logo.png');
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-position: center; 
+  display: flex;
+  text-align: center; 
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: #fff;
+  flex-direction: column;
+}
 
-  .coluna-direita p {
-    color: #CBB7F1;
-    font-weight: bold;
-    font-size: 20px;
-  }
+.coluna-esquerda h1 {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.coluna-esquerda p {
+  font-weight: bold;
+  font-size: 20px;
+}
   
-  /* Estilo geral do formulário */
+/* Estilo para a coluna da direita */
+.coluna-direita {
+  flex: 2;
+  background-color: #2B2B2B;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.coluna-direita p {
+  color: #CBB7F1;
+  font-weight: bold;
+  font-size: 20px;
+}
+  
+/* Estilo geral do formulário */
+.coluna-direita form {
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+}
+    
+/* Título do formulário */
+.coluna-direita form h1 {
+  margin-bottom: 20px;
+  color: #CBB7F1;
+  text-align: center;
+}
+  
+/* Título do esquecer senha */
+.coluna-direita form h2 {
+  margin-bottom: 20px;
+  color: #CBB7F1;
+  text-align: center;
+}
+    
+/* Estilo dos rótulos (labels) */
+.coluna-direita form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #fff;
+}
+    
+/* Estilo dos campos de entrada */
+.coluna-direita form input[type="text"],
+.coluna-direita form input[type="email"],
+.coluna-direita form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none; 
+  border-bottom: 1px solid #CBB7F1; 
+  box-sizing: border-box;
+  font-size: 23px;
+}
+    
+/* Foco nos campos de entrada */
+.coluna-direita form input[type="text"]:focus,
+.coluna-direita form input[type="email"]:focus,
+.coluna-direita form input[type="password"]:focus {
+  background-color: #C4C4C4;
+  outline: none;
+}
+    
+/* Estilo do botão de envio */
+.coluna-direita form [type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #CBB7F1;
+  border: none;
+  border-radius: 5px;
+  color: #2b2b2b;
+  font-size: 25px;
+  cursor: pointer;
+  font-weight: bold;
+}
+    
+/* Hover e foco no botão de envio */
+.coluna-direita form [type="submit"]:hover,
+.coluna-direita form [type="submit"]:focus {
+  background-color: #C4C4C4;
+  outline: none;
+}
+  
+/* Estilo do link "Esqueceu a senha? e Cadastro" */
+.link {
+  display: inline-block;
+  color: #CBB7F1; 
+  text-decoration: none; 
+  font-size: 18px; 
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;  
+  width: 100%
+}
+  
+/* Estilo do link quando o cursor está sobre ele */
+.link:hover {
+  text-decoration: underline; 
+}
+  
+/* Estilo para o elemento select */
+.coluna-direita form select {
+  border: 1px solid #CBB7F1;
+  border-radius: 5px;
+  background-color: white;
+  font-size: 18px;
+  box-sizing: border-box;
+  color: #5322ad;
+  font-weight: bold;
+}
+  
+/* Responsividade */
+@media (max-width: 1000px) {
   .coluna-direita form {
-      max-width: 500px;
-      width: 100%;
-      padding: 20px;
-      flex-direction: column;
-      align-items: center;
+    padding: 15px;
   }
-    
-    /* Título do formulário */
-    .coluna-direita form h1 {
-      margin-bottom: 20px;
-      color: #CBB7F1;
-      text-align: center;
-    }
-  
-    /* Título do esquecer senha */
-    .coluna-direita form h2 {
-      margin-bottom: 20px;
-      color: #CBB7F1;
-      text-align: center;
-    }
-    
-    /* Estilo dos rótulos (labels) */
-    .coluna-direita form label {
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #fff;
-    }
-    
-    /* Estilo dos campos de entrada */
-    .coluna-direita form input[type="text"],
-    .coluna-direita form input[type="email"],
-    .coluna-direita form input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: none; 
-      border-bottom: 1px solid #CBB7F1; 
-      box-sizing: border-box;
-      font-family: 'Arial', sans-serif;
-      font-size: 23px;
-    }
-    
-    /* Foco nos campos de entrada */
-    .coluna-direita form input[type="text"]:focus,
-    .coluna-direita form input[type="email"]:focus,
-    .coluna-direita form input[type="password"]:focus {
-      background-color: #C4C4C4;
-      outline: none;
-    }
-    
-    /* Estilo do botão de envio */
-    .coluna-direita form [type="submit"] {
-      width: 100%;
-      padding: 10px;
-      background-color: #CBB7F1;
-      border: none;
-      border-radius: 5px;
-      color: #2b2b2b;
-      font-size: 25px;
-      cursor: pointer;
-      font-family: 'Arial', sans-serif;
-      font-weight: bold;
-    }
-    
-    /* Hover e foco no botão de envio */
-    .coluna-direita form [type="submit"]:hover,
-    .coluna-direita form [type="submit"]:focus {
-      background-color: #C4C4C4;
-      outline: none;
-    }
-  
-    /* Estilo do link "Esqueceu a senha?" */
-  .forgot-password {
-    display: inline-block;
-    color: #CBB7F1; 
-    text-decoration: none; 
-    font-size: 18px; 
-    margin-top: 10px;
-    text-align: center;
-    font-weight: bold;
-  }
-  
-  /* Estilo do link quando o cursor está sobre ele */
-  .forgot-password:hover {
-    text-decoration: underline; 
-  }
-  
-  /* Estilo para o elemento select */
-  .coluna-direita form select {
-    border: 1px solid #CBB7F1;
-    border-radius: 5px;
-    background-color: white;
-    font-family: 'Arial', sans-serif;
-    font-size: 18px;
-    box-sizing: border-box;
-    color: #5322ad;
-    font-weight: bold;
-  }
-  
-    /* Responsividade */
-    @media (max-width: 1000px) {
-      .coluna-direita form {
-        padding: 15px;
-      }
-    }
+}
