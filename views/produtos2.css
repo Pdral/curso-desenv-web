@@ -103,7 +103,7 @@ body, html {
 
 .publicidade img{
     width: 100%; 
-    height: 400;
+    height: 400px;
 }
 
 .jogo{
@@ -316,7 +316,6 @@ body, html {
     width: 100px;
     height: 20px;
     text-align: center;
-    padding: none;
     margin-top: 18px;
 }
 
