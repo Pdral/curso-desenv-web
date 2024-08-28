@@ -118,7 +118,15 @@ body, html {
 .jogo .cartas{
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    height: 350px;
+}
+
+.jogo .cartas .produto div{
+    white-space: normal;
+    overflow: hidden; 
+    text-overflow: clip;
+    width: 175px;
 }
 
 .jogo .cartas .carta{
@@ -187,6 +195,7 @@ body, html {
     display: flex;
     justify-content: start;
     align-items: center;
+    width: 250px;
 }
 
 .botao-editar{
