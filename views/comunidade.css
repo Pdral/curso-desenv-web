@@ -77,6 +77,8 @@ body, html {
 .container {
     background-color: #fff;
     padding: 20px;
+    justify-content: center;
+    margin: 0 auto;
 }
 
 .search-bar {
@@ -87,6 +89,7 @@ body, html {
     margin-bottom: 20px;
     width: 80%;
     position: relative;
+    align-items: center;
 }
 
 .search-bar input[type="text"] {
@@ -100,12 +103,35 @@ body, html {
 .search-bar button {
     padding: 10px 15px;
     font-size: 16px;
-    background-color: #fff;
-    color: #5322ad;
+    background-color: #5322ad;
+    color: #fff;
     border: none;
     border-radius: 20px;
     cursor: pointer;
     margin-left: 10px;
+}
+
+#filterButton{
+    background-color: #fff;
+    color: #5322ad;
+}
+
+#postar{
+    width: 90%;
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #5322ad;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+    margin-bottom: 20px;
+    position: relative;
+    align-items: center;
 }
 
 .dropdown-content {
