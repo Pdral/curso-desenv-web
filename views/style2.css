@@ -89,7 +89,7 @@ body, html {
 .coluna-direita form input[type="password"] {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
+  margin: 15px auto;
   border: none; 
   border-bottom: 1px solid #CBB7F1; 
   box-sizing: border-box;
