@@ -311,8 +311,12 @@ body, html {
 .editar-imagem{
     position: absolute;
     top: 60%; 
-    right: 50px; 
-    width: 200px;
+    right: 75px; 
+    width: 100px;
+}
+
+.editar-imagem img{
+    width: 100px;
 }
 
 .descricao-produto{
@@ -421,4 +425,12 @@ input{
     background-color: #CBB7F1;
     color: #000;
     text-align: center;
+}
+
+.jogo .botao-adicionar-div{
+    margin-top: 40px;
+}
+
+.jogo .botao-adicionar-div .botao-adicionar img{
+    width: 100px;
 }

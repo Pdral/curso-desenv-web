@@ -260,7 +260,11 @@ body, html {
     position: absolute;
     top: 60%; 
     right: 50px; 
-    width: 200px;
+    width: 100px;
+}
+
+.editar-imagem img{
+    width: 100px;
 }
 
 .descricao-produto{
