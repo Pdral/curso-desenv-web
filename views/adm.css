@@ -78,6 +78,17 @@ body, html {
     margin-left: 10px;
   }
 
+ #pesquisar2 {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #5322ad;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+
 .container{
     padding: 15px;        
     width: 80%;

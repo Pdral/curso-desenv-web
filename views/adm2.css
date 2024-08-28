@@ -78,7 +78,19 @@ body, html {
     cursor: pointer;
     margin-left: 10px;
     font-weight: bold;
-  }
+}
+
+ #pesquisar2 {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #CBB7F1;
+    color: #2b2b2b;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-weight: bold;
+}
 
 .container{
     padding: 15px;        
