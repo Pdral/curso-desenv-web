@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Post</title>
+    <link rel="stylesheet" href="../views/post.css">
+</head>
+
+<body id="es">
+    <header class="header">
+        <div class="logo">
+            <img src="../data/logo.png" alt="Logo"> 
+            GrapeCards
+        </div>
+        <div class="perfil">
+            <div class="moedas">
+                <div class="simbolo-moeda">
+                    GC$
+                </div>
+                <div class="valor-moeda">
+                    100,00
+                </div>
+            </div>
+            <div class="usuario">
+                <div class="user-icon">
+                    <img src="../data/gato.png" alt="User Icon">
+                </div>
+                <div class="username">
+                    Carla Mariana
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+    <nav class="nav">
+        <a href="/">Produtos</a>
+        <a href="meus-produtos">Meus Produtos</a>
+        <a href="comunidade" class="active">Comunidade</a>
+        <a href="comunidade-dark">Dark mode</a>
+    </nav>
+
+    <!-- <div class="user-icon">
+        <img src="../data/gato.png" alt="User Icon">
+    </div> -->
+    
+    <div class="form">
+        <form id="f2">
+            <h1>Crie seu post!</h1>
+            <p>Título do Post <input type="text" name="titulo"></p>
+            <p>Texto do Post</p>
+            <textarea id="texto" placeholder="Escreva seu post aqui"></textarea>
+            <p>Jogo 
+                <select name="tipo">
+                    <option value="magic">Magic</option>
+                    <option value="pokemon">Pokémon</option>
+                    <option value="yugioh">Yu-Gi-Oh</option>
+                </select>
+            </p>
+            <p><input id="postar" type="submit" value="Postar"></p>
+    </div>
+
+    <script src="../src/script.js"></script> 
+</body>
+
+</html>
