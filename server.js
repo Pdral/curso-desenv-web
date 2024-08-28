@@ -304,6 +304,32 @@ http.createServer(function (req, res) {
                 });
                 break;
 
+                case '/add-produto':
+                    fs.readFile("public/add-produto.html", (err, data) => {
+                        if (err) {
+                            console.log(`Error reading file: ${err.message}`);
+                            res.writeHead(404, { 'Content-Type': 'text/html' });
+                            return res.end("<h1>404 File Not Found</h1>");
+                        }
+                        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                        res.write(data);
+                        return res.end();
+                    });
+                    break;
+
+                    case '/add-produto-dark':
+                        fs.readFile("public/add-produto-dark.html", (err, data) => {
+                            if (err) {
+                                console.log(`Error reading file: ${err.message}`);
+                                res.writeHead(404, { 'Content-Type': 'text/html' });
+                                return res.end("<h1>404 File Not Found</h1>");
+                            }
+                            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                            res.write(data);
+                            return res.end();
+                        });
+                        break;
+
             //----------------------------------------------------------------- Outros recursos
 
             case '/favicon.ico':

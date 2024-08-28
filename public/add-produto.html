@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Editar</title>
-    <link rel="stylesheet" href="../views/produtos2.css">
+    <title>Adicionar</title>
+    <link rel="stylesheet" href="../views/produtos.css">
 </head>
 
 <body id="es">
@@ -36,22 +36,19 @@
 
     
     <nav class="nav">
-        <a href="dark">Produtos</a>
-        <a href="meus-produtos-dark" class="active">Meus Produtos</a>
-        <a href="comunidade-dark">Comunidade</a>
-        <a href="editar-produto">White mode</a>
+        <a href="/">Produtos</a>
+        <a href="meus-produtos" class="active">Meus Produtos</a>
+        <a href="comunidade">Comunidade</a>
+        <a href="add-produto-dark">Dark mode</a>
     </nav>
 
     <div class="container">
         
         <div class="carta-a-venda">
             <div class="input-editar">
-                <input class="input-nome" value="Vampiro Esquelético"></input>
+                <input class="nome" value="Nome da carta"></input>
             </div>
-            <div class="frente-verso">
-                <img class="carta-grande" src="../data/magic1.png">
-                <img class="carta-grande" src="../data/magic-verso.png">
-            </div>
+            <div class="frente-verso"></div>
             <a class="editar-imagem" href="">
                 <img src="../data/editar.png">
             </a>
@@ -66,12 +63,11 @@
 
         <div class="descricao-produto">
             <h3 class="cabecalho-descricao">Preço: </h3>
-            <input value="GC$ 1,27"></input>
+            <input value="GC$ 0,00" class="descricao"></input>
         </div>
 
         <div class="botoes-editar">
-            <button class="botao-salvar">Salvar</button>
-            <button class="botao-excluir">Excluir</button>
+            <button class="botao-salvar">Criar</button>
         </div>
 
     <script src="../src/script.js"></script> 
