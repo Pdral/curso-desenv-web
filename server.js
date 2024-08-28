@@ -124,7 +124,7 @@ http.createServer(function (req, res) {
                 });
                 break;
 
-            case '/esquecersenha':
+            case '/esquecer-senha':
                 fs.readFile("public/esquecersenha.html", (err, data) => {
                     if (err) {
                         console.log(`Error reading file: ${err.message}`);
@@ -137,7 +137,7 @@ http.createServer(function (req, res) {
                 });
                 break;
 
-            case '/esquecersenha-dark':
+            case '/esquecer-senha-dark':
                 fs.readFile("public/esquecersenha-dark.html", (err, data) => {
                     if (err) {
                         console.log(`Error reading file: ${err.message}`);
@@ -150,16 +150,16 @@ http.createServer(function (req, res) {
                 });
                 break;
 
-            case '/form':
-                res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-                res.write("<h2> Os dados que você enviou foram: </h2>");
-                const param = u.searchParams;
-                res.write("<p> nome: " + param.get("nome") + "</p>");
-                res.write("<p> senha: " + param.get("senha") + "</p>");
-                const ad = param.get("add");
-                ad ? res.write("<p> add: " + ad + "</p>") : null;
-                res.end();
-                break;
+            //case '/form':
+                //res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                //res.write("<h2> Os dados que você enviou foram: </h2>");
+                //const param = u.searchParams;
+                //res.write("<p> nome: " + param.get("nome") + "</p>");
+                //res.write("<p> senha: " + param.get("senha") + "</p>");
+                //const ad = param.get("add");
+                //ad ? res.write("<p> add: " + ad + "</p>") : null;
+                //res.end();
+                //break;
 
             case '/comunidade':
                 fs.readFile("public/comunidade.html", (err, data) => {
@@ -303,6 +303,136 @@ http.createServer(function (req, res) {
                     return res.end();
                 });
                 break;
+
+            case '/criar-post':
+                fs.readFile("public/criar-post.html", (err, data) => {
+                    if (err) {
+                        console.log(`Error reading file: ${err.message}`);
+                        res.writeHead(404, { 'Content-Type': 'text/html' });
+                        return res.end("<h1>404 File Not Found</h1>");
+                    }
+                    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                    res.write(data);
+                    return res.end();
+                });
+                break;
+
+            case '/criar-post-dark':
+            fs.readFile("public/criar-post-dark.html", (err, data) => {
+                if (err) {
+                    console.log(`Error reading file: ${err.message}`);
+                    res.writeHead(404, { 'Content-Type': 'text/html' });
+                    return res.end("<h1>404 File Not Found</h1>");
+                }
+                res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                res.write(data);
+                return res.end();
+            });
+            break;
+
+            case '/add-produto':
+                fs.readFile("public/add-produto.html", (err, data) => {
+                    if (err) {
+                        console.log(`Error reading file: ${err.message}`);
+                        res.writeHead(404, { 'Content-Type': 'text/html' });
+                        return res.end("<h1>404 File Not Found</h1>");
+                    }
+                    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                    res.write(data);
+                    return res.end();
+                });
+                break;
+
+                case '/add-produto-dark':
+                    fs.readFile("public/add-produto-dark.html", (err, data) => {
+                        if (err) {
+                            console.log(`Error reading file: ${err.message}`);
+                            res.writeHead(404, { 'Content-Type': 'text/html' });
+                            return res.end("<h1>404 File Not Found</h1>");
+                        }
+                        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                        res.write(data);
+                        return res.end();
+                    });
+                    break;
+
+                case '/adm':
+                    fs.readFile("public/adm.html", (err, data) => {
+                        if (err) {
+                            console.log(`Error reading file: ${err.message}`);
+                            res.writeHead(404, { 'Content-Type': 'text/html' });
+                            return res.end("<h1>404 File Not Found</h1>");
+                        }
+                        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                        res.write(data);
+                        return res.end();
+                    });
+                    break;
+
+                case '/adm-dark':
+                    fs.readFile("public/adm-dark.html", (err, data) => {
+                        if (err) {
+                            console.log(`Error reading file: ${err.message}`);
+                            res.writeHead(404, { 'Content-Type': 'text/html' });
+                            return res.end("<h1>404 File Not Found</h1>");
+                        }
+                        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                        res.write(data);
+                        return res.end();
+                    });
+                    break;
+
+                 case '/editar-usuario':
+                    fs.readFile("public/editar-usuario.html", (err, data) => {
+                        if (err) {
+                            console.log(`Error reading file: ${err.message}`);
+                            res.writeHead(404, { 'Content-Type': 'text/html' });
+                            return res.end("<h1>404 File Not Found</h1>");
+                        }
+                        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                        res.write(data);
+                        return res.end();
+                    });
+                    break;
+                
+                    case '/editar-usuario-dark':
+                    fs.readFile("public/editar-usuario-dark.html", (err, data) => {
+                        if (err) {
+                            console.log(`Error reading file: ${err.message}`);
+                            res.writeHead(404, { 'Content-Type': 'text/html' });
+                            return res.end("<h1>404 File Not Found</h1>");
+                        }
+                        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                        res.write(data);
+                        return res.end();
+                    });
+                    break;
+
+                    case '/editar-jogo':
+                        fs.readFile("public/editar-jogo.html", (err, data) => {
+                            if (err) {
+                                console.log(`Error reading file: ${err.message}`);
+                                res.writeHead(404, { 'Content-Type': 'text/html' });
+                                return res.end("<h1>404 File Not Found</h1>");
+                            }
+                            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                            res.write(data);
+                            return res.end();
+                        });
+                        break;
+                    
+                        case '/editar-jogo-dark':
+                        fs.readFile("public/editar-jogo-dark.html", (err, data) => {
+                            if (err) {
+                                console.log(`Error reading file: ${err.message}`);
+                                res.writeHead(404, { 'Content-Type': 'text/html' });
+                                return res.end("<h1>404 File Not Found</h1>");
+                            }
+                            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+                            res.write(data);
+                            return res.end();
+                        });
+                        break;
 
             //----------------------------------------------------------------- Outros recursos
 

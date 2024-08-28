@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 
 <head>
     <meta charset="utf-8">
@@ -14,43 +14,47 @@
             <img src="../data/logo.png" alt="Logo"> 
             GrapeCards
         </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Buscar...">
-            <button id="filterButton">Filtrar</button>
-            <div class="dropdown-content" id="dropdownContent">
-                <a href="#" onclick="filter('magic')">Magic</a>
-                <a href="#" onclick="filter('pokemon')">Pokémon</a>
-                <a href="#" onclick="filter('Yu-Gi-Oh')">Yu-Gi-Oh</a>
+        <div class="perfil">
+            <div class="moedas">
+                <div class="simbolo-moeda">
+                    GC$
+                </div>
+                <div class="valor-moeda">
+                    100,00
+                </div>
             </div>
-        </div>
-        <div class="acesso">
-            <div class="login">
-                <a href="login.html" class="login">LOGIN</a>
-            </div>
-            <div class="cadastro">
-                <a href="cadastro.html" class="cadastro">CADASTRO</a>
+            <div class="usuario">
+                <div class="user-icon">
+                    <img src="../data/gato.png" alt="User Icon">
+                </div>
+                <div class="username">
+                    Carla Mariana
+                </div>
             </div>
         </div>
     </header>
 
     
     <nav class="nav">
-        <a href="index-dark.html">Produtos</a>
-        <a href="meus-produtos-dark.html" class="active">Meus Produtos</a>
-        <!-- <a href="comunidade.html">Comunidade</a> -->
-        <a href="editar-produto.html">White mode</a>
+        <a href="dark">Produtos</a>
+        <a href="meus-produtos-dark" class="active">Meus Produtos</a>
+        <a href="comunidade-dark">Comunidade</a>
+        <a href="editar-produto">White mode</a>
     </nav>
 
     <div class="container">
         
         <div class="carta-a-venda">
             <div class="input-editar">
-                <input class="nome" value="Vampiro Esquelético"></input>
+                <input class="input-nome" value="Vampiro Esquelético">
             </div>
-            <div class="frente-verso">
-                <img class="carta-grande" src="../data/magic1.png">
-                <img class="carta-grande" src="../data/magic-verso.png">
+            <div class="frente-verso-add">
+                <img class="carta-grande" src="../data/magic1.png" alt="Frente da carta">
+                <img class="carta-grande" src="../data/magic-verso.png" alt="Verso da carta">
             </div>
+            <a class="editar-imagem" href="">
+                <img src="../data/editar-dark.png" alt="Botão de editar">
+            </a>
         </div>
 
         <div class="descricao-produto">
@@ -62,13 +66,14 @@
 
         <div class="descricao-produto">
             <h3 class="cabecalho-descricao">Preço: </h3>
-            <input value="GC$ 1,27"></input>
+            <input value="GC$ 1,27">
         </div>
 
         <div class="botoes-editar">
             <button class="botao-salvar">Salvar</button>
             <button class="botao-excluir">Excluir</button>
         </div>
+    </div>
 
     <script src="../src/script.js"></script> 
 </body>

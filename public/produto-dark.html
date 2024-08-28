@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 
 <head>
     <meta charset="utf-8">
@@ -14,31 +14,32 @@
             <img src="../data/logo.png" alt="Logo"> 
             GrapeCards
         </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Buscar...">
-            <button id="filterButton">Filtrar</button>
-            <div class="dropdown-content" id="dropdownContent">
-                <a href="#" onclick="filter('magic')">Magic</a>
-                <a href="#" onclick="filter('pokemon')">Pokémon</a>
-                <a href="#" onclick="filter('Yu-Gi-Oh')">Yu-Gi-Oh</a>
+        <div class="perfil">
+            <div class="moedas">
+                <div class="simbolo-moeda">
+                    GC$
+                </div>
+                <div class="valor-moeda">
+                    100,00
+                </div>
             </div>
-        </div>
-        <div class="acesso">
-            <div class="login">
-                <a href="login.html" class="login">LOGIN</a>
-            </div>
-            <div class="cadastro">
-                <a href="cadastro.html" class="cadastro">CADASTRO</a>
+            <div class="usuario">
+                <div class="user-icon">
+                    <img src="../data/gato.png" alt="User Icon">
+                </div>
+                <div class="username">
+                    Carla Mariana
+                </div>
             </div>
         </div>
     </header>
 
     
     <nav class="nav">
-        <a href="index-dark.html" class="active">Produtos</a>
-        <a href="meus-produtos-dark.html">Meus Produtos</a>
-        <!-- <a href="comunidade.html">Comunidade</a> -->
-        <a href="produto.html">White mode</a>
+        <a href="/">Produtos</a>
+        <a href="meus-produtos" class="active">Meus Produtos</a>
+        <a href="comunidade">Comunidade</a>
+        <a href="add-produto">White mode</a>
     </nav>
 
     <div class="container">
@@ -46,8 +47,8 @@
         <div class="carta-a-venda">
             <h1 class="nome">Vampiro Esquelético</h1>
             <div class="frente-verso">
-                <img class="carta-grande" src="../data/magic1.png">
-                <img class="carta-grande" src="../data/magic-verso.png">
+                <img class="carta-grande" src="../data/magic1.png" alt="Frente da carta">
+                <img class="carta-grande" src="../data/magic-verso.png" alt="Verso da carta">
             </div>
         </div>
 
@@ -64,6 +65,7 @@
         </div>
 
         <button class="botao-comprar">Comprar</button>
+    </div>
 
     <script src="../src/script.js"></script> 
 </body>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 
 <head>
     <meta charset="utf-8">
@@ -13,15 +13,6 @@
         <div class="logo">
             <img src="../data/logo.png" alt="Logo"> 
             GrapeCards
-        </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Buscar...">
-            <button id="filterButton">Filtrar</button>
-            <div class="dropdown-content" id="dropdownContent">
-                <a href="#" onclick="filter('magic')">Magic</a>
-                <a href="#" onclick="filter('pokemon')">Pokémon</a>
-                <a href="#" onclick="filter('Yu-Gi-Oh')">Yu-Gi-Oh</a>
-            </div>
         </div>
         <div class="perfil">
             <div class="moedas">
@@ -45,17 +36,17 @@
 
     
     <nav class="nav">
-        <a href="index.html">Produtos</a>
-        <a href="meus-produtos.html" class="active">Meus Produtos</a>
-        <!-- <a href="comunidade.html">Comunidade</a> -->
-        <a href="meus-produtos-dark.html">Dark mode</a>
+        <a href="/">Produtos</a>
+        <a href="meus-produtos" class="active">Meus Produtos</a>
+        <a href="comunidade">Comunidade</a>
+        <a href="meus-produtos-dark">Dark mode</a>
     </nav>
 
     <div class="container">
 
         <div class="cabecalho">
             <h1>Carla Mariana</h1>
-            <img src="../data/gato.png">
+            <img src="../data/gato.png" alt="Ícone do usuário">
         </div>
 
         <div class="jogo">
@@ -63,44 +54,49 @@
             <div class="cartas">
                 <div class="produto-editavel">
                     <div class="produto">
-                        <img class="carta" src="../data/magic1.png">
+                        <img class="carta" src="../data/magic1.png" alt="Carta">
                         <div class="nome">Vampiro Esquelético</div>
                         <div class="preco">GC$ 1,27</div>
                     </div>
-                    <a class="botao-editar" href="editar-produto.html">
-                        <img class="editar" src="../data/editar.png">
+                    <a class="botao-editar" href="editar-produto">
+                        <img class="editar" src="../data/editar.png" alt="Botão de editar">
                     </a>
                 </div>
                 <div class="produto-editavel">
                     <div class="produto">
-                        <img class="carta" src="../data/magic2.png">
+                        <img class="carta" src="../data/magic2.png" alt="Carta">
                         <div class="nome">Especialidade de Rishkar</div>
                         <div class="preco">GC$ 16,99</div>
                     </div>
                     <a class="botao-editar" href="">
-                        <img class="editar" src="../data/editar.png">
+                        <img class="editar" src="../data/editar.png" alt="Botão de editar">
                     </a>
                 </div>
                 <div class="produto-editavel">
                     <div class="produto">
-                        <img class="carta" src="../data/magic3.png">
+                        <img class="carta" src="../data/magic3.png" alt="Carta">
                         <div class="nome">Aquisição Hostil</div>
                         <div class="preco">GC$ 1,69</div>
                     </div>
                     <a class="botao-editar" href="">
-                        <img class="editar" src="../data/editar.png">
+                        <img class="editar" src="../data/editar.png" alt="Botão de editar">
                     </a>
                 </div>
                 <div class="produto-editavel">
                     <div class="produto">
-                        <img class="carta" src="../data/magic4.png">
+                        <img class="carta" src="../data/magic4.png" alt="Carta">
                         <div class="nome">Guardião das Eras</div>
                         <div class="preco">GC$ 0,84</div>
                     </div>
                     <a class="botao-editar" href="">
-                        <img class="editar" src="../data/editar.png">
+                        <img class="editar" src="../data/editar.png" alt="Botão de editar">
                     </a>
                 </div>
+            </div>
+            <div class="botao-adicionar-div">
+                <a class="botao-adicionar" href="add-produto">
+                    <img class="adicionar" src="../data/botao-add.png" alt="Botão de adicionar">
+                </a>
             </div>
         </div>
 
@@ -171,6 +167,7 @@
                 </div>
             </div>
         </div>
+    </div>
 
     <script src="../src/script.js"></script> 
 </body>

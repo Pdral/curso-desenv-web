@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 
 <head>
     <meta charset="utf-8">
-    <title>Produto</title>
-    <link rel="stylesheet" href="../views/produtos.css">
+    <title>Post</title>
+    <link rel="stylesheet" href="../views/post.css">
 </head>
 
 <body id="es">
-
-    
     <header class="header">
         <div class="logo">
             <img src="../data/logo.png" alt="Logo"> 
@@ -40,33 +38,27 @@
         <a href="/">Produtos</a>
         <a href="meus-produtos">Meus Produtos</a>
         <a href="comunidade" class="active">Comunidade</a>
-        <a href="produto-dark">Dark mode</a>
+        <a href="comunidade-dark">Dark mode</a>
     </nav>
 
-
-    <div class="container">
-        
-        <div class="carta-a-venda">
-            <h1 class="nome">Vampiro Esquelético</h1>
-            <div class="frente-verso">
-                <img class="carta-grande" src="../data/magic1.png" alt="Frente da carta">
-                <img class="carta-grande" src="../data/magic-verso.png" alt="Verso da carta">
-            </div>
-        </div>
-
-        <div class="descricao-produto">
-            <h3 class="cabecalho-descricao">Vendedor: </h3>
-            <a href="meus-produtos.html">
-                <h3 class="descricao">Joãozinho123</h3>
-            </a>
-        </div>
-
-        <div class="descricao-produto">
-            <h3 class="cabecalho-descricao">Preço: </h3>
-            <h3 class="descricao">GC$ 1,27</h3>
-        </div>
-
-        <button class="botao-comprar">Comprar</button>
+    <!-- <div class="user-icon">
+        <img src="../data/gato.png" alt="User Icon">
+    </div> -->
+    
+    <div class="form">
+        <form id="f2">
+            <h1>Crie seu post!</h1>
+            <p>Título do Post <input type="text" name="titulo"></p>
+            <p>Texto do Post</p>
+            <textarea id="texto" placeholder="Escreva seu post aqui"></textarea>
+            <p>Jogo 
+                <select name="tipo">
+                    <option value="magic">Magic</option>
+                    <option value="pokemon">Pokémon</option>
+                    <option value="yugioh">Yu-Gi-Oh</option>
+                </select>
+            </p>
+            <p><input id="postar" type="submit" value="Postar"></p>
     </div>
 
     <script src="../src/script.js"></script> 

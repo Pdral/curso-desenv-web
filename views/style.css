@@ -15,7 +15,17 @@ body, html {
 /* Estilo para a coluna da esquerda */
 .coluna-esquerda {
   flex: 1;
-  background-color: #5322ad;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../data/logo.png');
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-position: center; 
+  display: flex;
+  text-align: center; 
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: #fff;
+  flex-direction: column;
 }
 
 /* Estilo para a coluna da direita */
@@ -97,18 +107,20 @@ body, html {
     outline: none;
   }
 
-  /* Estilo do link "Esqueceu a senha?" */
-.forgot-password {
+  /* Estilo do link "Esquecer Senha e Cadastro" */
+.link {
   display: inline-block;
   color: #5322ad; 
   text-decoration: none; 
   font-size: 14px; 
   margin-top: 10px;
   text-align: center;
+  width: 100%
 }
 
+
 /* Estilo do link quando o cursor está sobre ele */
-.forgot-password:hover {
+.link:hover {
   text-decoration: underline; 
 }
 
