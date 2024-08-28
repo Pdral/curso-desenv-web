@@ -118,6 +118,7 @@ body, html {
   width: 100%
 }
 
+
 /* Estilo do link quando o cursor está sobre ele */
 .link:hover {
   text-decoration: underline; 

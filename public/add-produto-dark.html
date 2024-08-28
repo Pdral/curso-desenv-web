@@ -3,13 +3,12 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Produto</title>
-    <link rel="stylesheet" href="../views/produtos.css">
+    <title>Adicionar</title>
+    <link rel="stylesheet" href="../views/produtos2.css">
 </head>
 
 <body id="es">
 
-    
     <header class="header">
         <div class="logo">
             <img src="../data/logo.png" alt="Logo"> 
@@ -38,35 +37,38 @@
     
     <nav class="nav">
         <a href="/">Produtos</a>
-        <a href="meus-produtos">Meus Produtos</a>
-        <a href="comunidade" class="active">Comunidade</a>
-        <a href="produto-dark">Dark mode</a>
+        <a href="meus-produtos" class="active">Meus Produtos</a>
+        <a href="comunidade">Comunidade</a>
+        <a href="add-produto">White mode</a>
     </nav>
-
 
     <div class="container">
         
         <div class="carta-a-venda">
-            <h1 class="nome">Vampiro Esquelético</h1>
-            <div class="frente-verso">
-                <img class="carta-grande" src="../data/magic1.png" alt="Frente da carta">
-                <img class="carta-grande" src="../data/magic-verso.png" alt="Verso da carta">
+            <div class="input-editar">
+                <input class="nome" value="Nome da carta">
             </div>
+            <div class="frente-verso-add"></div>
+            <a class="editar-imagem" href="">
+                <img src="../data/editar.png" alt="Botão de editar">
+            </a>
         </div>
 
         <div class="descricao-produto">
             <h3 class="cabecalho-descricao">Vendedor: </h3>
             <a href="meus-produtos.html">
-                <h3 class="descricao">Joãozinho123</h3>
+                <h3 class="descricao">Carla Mariana</h3>
             </a>
         </div>
 
         <div class="descricao-produto">
             <h3 class="cabecalho-descricao">Preço: </h3>
-            <h3 class="descricao">GC$ 1,27</h3>
+            <input value="GC$ 0,00">
         </div>
 
-        <button class="botao-comprar">Comprar</button>
+        <div class="botoes-editar">
+            <button class="botao-salvar">Criar</button>
+        </div>
     </div>
 
     <script src="../src/script.js"></script> 

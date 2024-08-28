@@ -52,16 +52,23 @@ body, html {
     display: flex;
 }
 
+.login:hover, .cadastro:hover {
+    text-decoration: underline; 
+  }
+
 .header .acesso a{
     color: #2B2B2B;
     font-size: 1.0em;
     font-weight: bold;
     padding-right: 80px;
+    text-decoration: none;
 }
 
 .container {
     background-color: #2b2b2b;
     padding: 20px;
+    justify-content: center;
+    margin: 0 auto;
 }
 
 .search-bar {
@@ -72,6 +79,7 @@ body, html {
     margin-bottom: 20px;
     width: 80%;
     position: relative;
+    align-items: center;
 }
 
 .search-bar input[type="text"] {
@@ -91,6 +99,31 @@ body, html {
     border-radius: 20px;
     cursor: pointer;
     margin-left: 10px;
+    font-weight: bold;
+}
+
+
+#filterButton{
+    background-color: #2b2b2b;
+    color: #cbb7f1;
+}
+
+#postar{
+    width: 90%;
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #cbb7f1;
+    color: #2b2b2b;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+    margin-bottom: 20px;
+    position: relative;
+    align-items: center;
     font-weight: bold;
 }
 
@@ -320,11 +353,6 @@ body, html {
     font-weight: bold;
     margin-bottom: 5px;
     display: block;
-}
-
-.header .perfil{
-    justify-content: start;
-    display: flex;
 }
 
 .header .perfil{
