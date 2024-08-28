@@ -273,3 +273,37 @@ body, html {
     height: 15px;
     fill: #2b2b2b;
 }
+
+.header .perfil{
+    justify-content: start;
+    display: flex;
+    gap: 150px;
+}
+
+.header .perfil .usuario{
+    margin-right: 60px;
+}
+
+.header .perfil .moedas .simbolo-moeda{
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.header .perfil .usuario .username{
+    color: #2b2b2b;
+}
+
+.user-icon {
+    width: 40px; 
+    margin: auto;
+    height: 40px; 
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.user-icon img {
+    width: 100%; 
+    height: 100%; 
+    border-radius: 50%; 
+    object-fit: cover; 
+}

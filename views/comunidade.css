@@ -323,11 +323,6 @@ body, html {
 .header .perfil{
     justify-content: start;
     display: flex;
-}
-
-.header .perfil{
-    justify-content: start;
-    display: flex;
     gap: 150px;
 }
 
