@@ -37,6 +37,21 @@ body, html {
   align-items: center;
 }
 
+/* Estilo para o botão dark */
+#btn-dark {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #5322ad; /* Cor do botão */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
 /* Estilo geral do formulário */
 .coluna-direita form {
     max-width: 500px;
