@@ -11,22 +11,6 @@ body, html {
   min-height: 100vh;  
   font-family: 'Verdana', sans-serif;
 }
-
-/* Estilo para o botão white */
-#btn-white {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  padding: 10px 20px;
-  background-color: #CBB7F1; /* Cor do botão */
-  border: none;
-  border-radius: 5px;
-  color: #2b2b2b;
-  font-size: 25px;
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: bold;  
-}
   
   /* Estilo para a coluna da esquerda */
 .coluna-esquerda {
@@ -59,14 +43,54 @@ body, html {
   flex: 2;
   background-color: #2B2B2B;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
 }
 
 .coluna-direita p {
   color: #CBB7F1;
   font-weight: bold;
   font-size: 20px;
+}
+
+/* Estilo para os botões de cima */
+.buttons {
+  display: flex;
+  justify-content: space-between; 
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+/* Estilo para o botão white */
+#btn-white {
+  padding: 10px 20px;
+  background-color: #CBB7F1; /* Cor do botão */
+  border: none;
+  border-radius: 5px;
+  color: #2b2b2b;
+  font-size: 25px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;  
+}
+
+/* Estilo para os botões de fonte */
+#increaseFont, #decreaseFont {
+  background-color: #CBB7F1;
+  font-size: 9px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.forms {
+  flex: 1; 
+  display: flex;
+  align-items: center; 
+  justify-content: center;
 }
   
 /* Estilo geral do formulário */
@@ -75,7 +99,6 @@ body, html {
     width: 100%;
     padding: 20px;
     flex-direction: column;
-    align-items: center;
 }
     
 /* Título do formulário */

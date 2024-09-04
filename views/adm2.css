@@ -49,6 +49,17 @@ body, html {
     border-bottom: 2px solid #0d0e0d;
 }
 
+#increaseFont, #decreaseFont {
+    color: #cbb7f1;
+    background-color: #2b2b2b;
+    font-size: 11px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
 .search-bar {
     display: flex;
     justify-content: flex-start;
@@ -315,6 +326,7 @@ input{
     justify-content: start;
     display: flex;
     gap: 150px;
+    align-items: center;
 }
 
 .header .perfil .usuario{

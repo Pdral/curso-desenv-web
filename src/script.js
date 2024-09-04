@@ -80,10 +80,76 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Função para aplicar o tamanho da fonte ao carregar a página
+    function applyFontSize() {
+        const fontSize = getCookie('fontSize');
+        if (fontSize) {
+            applyFontSizeToAllElements(fontSize);
+        }
+    }
+
+    // Função para aumentar o tamanho da fonte
+    function increaseFontSize() {
+        let currentSize = parseInt(window.getComputedStyle(document.body).fontSize);
+        currentSize += 2;
+        applyFontSizeToAllElements(currentSize + 'px');
+        setCookie('fontSize', currentSize + 'px', 365); // Salva o tamanho da fonte por 365 dias
+    }
+
+    // Função para diminuir o tamanho da fonte
+    function decreaseFontSize() {
+        let currentSize = parseInt(window.getComputedStyle(document.body).fontSize);
+        currentSize -= 2;
+        applyFontSizeToAllElements(currentSize + 'px');
+        setCookie('fontSize', currentSize + 'px', 365); 
+    }
+
+    // Função para aplicar o tamanho da fonte a todos os elementos
+    function applyFontSizeToAllElements(fontSize) {
+        document.body.style.fontSize = fontSize;
+        const elements = document.querySelectorAll('button, a, input, textarea, option, select, p, h1, h2, h3');
+        elements.forEach(element => {
+            element.style.fontSize = fontSize;
+        });
+    }
+
+    // Função para definir um cookie
+    function setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    // Função para obter um cookie pelo nome
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+     // Adiciona funcionalidade aos botões A+ e A-
+     const increaseButton = document.getElementById('increaseFont');
+     const decreaseButton = document.getElementById('decreaseFont');
+ 
+     if (increaseButton) {
+         increaseButton.addEventListener('click', increaseFontSize);
+     }
+ 
+     if (decreaseButton) {
+         decreaseButton.addEventListener('click', decreaseFontSize);
+     }
+
     // Chama as funções para configurar as funcionalidades
     setupLikeButtons();
     setupDropdown();
     setupChat();
     setupCommentForm();
+    applyFontSize();
     
 });

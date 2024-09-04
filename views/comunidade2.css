@@ -64,6 +64,17 @@ body, html {
     text-decoration: none;
 }
 
+#increaseFont, #decreaseFont {
+    color: #cbb7f1;
+    background-color: #2b2b2b;
+    font-size: 11px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
 .container {
     background-color: #2b2b2b;
     padding: 20px;
@@ -359,6 +370,7 @@ body, html {
     justify-content: start;
     display: flex;
     gap: 150px;
+    align-items: center;
 }
 
 .header .perfil .usuario{

@@ -65,6 +65,16 @@ body, html {
     text-decoration: underline; 
   }
 
+#increaseFont, #decreaseFont {
+    color: #5322ad;
+    background-color: #ffffff;
+    font-size: 9px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
 .publicidade{
     text-align: left;
 }
@@ -375,7 +385,8 @@ input{
 .header .perfil{
     justify-content: start;
     display: flex;
-    gap: 150px;
+    gap: 150px;    
+    align-items: center;
 }
 
 .header .perfil .usuario{

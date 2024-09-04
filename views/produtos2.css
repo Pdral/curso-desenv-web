@@ -55,7 +55,18 @@ body, html {
 
 .login:hover, .cadastro:hover {
     text-decoration: underline; 
-  }
+}
+
+#increaseFont, #decreaseFont {
+    color: #cbb7f1;
+    background-color: #2b2b2b;
+    font-size: 11px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-weight: bold;
+}
 
 .header .acesso a{
     color: #2B2B2B;
@@ -69,6 +80,7 @@ body, html {
     justify-content: start;
     display: flex;
     gap: 150px;
+    align-items: center;
 }
 
 .header .perfil .moedas .simbolo-moeda{

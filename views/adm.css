@@ -48,6 +48,16 @@ body, html {
     border-bottom: 2px solid #c8e6c9;
 }
 
+#increaseFont, #decreaseFont {
+    color: #5322ad;
+    background-color: #ffffff;
+    font-size: 9px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
 .search-bar {
     display: flex;
     justify-content: flex-start;
@@ -304,6 +314,7 @@ input{
     justify-content: start;
     display: flex;
     gap: 150px;
+    align-items: center;
 }
 
 .header .perfil .usuario{

@@ -33,17 +33,23 @@ body, html {
   flex: 2;
   background-color: white;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+}
+
+/* Estilo para os botões de cima */
+.buttons {
+  display: flex;
+  justify-content: space-between; 
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
 }
 
 /* Estilo para o botão dark */
 #btn-dark {
-  position: absolute;
-  top: 10px;
-  right: 20px;
   padding: 10px 20px;
-  background-color: #5322ad; /* Cor do botão */
+  background-color: #5322ad; 
   border: none;
   border-radius: 5px;
   color: white;
@@ -52,13 +58,30 @@ body, html {
   text-decoration: none;
 }
 
+/* Estilo para os botões de fonte */
+#increaseFont, #decreaseFont {
+  color: #5322ad;
+  background-color: #ffffff;
+  font-size: 9px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.forms {
+  flex: 1; 
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+}
+
 /* Estilo geral do formulário */
 .coluna-direita form {
     max-width: 500px;
     width: 100%;
     padding: 20px;
     flex-direction: column;
-    align-items: center;  
 }
   
   /* Título do formulário */
