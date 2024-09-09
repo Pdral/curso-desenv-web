@@ -3,14 +3,20 @@
         {
             "username" : "Carla Mariana",
             "moedas": "5000",
-            "perfil": "Premium",
+            "perfil": "Adm",
             "icon": "/img/gato.png"
         },
         {
             "username" : "Paulo Davi",
             "moedas": "2",
-            "perfil": "Simples",
+            "perfil": "Premium",
             "icon": "/img/cachorro.png"
+        },
+        {
+            "username" : "Joãozinho",
+            "moedas": "100",
+            "perfil": "Simples",
+            "icon": "/img/porco.png"
         }
     ]
 }

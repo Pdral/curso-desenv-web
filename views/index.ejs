@@ -1,54 +1,41 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<%- contentFor('title') %>
+<title>Produtos</title>
 
-<head>
-    <meta charset="utf-8">
-    <title>Produtos</title>
-    <link rel="stylesheet" href="/css/produtos.css">
-</head>
+<%- contentFor('body') %>
 
-<body id="es">
+<div class="publicidade">
+    <img src="/img/publicidade.png" alt="publicidade">
+</div>
 
-    <%- include(header) %>
+<div class="container">
 
-    <div class="publicidade">
-        <img src="/img/publicidade.png" alt="publicidade">
-    </div>
-
-    <div class="container">
-
-        <div class="search-bar">            
-            <input type="text" placeholder="Buscar carta...">
-            <button id="pesquisar">Pesquisar</button>
-            <button id="filterButton">Filtros</button>
-            <div class="dropdown-content" id="dropdownContent">
-                <% for (var i=0; i<jogos.length; i++) {%>
-                    <a href="#" onclick="filter('magic')"><%= jogos[i]["nome"] %></a>
-                <% } %>
-            </div>
-        </div>
-
-        <div class="jogos">
+    <div class="search-bar">            
+        <input type="text" placeholder="Buscar carta...">
+        <button id="pesquisar">Pesquisar</button>
+        <button id="filterButton">Filtros</button>
+        <div class="dropdown-content" id="dropdownContent">
             <% for (var i=0; i<jogos.length; i++) {%>
-                <div class="jogo">
-                    <h2><%= jogos[i]["nome"] %></h2>
-                    <div class="cartas">
-                        <% for (var j=0; j<jogos[i]["cartas"].length; j++) {%>
-                            <div class="produto">
-                                <a href="produto">
-                                    <img class="carta" src=<%= jogos[i]["cartas"][j]["img"] %> alt="Carta">
-                                </a>
-                                <div class="nome"><%= jogos[i]["cartas"][j]["nome"] %></div>
-                                <div class="preco">GC$ <%= jogos[i]["cartas"][j]["preco"] %></div>
-                            </div> 
-                        <% } %>
-                     </div>
-                </div>
+                <a href="#" onclick="filter('magic')"><%= jogos[i]["nome"] %></a>
             <% } %>
         </div>
     </div>
 
-    <script src="script/script.js"></script> 
-</body>
-
-</html>
+    <div class="jogos">
+        <% for (var i=0; i<jogos.length; i++) {%>
+            <div class="jogo">
+                <h2><%= jogos[i]["nome"] %></h2>
+                <div class="cartas">
+                    <% for (var j=0; j<jogos[i]["cartas"].length; j++) {%>
+                        <div class="produto">
+                            <a href="produto">
+                                <img class="carta" src=<%= jogos[i]["cartas"][j]["img"] %> alt="Carta">
+                            </a>
+                            <div class="nome"><%= jogos[i]["cartas"][j]["nome"] %></div>
+                            <div class="preco">GC$ <%= jogos[i]["cartas"][j]["preco"] %></div>
+                        </div> 
+                    <% } %>
+                 </div>
+            </div>
+        <% } %>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<header class="header">
+	<div class="logo">
+		<img src="/img/logo.png" alt="Logo"> 
+		GrapeCards
+	</div>
+	<div class="perfil">
+		<div class="usuario">
+			<div class="user-icon">
+				<img src=<%= user["icon"] %> alt="User Icon">
+			</div>
+			<div class="username">
+				<%= user["username"] %>
+			</div>
+		</div>
+		<div>
+			<button id="increaseFont">A+</button>
+			<button id="decreaseFont">A-</button>
+		</div>
+	</div>    
+</div>
+</header>
+
+<nav class="nav">
+	<a href="/" class=<%= navclass["produtos"] %>>Produtos</a>
+	<a href="adm" class=<%= navclass["adm"] %>>Usuários</a>
+	<a href="meus-produtos" class=<%= navclass["meus-produtos"] %>>Meus Produtos</a>
+	<a href="comunidade" class=<%= navclass["comunidade"] %>>Comunidade</a>
+	<a href="meus-produtos-dark">Dark mode</a>
+</nav>

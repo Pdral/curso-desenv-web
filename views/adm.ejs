@@ -1,0 +1,52 @@
+<%- contentFor('title') %>
+<title>Editar</title>
+
+<%- contentFor('body') %>
+
+<div class="container">
+    <div class="search-bar">            
+        <input type="text" placeholder="Buscar usuário...">
+        <button id="pesquisar">Pesquisar</button>
+    </div>
+
+
+    <div class="usuarios">
+        <% for (var i=0; i<usuarios.length; i++) {%>
+            <div class="editar-usuario">
+                <div class="usuario">
+                    <img src=<%= usuarios[i]["icon"] %> alt="Imagem do Usuário">
+                    <div class="nickname"><%= usuarios[i]["username"] %></div>
+                    <div class="moedas">GC$ <%= usuarios[i]["moedas"] %></div>
+                </div>
+                <a class="botao-editar" href="editar-usuario">
+                    <img class="editar" src="../data/editar.png" alt="Botão de editar">
+                </a>
+            </div>
+        <% } %>
+    </div>
+        
+    <div class="search-bar">            
+        <input type="text" placeholder="Buscar jogo...">
+        <button id="pesquisar2">Pesquisar</button>
+    </div>
+
+    <div class="jogos">
+        <% for (var i=0; i<jogos.length; i++) {%>
+            <div class="editar-jogo">
+                <div class="jogo">
+                    <div class="name"><%= jogos[i]["nome"] %></div>
+                </div>
+                <a class="botao-editar" href="editar-jogo">
+                    <img class="editar" src="../data/editar.png" alt="Botão de editar">
+                </a>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="botao-adicionar-div">
+        <a class="botao-adicionar" href="editar-jogo">
+            <img class="adicionar" src="../data/botao-add.png" alt="Botão de adicionar">
+        </a>
+    </div>
+
+</div>

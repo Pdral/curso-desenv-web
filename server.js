@@ -5,6 +5,8 @@ const express = require('express');
 const app = express() 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
+const expressLayouts = require('express-ejs-layouts'); 
+app.use(expressLayouts) 
 
 app.get('/teste', (req, res) => {
 	const jogos_dir = "data/jogos/dados.json";
@@ -21,7 +23,7 @@ app.get('/teste', (req, res) => {
 		var jsonData = JSON.parse(data); 
 
 	   console.log(jsonData["jogos"][0]);
-	   res.render('index', {jogos: jsonData["jogos"], header: "headers/default-header.ejs", navclass: {"produtos": "active"}, "user": users["usuarios"][1]});
+	   res.render('index', {jogos: jsonData["jogos"], header: "headers/default-header.ejs", navclass: {"produtos": "active"}, "user": users["usuarios"][1], css: "/css/produtos2.css"});
 	  });
 })
 

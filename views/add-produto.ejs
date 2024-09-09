@@ -1,0 +1,33 @@
+<%- contentFor('title') %>
+<title>Adicionar</title>
+
+<%- contentFor('body') %>
+
+<div class="container">
+        
+    <div class="carta-a-venda">
+        <div class="input-editar">
+            <input class="nome" value="Nome da carta">
+        </div>
+        <div class="frente-verso-add"></div>
+        <a class="editar-imagem" href="">
+            <img src="../data/editar.png" alt="Botão de editar">
+        </a>
+    </div>
+
+    <div class="descricao-produto">
+        <h3 class="cabecalho-descricao">Vendedor: </h3>
+        <a href="meus-produtos">
+            <h3 class="descricao"><%= user["username"] %></h3>
+        </a>
+    </div>
+
+    <div class="descricao-produto">
+        <h3 class="cabecalho-descricao">Preço: </h3>
+        <input value="GC$ 0,00" class="descricao">
+    </div>
+
+    <div class="botoes-editar">
+        <button class="botao-salvar">Criar</button>
+    </div>
+</div>
