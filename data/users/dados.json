@@ -1,0 +1,16 @@
+{
+    "usuarios": [
+        {
+            "username" : "Carla Mariana",
+            "moedas": "5000",
+            "perfil": "Premium",
+            "icon": "/img/gato.png"
+        },
+        {
+            "username" : "Paulo Davi",
+            "moedas": "2",
+            "perfil": "Simples",
+            "icon": "/img/cachorro.png"
+        }
+    ]
+}

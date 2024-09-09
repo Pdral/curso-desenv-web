@@ -1,0 +1,91 @@
+{
+    "jogos": [
+        {
+            "nome": "Magic",
+            "cartas": [
+                {
+                    "nome" : "Aquisição Hostil",
+                    "preco": "1,69",
+                    "vendedor": "Carla Mariana",
+                    "img": "/img/magic1.png"
+                },
+                {
+                    "nome" : "Especialidade de Rishkar",
+                    "preco": "16,99",
+                    "vendedor": "Carla Mariana",
+                    "img": "/img/magic2.png"
+                },
+                {
+                    "nome" : "Guardião das Eras",
+                    "preco": "0,84",
+                    "vendedor": "Carla Mariana",
+                    "img": "/img/magic3.png"
+                },
+                {
+                    "nome" : "Vampiro Esquelético",
+                    "preco": "1,27",
+                    "vendedor": "Carla Mariana",
+                    "img": "/img/magic4.png"
+                }
+            ]
+        },
+        {
+            "nome": "Pókemon",
+            "cartas": [
+                {
+                    "nome" : "Genesect",
+                    "preco": "2,99",
+                    "vendedor": "Carla Mariana",
+                    "img": "/img/pokemon1.png"
+                },
+                {
+                    "nome" : "Falinks-V",
+                    "preco": "23,99",
+                    "vendedor": "Carla Mariana",
+                    "img": "/img/pokemon2.png"
+                },
+                {
+                    "nome" : "Goodra de Hisui",
+                    "preco": "14,99",
+                    "vendedor": "Carla Mariana",
+                    "img": "/img/pokemon3.png"
+                },
+                {
+                    "nome" : "Muk da Equipe Aqua",
+                    "preco": "4,99",
+                    "vendedor": "Carla Mariana",
+                    "img": "/img/pokemon4.png"
+                }
+            ]
+        },
+        {
+            "nome": "Yu-gi-oh!",
+            "cartas": [
+                {
+                    "nome" : "Dragão Secular",
+                    "preco": "11,99",
+                    "vendedor": "Carla Mariana",
+                    "img": "/img/yugioh1.png"
+                },
+                {
+                    "nome" : "Negrodragão do Trovão",
+                    "preco": "39,90",
+                    "vendedor": "Carla Mariana",
+                    "img": "/img/yugioh2.png"
+                },
+                {
+                    "nome" : "Monstro Marinho de Teseu",
+                    "preco": "19,99",
+                    "vendedor": "Carla Mariana",
+                    "img": "/img/yugioh3.png"
+                },
+                {
+                    "nome" : "Sinais do Adamancipador",
+                    "preco": "14,99",
+                    "vendedor": "Carla Mariana",
+                    "img": "/img/yugioh4.png"
+                }
+            ]
+        }
+    ]
+}
