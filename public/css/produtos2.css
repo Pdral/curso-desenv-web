@@ -143,8 +143,11 @@ body, html {
 .jogo .cartas{
     display: flex;
     justify-content: space-between;
+    gap: 100px;
     align-items: flex-start;
-    height: 350px;
+    white-space: nowrap;
+    overflow-x: auto;
+    height: 375px;
 }
 
 .jogo .cartas .produto div{

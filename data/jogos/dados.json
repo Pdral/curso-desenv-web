@@ -22,7 +22,7 @@
                 },
                 {
                     "id": 2,
-                    "nome" : "Guardião das Eras",
+                    "nome" : "Aquisição Hostil",
                     "preco": "0,84",
                     "vendedor": "0",
                     "frente": "/img/magic3.png",
@@ -30,7 +30,7 @@
                 },
                 {
                     "id": 3,
-                    "nome" : "Aquisição Hostil",
+                    "nome" : "Guardião das Eras",
                     "preco": "1,27",
                     "vendedor": "0",
                     "frente": "/img/magic4.png",
@@ -82,7 +82,7 @@
             "cartas": [
                 {
                     "id": 8,
-                    "nome" : "Dragão Secular",
+                    "nome" : "Monstro Marinho de Teseu",
                     "preco": "11,99",
                     "vendedor": "2",
                     "frente": "/img/yugioh1.png",
@@ -98,7 +98,7 @@
                 },
                 {
                     "id": 10,
-                    "nome" : "Monstro Marinho de Teseu",
+                    "nome" : "Dragão Secular",
                     "preco": "19,99",
                     "vendedor": "2",
                     "frente": "/img/yugioh3.png",

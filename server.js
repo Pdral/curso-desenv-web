@@ -14,9 +14,13 @@ app.use(expressLayouts)
 app.use((req, res, next) => {
     const userId = req.query.user;
 
-	var data = fs.readFileSync(users_dir , "utf8");
-	var users = JSON.parse(data); 
-	req.query.user = users["usuarios"][userId];
+	if(userId == undefined){
+		req.query.user = {"perfil": "visitante"}
+	} else{
+		var data = fs.readFileSync(users_dir , "utf8");
+		var users = JSON.parse(data); 
+		req.query.user = users["usuarios"][userId];
+	}
 
     next(); 
 });
