@@ -10,6 +10,8 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 const expressLayouts = require('express-ejs-layouts'); 
 app.use(expressLayouts) 
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
 app.use((req, res, next) => {
     const userId = req.query.user;
@@ -30,26 +32,40 @@ app.get('/', (req, res) => {
 	var data = fs.readFileSync(jogos_dir , "utf8");
 	var jogos = JSON.parse(data)["jogos"];
 
-	res.render('index', {jogos: jogos, header: setHeader(user), navclass: {"produtos": "active"}, "user": user, css: "/css/produtos.css"});
+	// Lê o cookie 'theme' enviado pelo cliente
+    const theme = req.cookies.theme || 'light'; 
+
+    // Define o CSS com base no tema
+    const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
+
+	res.render('index', {jogos: jogos, header: setHeader(user), navclass: {"produtos": "active"}, "user": user, css: selectedCSS});
 })
 
 app.get('/cadastro', (req, res) => {
 	const user = req.query.user;
-	res.render('cadastro', {layout: "no-header", "user": user, css: "/css/style.css"});
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/style2.css' : '/css/style.css';
+	res.render('cadastro', {layout: "no-header", "user": user, css: selectedCSS});
 })
 
 app.get('/login', (req, res) => {
 	const user = req.query.user;
-	res.render('login', {layout: "no-header", "user": user, css: "/css/style.css"});
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/style2.css' : '/css/style.css';
+	res.render('login', {layout: "no-header", "user": user, css: selectedCSS});
 })
 
 app.get('/esquecer-senha', (req, res) => {
 	const user = req.query.user;
-	res.render('esquecer-senha', {layout: "no-header", "user": user, css: "/css/style.css"});
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/style2.css' : '/css/style.css';
+	res.render('esquecer-senha', {layout: "no-header", "user": user, css: selectedCSS});
 })
 
 app.get('/comunidade', (req, res) => {
 	const user = req.query.user;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/comunidade2.css' : '/css/comunidade.css';
 	
 	var data = fs.readFileSync(jogos_dir , "utf8");
 	var jogos = JSON.parse(data)["jogos"];
@@ -58,20 +74,24 @@ app.get('/comunidade', (req, res) => {
 	for (let index = 0; index < posts.length; index++) {
 		posts[index]["user"] = setUser(posts[index]["user"]);
 	}
-	res.render('comunidade', {jogos: jogos, header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, posts: posts, css: "/css/comunidade.css"});
+	res.render('comunidade', {jogos: jogos, header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, posts: posts, css: selectedCSS});
 })
 
 app.get('/post/:id', (req, res) => {
 	const user = req.query.user;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/post2.css' : '/css/post.css';
 	var data = fs.readFileSync(posts_dir , "utf8");
 	var posts = JSON.parse(data)["posts"]; 
 	var post = posts[req.params.id];
 	post["user"] = setUser(post["user"]);
-	res.render('post', {header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, post: post, css: "/css/post.css"});
+	res.render('post', {header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, post: post, css: selectedCSS});
 })
 
 app.get('/meus-produtos', (req, res) => {
 	const user = req.query.user;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	
 	var data = fs.readFileSync(jogos_dir , "utf8");
 	var jogos = JSON.parse(data)["jogos"];
@@ -85,12 +105,14 @@ app.get('/meus-produtos', (req, res) => {
 			}
 		}
 	}
-	res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, dono: user, cartas: cartas, css: "/css/produtos.css"});
+	res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, dono: user, cartas: cartas, css: selectedCSS});
 })
 
 app.get('/meus-produtos/:id', (req, res) => {
 	const user = req.query.user;
 	const donoId = req.params.id;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	
 	var dono = setUser(donoId);
 	var data = fs.readFileSync(jogos_dir , "utf8");
@@ -105,12 +127,14 @@ app.get('/meus-produtos/:id', (req, res) => {
 			}
 		}
 	}
-	res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, dono: dono, cartas: cartas, css: "/css/produtos.css"});
+	res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, dono: dono, cartas: cartas, css: selectedCSS});
 })
 
 app.get('/editar-produto/:id', (req, res) => {
 	const user = req.query.user;
 	const cartaId = req.params.id;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	
 	var data = fs.readFileSync(jogos_dir , "utf8");
 	var jogos = JSON.parse(data)["jogos"];
@@ -127,12 +151,14 @@ app.get('/editar-produto/:id', (req, res) => {
 		}
 	}
 	
-	res.render('editar-produto', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, carta: carta, css: "/css/produtos.css"});
+	res.render('editar-produto', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, carta: carta, css: selectedCSS});
 })
 
 app.get('/produto/:id', (req, res) => {
 	const user = req.query.user;
 	const cartaId = req.params.id;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	
 	var data = fs.readFileSync(jogos_dir , "utf8");
 	var jogos = JSON.parse(data)["jogos"];
@@ -151,47 +177,57 @@ app.get('/produto/:id', (req, res) => {
 	
 	carta["vendedor"] = setUser(carta["vendedor"]);
 
-	res.render('produto', {header: setHeader(user), navclass: {"produtos": "active"}, "user": user, carta: carta, css: "/css/produtos.css"});
+	res.render('produto', {header: setHeader(user), navclass: {"produtos": "active"}, "user": user, carta: carta, css: selectedCSS});
 })
 
 app.get('/criar-post', (req, res) => {
 	const user = req.query.user;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	var data = fs.readFileSync(jogos_dir , "utf8");
 	var jogos = JSON.parse(data)["jogos"];
 
-	res.render('criar-post', {jogos: jogos, header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, css: "/css/post.css"});
+	res.render('criar-post', {jogos: jogos, header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, css: selectedCSS});
 })
 
 app.get('/add-produto', (req, res) => {
 	const user = req.query.user;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 
-	res.render('add-produto', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, css: "/css/produtos.css"});
+	res.render('add-produto', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, css: selectedCSS});
 })
 
 app.get('/adm', (req, res) => {
 	const user = req.query.user;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
 	var data = fs.readFileSync(jogos_dir , "utf8");
 	var jogos = JSON.parse(data)["jogos"];
 	var data = fs.readFileSync(users_dir , "utf8");
 	var usuarios = JSON.parse(data)["usuarios"];
 
-	res.render('adm', {jogos: jogos, usuarios: usuarios, header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: "/css/adm.css"});
+	res.render('adm', {jogos: jogos, usuarios: usuarios, header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
 })
 
 app.get('/editar-usuario/:id', (req, res) => {
 	const user = req.query.user;
 	const userId = req.params.id;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
 
-	res.render('editar-usuario', {user: setUser(userId), header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: "/css/adm2.css"});
+	res.render('editar-usuario', {user: setUser(userId), header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
 })
 
 app.get('/editar-jogo/:id', (req, res) => {
 	const user = req.query.user;
 	const jogoId = req.params.id;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
 	var data = fs.readFileSync(jogos_dir , "utf8");
 	var jogos = JSON.parse(data)["jogos"];
 
-	res.render('editar-jogo', {jogo: jogos[jogoId], header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: "/css/adm.css"});
+	res.render('editar-jogo', {jogo: jogos[jogoId], header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
 })
 
 app.listen(port, function () {

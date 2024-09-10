@@ -46,8 +46,8 @@ body, html {
   padding: 20px;
 }
 
-/* Estilo para o botão dark */
-#btn-switch {
+/* Estilo para o botão switch */
+.theme-switch {
   padding: 10px 20px;
   background-color: #5322ad; 
   border: none;

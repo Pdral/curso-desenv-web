@@ -62,8 +62,8 @@ body, html {
   padding: 20px;
 }
 
-/* Estilo para o botão white */
-#btn-switch {
+/* Estilo para o botão switch */
+.theme-switch {
   padding: 10px 20px;
   background-color: #CBB7F1; /* Cor do botão */
   border: none;

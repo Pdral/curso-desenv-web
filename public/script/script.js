@@ -145,6 +145,32 @@ document.addEventListener('DOMContentLoaded', () => {
          decreaseButton.addEventListener('click', decreaseFontSize);
      }
 
+     
+    // Adiciona eventos para todos os elementos com a classe 'theme-switch'
+    document.querySelectorAll('.theme-switch').forEach(element => {
+        element.addEventListener('click', (event) => {
+            event.preventDefault(); // Impede a navegação padrão do link ou o comportamento padrão do botão
+            const newTheme = event.currentTarget.getAttribute('data-theme');
+            const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            if (newTheme !== currentTheme) {
+                document.body.classList.toggle('dark-mode');
+                setCookie('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light', 365);
+                // Recarrega a página para aplicar o CSS correto
+                window.location.reload();
+            }
+        });
+    });
+
+    // Verifica e aplica o tema ao carregar a página
+    window.onload = function() {
+        const theme = getCookie('theme') || 'light';
+        if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+    }
+
     // Chama as funções para configurar as funcionalidades
     setupLikeButtons();
     setupDropdown();
