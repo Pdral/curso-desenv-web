@@ -1,0 +1,20 @@
+<%- contentFor('title') %>
+<title>Post</title>
+
+<%- contentFor('body') %>
+<div class="form">
+    <form id="f2">
+        <h1>Crie seu post!</h1>
+        <p>Título do Post <input type="text" name="titulo"></p>
+        <p>Texto do Post</p>
+        <textarea id="texto" placeholder="Escreva seu post aqui"></textarea>
+        <p>Jogo 
+            <select name="tipo">
+                <% for (var i=0; i<jogos.length; i++) {%>
+                    <option value=<%= jogos[i]["nome"] %>><%= jogos[i]["nome"] %></option>
+                <% } %>
+            </select>
+        </p>
+        <p><input id="postar" type="submit" value="Postar"></p>
+    </form>
+</div>

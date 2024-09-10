@@ -1,5 +1,5 @@
 <%- contentFor('title') %>
-<title>Adicionar</title>
+<title>Editar</title>
 
 <%- contentFor('body') %>
 
@@ -7,9 +7,12 @@
         
     <div class="carta-a-venda">
         <div class="input-editar">
-            <input class="nome-escuro" value="Nome da carta">
+            <input class="nome" value="<%= carta["nome"] %>">
         </div>
-        <div class="frente-verso-add"></div>
+        <div class="frente-verso-add">
+            <img class="carta-grande" src=<%= carta["frente"] %> alt="Frente da carta">
+            <img class="carta-grande" src=<%= carta["verso"] %> alt="Verso da carta">
+        </div>
         <a class="editar-imagem" href=""></a>
     </div>
 
@@ -22,10 +25,11 @@
 
     <div class="descricao-produto">
         <h3 class="cabecalho-descricao">Preço: </h3>
-        <input value="GC$ 0,00">
+        <input value="GC$ <%= carta["preco"] %>">
     </div>
 
     <div class="botoes-editar">
-        <button class="botao-salvar">Criar</button>
+        <button class="botao-salvar">Salvar</button>
+        <button class="botao-excluir">Excluir</button>
     </div>
 </div>

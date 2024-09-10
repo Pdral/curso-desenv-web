@@ -1,0 +1,33 @@
+<%- contentFor('title') %>
+<title>Produto</title>
+
+<%- contentFor('body') %>
+
+<div class="publicidade">
+    <img src="/img/publicidade.png" alt="publicidade">
+</div>
+
+<div class="container">
+        
+    <div class="carta-a-venda">
+        <h1 class="nome"><%= carta["nome"] %></h1>
+        <div class="frente-verso">
+            <img class="carta-grande" src=<%= carta["frente"] %> alt="Frente da carta">
+            <img class="carta-grande" src=<%= carta["verso"] %> alt="Verso da carta">
+        </div>
+    </div>
+
+    <div class="descricao-produto">
+        <h3 class="cabecalho-descricao">Vendedor: </h3>
+        <a href="meus-produtos">
+            <h3 class="descricao"><%= carta["vendedor"]["username"] %></h3>
+        </a>
+    </div>
+
+    <div class="descricao-produto">
+        <h3 class="cabecalho-descricao">Preço: </h3>
+        <h3 class="descricao">GC$ <%= carta["preco"] %></h3>
+    </div>
+
+    <button class="botao-comprar">Comprar</button>
+</div>

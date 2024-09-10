@@ -1,22 +1,37 @@
 {
     "usuarios": [
         {
+            "id": 0,
             "username" : "Carla Mariana",
-            "moedas": "5000",
-            "perfil": "Adm",
-            "icon": "/img/gato.png"
+            "moedas": "5000,00",
+            "perfil": "admin",
+            "icon": "/img/gato.png",
+            "cartas-compradas":[
+                {
+                    "img":"/img/magic-1.png",
+                    "nome": "Carta Comprada",
+                    "preco": "5,99"
+                }
+            ],
+            "cartas-vendidas": []
         },
         {
+            "id": 1,
             "username" : "Paulo Davi",
-            "moedas": "2",
-            "perfil": "Premium",
-            "icon": "/img/cachorro.png"
+            "moedas": "2,00",
+            "perfil": "premium",
+            "icon": "/img/cachorro.png",
+            "cartas-compradas":[],
+            "cartas-vendidas": []
         },
         {
+            "id": 2,
             "username" : "Joãozinho",
-            "moedas": "100",
-            "perfil": "Simples",
-            "icon": "/img/porco.png"
+            "moedas": "100,00",
+            "perfil": "simples",
+            "icon": "/img/porco.png",
+            "cartas-compradas":[],
+            "cartas-vendidas": []
         }
     ]
 }

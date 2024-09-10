@@ -1,0 +1,67 @@
+<%- contentFor('title') %>
+<title>Meus Produtos</title>
+
+<%- contentFor('body') %>
+
+<div class="publicidade">
+    <img src="/img/publicidade.png" alt="publicidade">
+</div>
+
+<div class="container">
+
+    <div class="cabecalho">
+        <h1><%= user["username"] %></h1>
+        <img src=<%= user["icon"] %> alt="Ícone do usuário">
+    </div>
+
+    <div class="jogo">
+        <div class="nome-jogo"><h2>Produtos à venda</h2></div>
+        <div class="cartas">
+            <% for (var i=0; i<cartas.length; i++) {%>
+                <div class="produto-editavel">
+                    <div class="produto">
+                        <img class="carta" src=<%= cartas[i]["frente"] %> alt="Carta">
+                        <div class="nome"><%= cartas[i]["nome"] %></div>
+                        <div class="preco">GC$ <%= cartas[i]["preco"] %></div>
+                    </div>
+                    <a class="botao-editar" href="editar-produto"></a>
+                </div>
+            <% } %>
+        </div>
+        <div class="botao-adicionar-div">
+            <a class="botao-adicionar" href="add-produto">
+                <img class="adicionar" src="./img/botao-add.png" alt="Botão de adicionar">
+            </a>
+        </div>
+    </div>
+
+    <div class="jogo">
+        <div class="nome-jogo"><h2>Produtos vendidos</h2></div>
+        <div class="cartas">
+            <% for (var i=0; i<user["cartas-vendidas"].length; i++) {%>
+                <div class="produto-editavel">
+                    <div class="produto">
+                        <img class="carta" src=<%= user["cartas-vendidas"][i]["img"] %> alt="Carta">
+                        <div class="nome"><%= user["cartas-vendidas"][i]["nome"] %></div>
+                        <div class="preco">GC$ <%= user["cartas-vendidas"][i]["preco"] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="jogo">
+        <div class="nome-jogo"><h2>Aquisições</h2></div>
+        <div class="cartas">
+            <% for (var i=0; i<user["cartas-vendidas"].length; i++) {%>
+                <div class="produto-editavel">
+                    <div class="produto">
+                        <img class="carta" src=<%= user["cartas-compradas"][i]["img"] %> alt="Carta">
+                        <div class="nome"><%= user["cartas-compradas"][i]["nome"] %></div>
+                        <div class="preco">GC$ <%= user["cartas-compradas"][i]["preco"] %></div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>

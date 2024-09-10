@@ -125,7 +125,6 @@ body, html {
     width: 80%;
     margin: 20px auto;
     text-align: center;
-    /* background-color: red; */
 }
 
 .jogo h2{
@@ -218,8 +217,12 @@ body, html {
 }
 
 .botao-editar{
+    background-image: url('../img/editar.png');
+    background-size: cover; 
     margin-left: 15px;
     margin-top: -250px;
+    width: 40px;
+    height: 40px;
 }
 
 .editar{
@@ -277,12 +280,11 @@ body, html {
 .editar-imagem{
     position: absolute;
     top: 60%; 
-    right: 50px; 
+    right: 10%; 
     width: 100px;
-}
-
-.editar-imagem img{
-    width: 100px;
+    height: 100px;
+    background-image: url('../img/editar.png');
+    background-size: cover; 
 }
 
 .descricao-produto{
@@ -346,6 +348,14 @@ body, html {
     height: 20px;
     text-align: center;
     margin-top: 18px;
+}
+
+.descricao-produto select{
+    width: 100px;
+    height: 20px;
+    text-align: center;
+    margin-top: 18px;
+    background-color: #CBB7F1;
 }
 
 .botao-salvar{

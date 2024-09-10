@@ -1,0 +1,25 @@
+<%- contentFor('title') %>
+<title>Editar</title>
+
+<%- contentFor('body') %>
+
+<div class="container">
+        
+    <div class="usuario-a-editar">
+        <div class="user-icon">
+            <img src=<%= user["icon"] %> alt="User Icon">
+        </div>
+        <div class="username">
+            <%= user["username"] %>
+        </div>
+    </div>
+    <div class="descricao-produto">
+        <h3 class="cabecalho-descricao">Moedas: </h3>
+        <input value="GC$ <%= user["moedas"] %>" class="descricao">
+    </div>
+
+    <div class="botoes-editar">
+        <button class="botao-salvar">Salvar</button>
+        <button class="botao-excluir">Excluir</button>
+    </div>
+</div>
