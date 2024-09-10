@@ -29,7 +29,7 @@
 </header>
 
 <nav class="nav">
-	<a href="/" class=<%= navclass["produtos"] %>>Produtos</a>
-	<a href="meus-produtos" class=<%= navclass["meus-produtos"] %>>Meus Produtos</a>
-	<a href="meus-produtos-dark">Dark mode</a>
+	<a href="/?user=<%= user["id"] %>" class=<%= navclass["produtos"] %>>Produtos</a>
+	<a href="/meus-produtos?user=<%= user["id"] %>" class=<%= navclass["meus-produtos"] %>>Meus Produtos</a>
+	<a href="/meus-produtos-dark">Dark mode</a>
 </nav>

@@ -21,9 +21,9 @@
 </header>
 
 <nav class="nav">
-	<a href="/" class=<%= navclass["produtos"] %>>Produtos</a>
-	<a href="adm" class=<%= navclass["adm"] %>>Usuários</a>
-	<a href="meus-produtos" class=<%= navclass["meus-produtos"] %>>Meus Produtos</a>
-	<a href="comunidade" class=<%= navclass["comunidade"] %>>Comunidade</a>
-	<a href="meus-produtos-dark">Switch mode</a>
+	<a href="/?user=<%= user["id"] %>" class=<%= navclass["produtos"] %>>Produtos</a>
+	<a href="/adm?user=<%= user["id"] %>" class=<%= navclass["adm"] %>>Usuários</a>
+	<a href="/meus-produtos?user=<%= user["id"] %>" class=<%= navclass["meus-produtos"] %>>Meus Produtos</a>
+	<a href="/comunidade?user=<%= user["id"] %>" class=<%= navclass["comunidade"] %>>Comunidade</a>
+	<a href="/meus-produtos-dark">Switch mode</a>
 </nav>

@@ -348,9 +348,15 @@ input{
 
 .container .botao-adicionar-div{
     margin-top: -200px;
+    width: 100px;
+    height: 100px;
+    background-image: url('../img/botao-add.png');
+    background-size: cover; 
+    margin-inline: auto;
 }
 
-.container .botao-adicionar-div .botao-adicionar img{
+.container .botao-adicionar-div a {
     width: 100px;
+    height: 100px;
 }
 

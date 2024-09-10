@@ -85,7 +85,27 @@ app.get('/meus-produtos', (req, res) => {
 			}
 		}
 	}
-	res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, cartas: cartas, css: "/css/produtos.css"});
+	res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, dono: user, cartas: cartas, css: "/css/produtos.css"});
+})
+
+app.get('/meus-produtos/:id', (req, res) => {
+	const user = req.query.user;
+	const donoId = req.params.id;
+	
+	var dono = setUser(donoId);
+	var data = fs.readFileSync(jogos_dir , "utf8");
+	var jogos = JSON.parse(data)["jogos"];
+	var cartas = [];
+	for (let i = 0; i < jogos.length; i++) {
+		var jogo = jogos[i];
+		for (let j = 0; j < jogo["cartas"].length; j++) {
+			var carta = jogo["cartas"][j];
+			if(carta["vendedor"] == dono["id"]){
+				cartas.push(carta);
+			}
+		}
+	}
+	res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, dono: dono, cartas: cartas, css: "/css/produtos.css"});
 })
 
 app.get('/editar-produto/:id', (req, res) => {

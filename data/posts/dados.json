@@ -1,6 +1,7 @@
 {
     "posts": [
         {
+            "id": 0,
             "user" : "0",
             "titulo": "Título do Post 1",
             "tags": ["Magic"],
@@ -8,6 +9,7 @@
             "comentarios": []
         },
         {
+            "id": 1,
             "user" : "1",
             "titulo": "Título do Post 2",
             "tags": ["Pokémon"],
@@ -15,6 +17,7 @@
             "comentarios": []
         },
         {
+            "id": 2,
             "user" : "2",
             "titulo": "Título do Post 3",
             "tags": ["Yu-gi-oh!"],

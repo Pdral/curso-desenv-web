@@ -10,8 +10,8 @@
 <div class="container">
 
     <div class="cabecalho">
-        <h1><%= user["username"] %></h1>
-        <img src=<%= user["icon"] %> alt="Ícone do usuário">
+        <h1><%= dono["username"] %></h1>
+        <img src=<%= dono["icon"] %> alt="Ícone do usuário">
     </div>
 
     <div class="jogo">
@@ -24,26 +24,24 @@
                         <div class="nome"><%= cartas[i]["nome"] %></div>
                         <div class="preco">GC$ <%= cartas[i]["preco"] %></div>
                     </div>
-                    <a class="botao-editar" href="editar-produto"></a>
+                    <a class="botao-editar" href="/editar-produto/<%= cartas[i]["id"] %>?user=<%= user["id"] %>"></a>
                 </div>
             <% } %>
         </div>
-        <div class="botao-adicionar-div">
-            <a class="botao-adicionar" href="add-produto">
-                <img class="adicionar" src="./img/botao-add.png" alt="Botão de adicionar">
-            </a>
-        </div>
+        <a class="botao-adicionar" href="/add-produto?user=<%= user["id"] %>">
+            <div class="botao-adicionar-div"></div>
+        </a>
     </div>
 
     <div class="jogo">
         <div class="nome-jogo"><h2>Produtos vendidos</h2></div>
         <div class="cartas">
-            <% for (var i=0; i<user["cartas-vendidas"].length; i++) {%>
+            <% for (var i=0; i<dono["cartas-vendidas"].length; i++) {%>
                 <div class="produto-editavel">
                     <div class="produto">
-                        <img class="carta" src=<%= user["cartas-vendidas"][i]["img"] %> alt="Carta">
-                        <div class="nome"><%= user["cartas-vendidas"][i]["nome"] %></div>
-                        <div class="preco">GC$ <%= user["cartas-vendidas"][i]["preco"] %></div>
+                        <img class="carta" src=<%= dono["cartas-vendidas"][i]["img"] %> alt="Carta">
+                        <div class="nome"><%= dono["cartas-vendidas"][i]["nome"] %></div>
+                        <div class="preco">GC$ <%= dono["cartas-vendidas"][i]["preco"] %></div>
                     </div>
                 </div>
             <% } %>
@@ -53,12 +51,12 @@
     <div class="jogo">
         <div class="nome-jogo"><h2>Aquisições</h2></div>
         <div class="cartas">
-            <% for (var i=0; i<user["cartas-vendidas"].length; i++) {%>
+            <% for (var i=0; i<dono["cartas-vendidas"].length; i++) {%>
                 <div class="produto-editavel">
                     <div class="produto">
-                        <img class="carta" src=<%= user["cartas-compradas"][i]["img"] %> alt="Carta">
-                        <div class="nome"><%= user["cartas-compradas"][i]["nome"] %></div>
-                        <div class="preco">GC$ <%= user["cartas-compradas"][i]["preco"] %></div>
+                        <img class="carta" src=<%= dono["cartas-compradas"][i]["img"] %> alt="Carta">
+                        <div class="nome"><%= dono["cartas-compradas"][i]["nome"] %></div>
+                        <div class="preco">GC$ <%= dono["cartas-compradas"][i]["preco"] %></div>
                     </div>
                 </div>
             <% } %>

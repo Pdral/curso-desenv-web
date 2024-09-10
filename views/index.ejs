@@ -27,7 +27,7 @@
                 <div class="cartas">
                     <% for (var j=0; j<jogos[i]["cartas"].length; j++) {%>
                         <div class="produto">
-                            <a href="produto">
+                            <a href="/produto/<%= jogos[i]["cartas"][j]["id"] %>?user=<%= user["id"] %>">
                                 <img class="carta" src=<%= jogos[i]["cartas"][j]["frente"] %> alt="Carta">
                             </a>
                             <div class="nome"><%= jogos[i]["cartas"][j]["nome"] %></div>
