@@ -107,9 +107,13 @@ app.get('/meus-produtos', (req, res) => {
 	}
 	 // Verifica se a requisição é via AJAX (fetch)
 	 if (req.xhr) {
-		res.json({ cartas: cartas });
+        res.json({ 
+            cartasCompradas: dono["cartas-compradas"],
+            cartasVendidas: dono["cartas-vendidas"],
+            cartas: cartas || [] 
+        });
 	} else {
-		res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, dono: dono, cartas: cartas, css: selectedCSS});
+		res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, dono: user, cartas: cartas, css: selectedCSS});
 	}
 })
 
@@ -237,7 +241,15 @@ app.get('/adm', (req, res) => {
 	var data = fs.readFileSync(users_dir , "utf8");
 	var usuarios = JSON.parse(data)["usuarios"];
 
-	res.render('adm', {jogos: jogos, usuarios: usuarios, header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
+	if (req.xhr) {
+        res.json({ 
+            jogos: jogos,
+            usuarios: usuarios
+        });
+	} else{
+		res.render('adm', {jogos: jogos, usuarios: usuarios, header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
+	}
+	
 })
 
 app.get('/editar-usuario/:id', (req, res) => {
