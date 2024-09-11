@@ -9,18 +9,8 @@
         <button id="pesquisar">Pesquisar</button>
     </div>
 
-
-    <div class="usuarios">
-        <% for (var i=0; i<usuarios.length; i++) {%>
-            <div class="editar-usuario">
-                <div class="usuario">
-                    <img src=<%= usuarios[i]["icon"] %> alt="Imagem do Usuário">
-                    <div class="nickname"><%= usuarios[i]["username"] %></div>
-                    <div class="moedas">GC$ <%= usuarios[i]["moedas"] %></div>
-                </div>
-                <a class="botao-editar" href="/editar-usuario/<%= usuarios[i]["id"] %>?user=<%= user["id"] %>"></a>
-            </div>
-        <% } %>
+    <div class="usuarios" id="usuarios-container">
+        <!-- Os dados dos usuários serão inseridos aqui pelo JavaScript -->
     </div>
         
     <div class="search-bar">            
@@ -28,15 +18,8 @@
         <button id="pesquisar2">Pesquisar</button>
     </div>
 
-    <div class="jogos">
-        <% for (var i=0; i<jogos.length; i++) {%>
-            <div class="editar-jogo">
-                <div class="jogo">
-                    <div class="name"><%= jogos[i]["nome"] %></div>
-                </div>
-                <a class="botao-editar" href="/editar-jogo/<%= jogos[i]["id"]%>?user=<%= user["id"] %>"></a>
-            </div>
-        <% } %>
+    <div class="jogos" id="jogos-container">
+        <!-- Os dados dos jogos serão inseridos aqui pelo JavaScript -->
     </div>
 
     <a class="botao-adicionar" href="/editar-jogo">

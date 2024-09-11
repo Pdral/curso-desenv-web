@@ -16,17 +16,8 @@
 
     <div class="jogo">
         <div class="nome-jogo"><h2>Produtos à venda</h2></div>
-        <div class="cartas">
-            <% for (var i=0; i<cartas.length; i++) {%>
-                <div class="produto-editavel">
-                    <div class="produto">
-                        <img class="carta" src=<%= cartas[i]["frente"] %> alt="Carta">
-                        <div class="nome"><%= cartas[i]["nome"] %></div>
-                        <div class="preco">GC$ <%= cartas[i]["preco"] %></div>
-                    </div>
-                    <a class="botao-editar" href="/editar-produto/<%= cartas[i]["id"] %>?user=<%= user["id"] %>"></a>
-                </div>
-            <% } %>
+        <div id="cartas-container" class="cartas">
+            <!-- As cartas serão inseridas aqui via Fetch API -->
         </div>
         <a class="botao-adicionar" href="/add-produto?user=<%= user["id"] %>">
             <div class="botao-adicionar-div"></div>
@@ -35,31 +26,15 @@
 
     <div class="jogo">
         <div class="nome-jogo"><h2>Produtos vendidos</h2></div>
-        <div class="cartas">
-            <% for (var i=0; i<dono["cartas-vendidas"].length; i++) {%>
-                <div class="produto-editavel">
-                    <div class="produto">
-                        <img class="carta" src=<%= dono["cartas-vendidas"][i]["img"] %> alt="Carta">
-                        <div class="nome"><%= dono["cartas-vendidas"][i]["nome"] %></div>
-                        <div class="preco">GC$ <%= dono["cartas-vendidas"][i]["preco"] %></div>
-                    </div>
-                </div>
-            <% } %>
+        <div id="cartas-compradas" class="cartas">
+            <!-- As cartas serão inseridas aqui via Fetch API -->
         </div>
     </div>
 
     <div class="jogo">
         <div class="nome-jogo"><h2>Aquisições</h2></div>
-        <div class="cartas">
-            <% for (var i=0; i<dono["cartas-vendidas"].length; i++) {%>
-                <div class="produto-editavel">
-                    <div class="produto">
-                        <img class="carta" src=<%= dono["cartas-compradas"][i]["img"] %> alt="Carta">
-                        <div class="nome"><%= dono["cartas-compradas"][i]["nome"] %></div>
-                        <div class="preco">GC$ <%= dono["cartas-compradas"][i]["preco"] %></div>
-                    </div>
-                </div>
-            <% } %>
+        <div id="cartas-vendidas" class="cartas">
+            <!-- As cartas serão inseridas aqui via Fetch API -->
         </div>
     </div>
 </div>

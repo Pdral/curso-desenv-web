@@ -8,12 +8,18 @@
             "icon": "/img/gato.png",
             "cartas-compradas":[
                 {
-                    "img":"/img/magic-1.png",
-                    "nome": "Carta Comprada",
+                    "img":"/img/magic3.png",
+                    "nome": "Aquisição Hostil",
                     "preco": "5,99"
                 }
             ],
-            "cartas-vendidas": []
+            "cartas-vendidas": [
+                {
+                "img":"/img/magic4.png",
+                "nome": "Guardião das Eras",
+                "preco": "0,50"
+                }
+            ]
         },
         {
             "id": 1,

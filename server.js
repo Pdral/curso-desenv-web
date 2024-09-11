@@ -105,30 +105,60 @@ app.get('/meus-produtos', (req, res) => {
 			}
 		}
 	}
-	res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, dono: user, cartas: cartas, css: selectedCSS});
+	 // Verifica se a requisição é via AJAX (fetch)
+	 if (req.xhr) {
+		res.json({ cartas: cartas });
+	} else {
+		res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, dono: dono, cartas: cartas, css: selectedCSS});
+	}
 })
 
 app.get('/meus-produtos/:id', (req, res) => {
-	const user = req.query.user;
-	const donoId = req.params.id;
-	const theme = req.cookies.theme || 'light'; 
+    const user = req.query.user;
+    const donoId = req.params.id;
+    const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
-	
-	var dono = setUser(donoId);
-	var data = fs.readFileSync(jogos_dir , "utf8");
-	var jogos = JSON.parse(data)["jogos"];
-	var cartas = [];
-	for (let i = 0; i < jogos.length; i++) {
-		var jogo = jogos[i];
-		for (let j = 0; j < jogo["cartas"].length; j++) {
-			var carta = jogo["cartas"][j];
-			if(carta["vendedor"] == dono["id"]){
-				cartas.push(carta);
-			}
-		}
-	}
-	res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, dono: dono, cartas: cartas, css: selectedCSS});
-})
+    
+    var dono = setUser(donoId);  // Verifique se setUser está retornando corretamente
+    if (!dono) {
+        return res.status(404).send('Usuário não encontrado');
+    }
+
+    var data = fs.readFileSync(jogos_dir , "utf8");
+    var jogos = JSON.parse(data)["jogos"];
+    var cartas = [];
+    
+    for (let i = 0; i < jogos.length; i++) {
+        var jogo = jogos[i];
+        for (let j = 0; j < jogo["cartas"].length; j++) {
+            var carta = jogo["cartas"][j];
+            if (carta["vendedor"] == dono["id"]) {
+                cartas.push(carta);
+            }
+        }
+    }
+
+    // Verifica se as cartas foram encontradas
+    console.log('Cartas do dono:', cartas);
+
+    // Verifica se a requisição é via AJAX (fetch)
+    if (req.xhr) {
+        res.json({ 
+            cartasCompradas: dono["cartas-compradas"],
+            cartasVendidas: dono["cartas-vendidas"],
+            cartas: cartas || [] 
+        });
+    } else {
+        res.render('meus-produtos', {
+            header: setHeader(user), 
+            navclass: { "meus-produtos": "active" }, 
+            user: user, 
+            dono: dono, 
+            cartas: cartas, 
+            css: selectedCSS
+        });
+    }
+});
 
 app.get('/editar-produto/:id', (req, res) => {
 	const user = req.query.user;
@@ -183,7 +213,7 @@ app.get('/produto/:id', (req, res) => {
 app.get('/criar-post', (req, res) => {
 	const user = req.query.user;
 	const theme = req.cookies.theme || 'light'; 
-    const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
+    const selectedCSS = theme === 'dark' ? '/css/post2.css' : '/css/post.css';
 	var data = fs.readFileSync(jogos_dir , "utf8");
 	var jogos = JSON.parse(data)["jogos"];
 

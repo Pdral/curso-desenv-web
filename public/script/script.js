@@ -171,11 +171,146 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Carrega as cartas na pagina de meus-produtos
+    function setupCartas() {
+        const cartasContainer = document.getElementById('cartas-container');
+        const cartasCompradasContainer = document.getElementById('cartas-compradas');
+        const cartasVendidasContainer = document.getElementById('cartas-vendidas');
+        
+        if (cartasContainer) {
+            // Extrair o ID da página da URL
+            const pathParts = window.location.pathname.split('/');
+            const pageId = pathParts[pathParts.length - 1]; 
+            
+            // Extrair o ID do usuário dos parâmetros da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('user'); 
+            
+            // Faz a requisição via Fetch para carregar as cartas usando o ID da página
+            fetch(`/meus-produtos/${pageId}?user=${userId}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na requisição');
+                }
+            
+                return response.json();
+            })
+            .then(data => {
+                console.log('Dados recebidos:', data);  // Verificar os dados recebidos
+                cartasContainer.innerHTML = '';  // Limpar conteúdo anterior
+                data.cartas.forEach(carta => {
+                    const cartaDiv = document.createElement('div');
+                    cartaDiv.classList.add('produto');
+                    cartaDiv.innerHTML = `
+                        <img src="${carta.frente}" alt="${carta.nome}" class="carta">
+                        <div class="nome">${carta.nome}</div>
+                        <div class="preco">Preço: R$ ${carta.preco}</div>
+                    `;
+                    cartasContainer.appendChild(cartaDiv);
+                });
+            
+                cartasCompradasContainer.innerHTML = '';
+                data.cartasCompradas.forEach(carta => {
+                    const cartaDiv = document.createElement('div');
+                    cartaDiv.classList.add('produto');
+                    cartaDiv.innerHTML = `
+                        <img src="${carta.img}" alt="${carta.nome}" class="carta">
+                        <div class="nome">${carta.nome}</div>
+                        <div class="preco">GC$ ${carta.preco}</div>
+                    `;
+                    cartasCompradasContainer.appendChild(cartaDiv);
+                });
+            
+                cartasVendidasContainer.innerHTML = '';
+                data.cartasVendidas.forEach(carta => {
+                    const cartaDiv = document.createElement('div');
+                    cartaDiv.classList.add('produto');
+                    cartaDiv.innerHTML = `
+                        <img src="${carta.img}" alt="${carta.nome}" class="carta">
+                        <div class="nome">${carta.nome}</div>
+                        <div class="preco">GC$ ${carta.preco}</div>
+                    `;
+                    cartasVendidasContainer.appendChild(cartaDiv);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao carregar as cartas:', error);
+            });
+        }
+    }
+
+     // Verifique se estamos na página de administração
+     if (window.location.pathname !== '/adm') {
+        return;
+    }
+    function setupUsuarioseJogos() {
+        fetch('/adm', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const jogos = data.jogos;
+                const usuarios = data.usuarios;
+
+                // Atualizar o container de usuários
+                const usuariosContainer = document.getElementById('usuarios-container');
+                usuariosContainer.innerHTML = ''; // Limpar conteúdo existente
+
+                usuarios.forEach(usuario => {
+                    const usuarioDiv = document.createElement('div');
+                    usuarioDiv.className = 'editar-usuario';
+
+                    const usuarioContent = `
+                        <div class="usuario">
+                            <img src="${usuario.icon}" alt="Imagem do Usuário">
+                            <div class="nickname">${usuario.username}</div>
+                            <div class="moedas">GC$ ${usuario.moedas}</div>
+                        </div>
+                        <a class="botao-editar" href="/editar-usuario/${usuario.id}?user=${usuario.id}"></a>
+                    `;
+
+                    usuarioDiv.innerHTML = usuarioContent;
+                    usuariosContainer.appendChild(usuarioDiv);
+                });
+
+                // Atualizar o container de jogos
+                const jogosContainer = document.getElementById('jogos-container');
+                jogosContainer.innerHTML = ''; // Limpar conteúdo existente
+
+                jogos.forEach(jogo => {
+                    const jogoDiv = document.createElement('div');
+                    jogoDiv.className = 'jogo'; // Adicione uma classe para estilizar jogos
+
+                    const jogoContent = `
+                        <div class="jogo-info">
+                            <div class="jogo-nome">${jogo.nome}</div>
+                        </div>
+                    `;
+
+                    jogoDiv.innerHTML = jogoContent;
+                    jogosContainer.appendChild(jogoDiv);
+                });
+
+                
+            })
+            .catch(error => {
+                console.error('Erro ao carregar dados:', error);
+            });
+    }
+    
     // Chama as funções para configurar as funcionalidades
     setupLikeButtons();
     setupDropdown();
     setupChat();
     setupCommentForm();
     applyFontSize();
-    
+    setupCartas();
+    setupUsuarioseJogos()
 });
