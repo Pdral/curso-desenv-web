@@ -48,6 +48,23 @@ body, html {
     border-bottom: 2px solid #c8e6c9;
 }
 
+.header .acesso{
+    justify-content: start;
+    display: flex;
+}
+
+.header .acesso a{
+    color: #ffffff;
+    font-size: 1.0em;
+    font-weight: bold;
+    padding-right: 80px;
+    text-decoration: none;
+}
+
+.login:hover, .cadastro:hover {
+    text-decoration: underline; 
+  }
+
 #increaseFont, #decreaseFont {
     color: #5322ad;
     background-color: #ffffff;

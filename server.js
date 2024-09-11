@@ -108,8 +108,8 @@ app.get('/meus-produtos', (req, res) => {
 	 // Verifica se a requisição é via AJAX (fetch)
 	 if (req.xhr) {
         res.json({ 
-            cartasCompradas: dono["cartas-compradas"],
-            cartasVendidas: dono["cartas-vendidas"],
+            cartasCompradas: user["cartas-compradas"],
+            cartasVendidas: user["cartas-vendidas"],
             cartas: cartas || [] 
         });
 	} else {
