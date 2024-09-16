@@ -390,6 +390,8 @@ input{
 }
 
 .container .botao-adicionar-div a {
+    display: inline-block;
     width: 100px;
     height: 100px;
+    border-radius: 50%;
 }
