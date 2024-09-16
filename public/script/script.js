@@ -217,6 +217,19 @@ function setupCartas() {
         .then(data => {
             console.log('Dados recebidos:', data);  // Verificar os dados recebidos
             cartasContainer.innerHTML = '';  // Limpar conteúdo anterior
+
+            if(pageId == undefined || pageId == userId){
+                const botaoAdd = document.createElement('a');
+                botaoAdd.classList.add('botao-adicionar');
+                botaoAdd.href = '/add-produto?user=' + userId;
+                const adddiv = document.createElement('div');
+                adddiv.classList.add("botao-adicionar-div");
+                botaoAdd.appendChild(adddiv);
+
+                const jogosavenda = document.getElementById('div-a-venda');
+                jogosavenda.appendChild(botaoAdd);
+            }
+
             data.cartas.forEach(carta => {
                 const prodEditavel = document.createElement('div'); 
                 prodEditavel.classList.add('produto-editavel');

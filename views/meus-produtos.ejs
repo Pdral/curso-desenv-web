@@ -14,14 +14,12 @@
         <img src=<%= dono["icon"] %> alt="Ícone do usuário">
     </div>
 
-    <div class="jogo">
+    <div class="jogo" id="div-a-venda">
         <div class="nome-jogo"><h2>Produtos à venda</h2></div>
         <div id="cartas-container" class="cartas">
             <!-- As cartas serão inseridas aqui via Fetch API -->
         </div>
-        <a class="botao-adicionar" href="/add-produto?user=<%= user["id"] %>">
-            <div class="botao-adicionar-div"></div>
-        </a>
+        
     </div>
 
     <div class="jogo">
