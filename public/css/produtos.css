@@ -441,7 +441,9 @@ input{
     margin-inline: auto;
 }
 
-.jogo .botao-adicionar-div a {
+.jogo .botao-adicionar {
+    display: inline-block;
     width: 100px;
     height: 100px;
+    border-radius: 50%;
 }

@@ -16,8 +16,8 @@ app.use(cookieParser());
 app.use((req, res, next) => {
     const userId = req.query.user;
 
-	if(userId == undefined){
-		req.query.user = {"perfil": "visitante"}
+	if(userId == undefined || userId == ""){
+		req.query.user = {"perfil": "visitante", "id": undefined}
 	} else{
 		var data = fs.readFileSync(users_dir , "utf8");
 		var users = JSON.parse(data); 
@@ -258,18 +258,25 @@ app.get('/editar-usuario/:id', (req, res) => {
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
 
-	res.render('editar-usuario', {user: setUser(userId), header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
+	res.render('editar-usuario', {usuario: setUser(userId), header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
 })
 
 app.get('/editar-jogo/:id', (req, res) => {
 	const user = req.query.user;
 	const jogoId = req.params.id;
+	let jogo;
+	if(jogoId == 'new'){
+		jogo = {"nome": 'Nome do jogo'};
+	} else{
+		var data = fs.readFileSync(jogos_dir , "utf8");
+		var jogos = JSON.parse(data)["jogos"];
+		jogo = jogos[jogoId];
+	}
+
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
-	var data = fs.readFileSync(jogos_dir , "utf8");
-	var jogos = JSON.parse(data)["jogos"];
 
-	res.render('editar-jogo', {jogo: jogos[jogoId], header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
+	res.render('editar-jogo', {jogo: jogo, header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
 })
 
 app.listen(port, function () {

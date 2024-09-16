@@ -218,6 +218,8 @@ function setupCartas() {
             console.log('Dados recebidos:', data);  // Verificar os dados recebidos
             cartasContainer.innerHTML = '';  // Limpar conteúdo anterior
             data.cartas.forEach(carta => {
+                const prodEditavel = document.createElement('div'); 
+                prodEditavel.classList.add('produto-editavel');
                 const cartaDiv = document.createElement('div');
                 cartaDiv.classList.add('produto');
                 cartaDiv.innerHTML = `
@@ -225,7 +227,16 @@ function setupCartas() {
                     <div class="nome">${carta.nome}</div>
                     <div class="preco">Preço: R$ ${carta.preco}</div>
                 `;
-                cartasContainer.appendChild(cartaDiv);
+                prodEditavel.appendChild(cartaDiv);
+
+                if(pageId == undefined || pageId == userId){
+                    const botaoEditar = document.createElement('a');
+                    botaoEditar.classList.add('botao-editar');
+                    botaoEditar.href = '/editar-produto/' + carta["id"] + '?user=' + userId;
+                    prodEditavel.appendChild(botaoEditar);
+                }
+                
+                cartasContainer.appendChild(prodEditavel);
             });
         
             cartasCompradasContainer.innerHTML = '';
@@ -264,6 +275,8 @@ function setupUsuarioseJogos() {
     if (window.location.pathname !== '/adm') {
         return undefined;
     }
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user'); 
     fetch('/adm', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(response => {
             if (!response.ok) {
@@ -293,7 +306,7 @@ function setupUsuarioseJogos() {
                         <div class="nickname">${usuario.username}</div>
                         <div class="moedas">GC$ ${usuario.moedas}</div>
                     </div>
-                    <a class="botao-editar" href="/editar-usuario/${usuario.id}?user=${usuario.id}"></a>
+                    <a class="botao-editar" href="/editar-usuario/${usuario.id}?user=${userId}"></a>
                 `;
 
                 usuarioDiv.innerHTML = usuarioContent;
@@ -305,6 +318,10 @@ function setupUsuarioseJogos() {
             jogosContainer.innerHTML = ''; // Limpar conteúdo existente
 
             jogos.forEach(jogo => {
+
+                const editarJogo = document.createElement('div');
+                editarJogo.className = 'editar-jogo';
+
                 const jogoDiv = document.createElement('div');
                 jogoDiv.className = 'jogo'; // Adicione uma classe para estilizar jogos
 
@@ -315,7 +332,15 @@ function setupUsuarioseJogos() {
                 `;
 
                 jogoDiv.innerHTML = jogoContent;
-                jogosContainer.appendChild(jogoDiv);
+                editarJogo.appendChild(jogoDiv);
+
+                const botaoEditar = document.createElement('a');
+                botaoEditar.classList.add('botao-editar');
+                botaoEditar.href = '/editar-jogo/' + jogo["id"] + '?user=' + userId;
+                editarJogo.appendChild(botaoEditar);
+
+                
+                jogosContainer.appendChild(editarJogo);
             });
 
             
