@@ -1,27 +1,36 @@
-{     "posts": [
-        {
-            "id": 0,
-            "user" : "0",
-            "titulo": "Título do Post 1",
-            "jogo": "Magic",
-            "texto": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            "comentarios": []
-        },
-        {
-            "id": 1,
-            "user" : "1",
-            "titulo": "Título do Post 2",
-            "jogo": "Pokémon",
-            "texto": "Curabitur vel tellus at velit consequat faucibus. Vestibulum nec orci eu urna tincidunt auctor.",
-            "comentarios": []
-        },
-        {
-            "id": 2,
-            "user" : "2",
-            "titulo": "Título do Post 3",
-            "jogo": "Yu-gi-oh!",
-            "texto": "Sed nec eros at purus sollicitudin vestibulum ac eu nunc. Donec auctor leo sed mi tristique.",
-            "comentarios": []
-        }
-    ]
+{
+  "posts": [
+    {
+      "id": 3,
+      "user": "1",
+      "titulo": "teste",
+      "jogo": "Magic",
+      "texto": "teste",
+      "comentarios": []
+    },
+    {
+      "id": 2,
+      "user": "2",
+      "titulo": "Título do Post 3",
+      "jogo": "Yu-gi-oh!",
+      "texto": "Sed nec eros at purus sollicitudin vestibulum ac eu nunc. Donec auctor leo sed mi tristique.",
+      "comentarios": []
+    },
+    {
+      "id": 1,
+      "user": "1",
+      "titulo": "Título do Post 2",
+      "jogo": "Pokémon",
+      "texto": "Curabitur vel tellus at velit consequat faucibus. Vestibulum nec orci eu urna tincidunt auctor.",
+      "comentarios": []
+    },
+    {
+      "id": 0,
+      "user": "0",
+      "titulo": "Título do Post 1",
+      "jogo": "Magic",
+      "texto": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "comentarios": []
+    }
+  ]
 }

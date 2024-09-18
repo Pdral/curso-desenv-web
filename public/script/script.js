@@ -170,6 +170,45 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.remove('dark-mode');
         }
     }
+
+    // Função para Criar post
+    // Verifique se estamos na página decriar post
+    if (window.location.pathname !== '/criar-post') {
+        return undefined;
+    }
+    const form = document.getElementById('f2');
+    
+    // Adicione o campo user ao formulário
+    const urlParams = new URLSearchParams(window.location.search);
+    const user = urlParams.get('user');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita o envio padrão do formulário
+
+        // Obtém os dados do formulário
+        const formData = new FormData(form);
+        formData.append('user', user);
+
+        // Cria uma requisição POST
+        fetch('http://localhost:8084/criar-post', {
+            method: 'POST',
+            body: new URLSearchParams(formData) // Converte FormData para URLSearchParams
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao criar post: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Post criado com sucesso:', data);
+            // Opcional: redirecionar para outra página ou atualizar a interface
+            window.location.href = '/comunidade?user=' + user; // Exemplo: redirecionar para a página da comunidade
+        })
+        .catch(error => {
+            console.error('Erro ao criar post:', error);
+        });
+    });
     
     // Chama as funções para configurar as funcionalidades
     setupLikeButtons();

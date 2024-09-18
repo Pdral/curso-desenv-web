@@ -9,6 +9,11 @@ const ids_path = "data/ids.json";
 http.createServer((req, res) => {
 	const u = new URL(req.url, `http://${req.headers.host}`);
 
+	 // Configurar cabeçalhos CORS
+	 res.setHeader('Access-Control-Allow-Origin', '*'); // Permite todas as origens
+	 res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+	 res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
     switch (u.pathname) {
 
         case '/usuarios':
@@ -25,6 +30,28 @@ http.createServer((req, res) => {
 			break;
 		case '/carta':
 			handleGetCarta(res, u);
+			break;
+		case '/criar-post':
+			if (req.method === 'POST') {
+				let body = '';
+				req.on('data', chunk => {
+					body += chunk.toString(); // Concatena os chunks recebidos
+				});
+				req.on('end', () => {
+					const postData = new URLSearchParams(body);
+					const newPost = createPost({
+						titulo: postData.get('titulo'),
+						texto: postData.get('texto'),
+						jogo: postData.get('tipo'), 
+						user: postData.get('user') 
+					});
+					res.writeHead(200, { 'Content-Type': 'application/json' });
+					res.end(JSON.stringify(newPost));
+				});
+			} else {
+				res.writeHead(405, { 'Content-Type': 'text/plain' });
+				res.end('Method Not Allowed');
+			}
 			break;
     }
 
@@ -171,4 +198,23 @@ function getCarta(id){
 			}
 		}
 	}
+}
+
+// Função para criar um novo post
+function createPost(postData) {
+    const newId = nextId('posts'); // Gera um novo ID para o post
+    const post = {
+        id: newId,
+        user: postData.user, 
+        titulo: postData.titulo,
+        jogo: postData.jogo,
+        texto: postData.texto,
+        comentarios: []
+    };
+    
+    const posts = JSON.parse(fs.readFileSync(posts_path, 'utf8')).posts;
+    posts.unshift(post);
+    fs.writeFileSync(posts_path, JSON.stringify({ posts }, null, 2), 'utf8');
+    
+    return post;
 }

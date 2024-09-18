@@ -3,15 +3,15 @@
 
 <%- contentFor('body') %>
 <div class="form">
-    <form id="f2">
+    <form id="f2" action="/criar-post" method="POST">
         <h1>Crie seu post!</h1>
-        <p>Título do Post <input type="text" name="titulo"></p>
+        <p>Título do Post <input type="text" name="titulo" required></p>
         <p>Texto do Post</p>
-        <textarea id="texto" placeholder="Escreva seu post aqui"></textarea>
+        <textarea name="texto" required></textarea>
         <p>Jogo 
-            <select name="tipo">
+            <select name="tipo" required>
                 <% for (var i=0; i<jogos.length; i++) {%>
-                    <option value=<%= jogos[i]["nome"] %>><%= jogos[i]["nome"] %></option>
+                    <option value="<%= jogos[i]["nome"] %>"><%= jogos[i]["nome"] %></option>
                 <% } %>
             </select>
         </p>

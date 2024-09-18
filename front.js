@@ -9,6 +9,12 @@ app.use(expressLayouts)
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+// Middleware para parsing de dados de formulário (application/x-www-form-urlencoded)
+app.use(express.urlencoded({ extended: true }));
+
+// Middleware para parsing de dados JSON (application/json), caso precise usar JSON
+app.use(express.json());
+
 app.use((req, res, next) => {
     const userId = req.query.user;
 

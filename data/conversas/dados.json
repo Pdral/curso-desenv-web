@@ -1,0 +1,46 @@
+{
+    "conversas": [
+        {
+            "id": 1,
+            "users": ["0", "2"],
+            "messages": [
+                {
+                    "sender": "0",
+                    "message": "Seja bem-vindo(a) ao GrapeCards! Estou à disposição caso tenha alguma dúvida.",
+                    "timestamp": "2024-09-18T14:30:00",
+                    "avatarUrl": "/img/gato.png"
+                },
+                {
+                    "sender": "0",
+                    "message": "Olá, como você está?",
+                    "timestamp": "2024-09-18T14:20:00",
+                    "avatarUrl": "/img/gato.png"
+                },
+                {
+                    "sender": "2",
+                    "message": "Estou bem, e você?",
+                    "timestamp": "2024-09-18T14:22:00",
+                    "avatarUrl": "/img/porco.png"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "users": ["1", "2"],
+            "messages": [
+                {
+                    "sender": "0",
+                    "message": "Seja bem-vindo(a) ao GrapeCards! Estou à disposição caso tenha alguma dúvida.",
+                    "timestamp": "2024-09-18T14:30:00",
+                    "avatarUrl": "/img/gato.png"
+                },
+                {
+                    "sender": "1",
+                    "message": "Você viu o último jogo?",
+                    "timestamp": "2024-09-18T14:25:00",
+                    "avatarUrl": "/img/cachorro.png"
+                }
+            ]
+        }
+    ]
+}
