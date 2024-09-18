@@ -363,5 +363,89 @@ function setupUsuarioseJogos() {
         });
 }
 
+function setupJogos(filtro) {
+    // Verifique se estamos na página de produtos
+    if (window.location.pathname !== '/') {
+        return undefined;
+    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user'); 
+    fetch('/?filtro=' + filtro, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            var a = response.json();
+            console.log(a);
+            return a;
+        })
+        .then(data => {
+            const jogos = data.jogos;
+
+            console.log('Dados recebidos:', data);  // Verificar os dados recebidos
+
+            // Atualizar o container de jogos
+            const jogosContainer = document.getElementById('jogos');
+            jogosContainer.innerHTML = ''; // Limpar conteúdo existente
+
+            jogos.forEach(jogo => {
+
+                const jogoDiv = document.createElement('div');
+                jogoDiv.className = 'jogo';
+
+                const nome = document.createElement('h2');
+                nome.textContent = jogo["nome"];
+                jogoDiv.appendChild(nome);
+
+                const cartasDiv = document.createElement('div');
+                cartasDiv.className = 'cartas';
+
+                jogo["cartas"].forEach(carta => {
+                    const produtoDiv = document.createElement('div');
+                    produtoDiv.className = 'produto';
+
+                    const produtoLink = document.createElement('a');
+                    produtoLink.href = '/produto/' + carta["id"] + '?user=' + userId;
+
+                    const produtoImg = document.createElement('img');
+                    produtoImg.className = 'carta';
+                    produtoImg.src = carta["frente"];
+                    produtoImg.alt = "Carta";
+
+                    produtoLink.appendChild(produtoImg);
+                    produtoDiv.appendChild(produtoLink);
+
+                    const cartaNome = document.createElement('div');
+                    cartaNome.className = 'nome';
+                    cartaNome.textContent = carta["nome"];
+                    produtoDiv.appendChild(cartaNome);
+
+                    const cartaPreco = document.createElement('div');
+                    cartaPreco.className = 'preco';
+                    cartaPreco.textContent = carta["preco"];
+                    produtoDiv.appendChild(cartaPreco);
+
+                    cartasDiv.appendChild(produtoDiv);
+                })
+
+                jogoDiv.appendChild(cartasDiv);
+
+                jogosContainer.appendChild(jogoDiv);
+            });
+
+            
+        })
+        .catch(error => {
+            console.error('Erro ao carregar dados:', error);
+        });
+}
+
+function filtraPosts(filtro){
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user');
+    window.location.href = '/comunidade?user=' + userId + '&filtro=' + filtro;
+}
+
 setupCartas();
-setupUsuarioseJogos()
+setupUsuarioseJogos();
+setupJogos("");

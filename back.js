@@ -34,11 +34,12 @@ function handleGeneralFiles(req, res, u, fileName, entity){
 	const cors = {'Access-Control-Allow-Origin': '*'};
 	params = u.searchParams;
 	const id = params.get("id");
+	const filtro = params.get("filtro");
 	switch(req.method) {
 		case 'GET':
 			let response
 			if(id == undefined){
-				response = list(fileName, entity);
+				response = list(fileName, entity, filtro);
 			} else {
 				response = find(fileName, entity, id);
 			}
@@ -87,12 +88,24 @@ function nextId(entity){
 	return id;
 }
 
-function list(fileName, entity){
+function list(fileName, entity, filtro){
 	var file = fs.readFileSync(fileName , "utf8");
 	var data = JSON.parse(file)[entity];
 	if(entity == 'posts'){
 		for (let index = 0; index < data.length; index++) {
 			data[index]["user"] = find(users_path, "usuarios",data[index]["user"]);
+		}
+	}
+	return filtrar(data, entity, filtro);
+}
+
+function filtrar(data, entity, filtro){
+	if(filtro != undefined && filtro != null && filtro != ""){
+		switch(entity){
+			case 'posts':
+				return data.filter(post => post["jogo"] == filtro);
+			case 'jogos':
+				return data.filter(jogo => jogo["nome"] == filtro);
 		}
 	}
 	return data;

@@ -1,12 +1,7 @@
-const fs = require('fs');
-const path = require('path');
 const api = "http://localhost:8084";
 const port = 8083;
 const express = require('express');
 const app = express() 
-const jogos_dir = "data/jogos/dados.json";
-const posts_dir = "data/posts/dados.json";
-const users_dir = "data/users/dados.json";
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 const expressLayouts = require('express-ejs-layouts'); 
@@ -37,7 +32,16 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res) => {
 	const user = req.query.user;
-	fetch(api + '/jogos').then(response => {
+	var filtro = req.query.filtro;
+	if(filtro == undefined){
+		filtro = "";
+	}
+	// Lê o cookie 'theme' enviado pelo cliente
+	const theme = req.cookies.theme || 'light';
+	// Define o CSS com base no tema
+	const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
+
+	fetch(api + '/jogos?filtro=' + filtro).then(response => {
 		if (!response.ok) {
 			throw new Error('Network response was not ok');
 		}
@@ -45,13 +49,11 @@ app.get('/', (req, res) => {
 		return a;
 	})
 	.then(jogos => {
-		// Lê o cookie 'theme' enviado pelo cliente
-		const theme = req.cookies.theme || 'light'; 
-
-		// Define o CSS com base no tema
-		const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
-	
-		res.render('index', {jogos: jogos, header: setHeader(user), navclass: {"produtos": "active"}, "user": user, css: selectedCSS});
+		if (req.xhr) {
+			res.json({jogos : jogos});
+		} else {
+			res.render('index', {jogos: jogos, header: setHeader(user), navclass: {"produtos": "active"}, "user": user, css: selectedCSS});
+		}
 	})
 })
 
@@ -81,6 +83,11 @@ app.get('/comunidade', (req, res) => {
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/comunidade2.css' : '/css/comunidade.css';
 
+	var filtro = req.query.filtro;
+	if(filtro == undefined){
+		filtro = "";
+	}
+
 	fetch(api + '/jogos').then(response => {
 		if (!response.ok) {
 			throw new Error('Network response was not ok');
@@ -89,7 +96,7 @@ app.get('/comunidade', (req, res) => {
 		return a;
 	})
 	.then(jogos => {
-		fetch(api + '/posts').then(response => {
+		fetch(api + '/posts?filtro=' + filtro).then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
 			}
@@ -97,7 +104,7 @@ app.get('/comunidade', (req, res) => {
 			return a;
 		})
 		.then(posts => {
-			res.render('comunidade', {jogos: jogos, header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, posts: posts, css: selectedCSS});
+			res.render('comunidade', {posts: posts, jogos: jogos, header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, css: selectedCSS});
 		})
 	})
 })
