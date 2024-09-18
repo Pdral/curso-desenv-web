@@ -170,7 +170,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.remove('dark-mode');
         }
     }
+    
+    // Chama as funções para configurar as funcionalidades
+    setupLikeButtons();
+    setupDropdown();
+    setupChat();
+    setupCommentForm();
+    applyFontSize();
+});
 
+function createPost() {
     // Função para Criar post
     // Verifique se estamos na página decriar post
     if (window.location.pathname !== '/criar-post') {
@@ -209,14 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Erro ao criar post:', error);
         });
     });
-    
-    // Chama as funções para configurar as funcionalidades
-    setupLikeButtons();
-    setupDropdown();
-    setupChat();
-    setupCommentForm();
-    applyFontSize();
-});
+}
 
 // Carrega as cartas na pagina de meus-produtos
 function setupCartas() {
@@ -488,3 +490,4 @@ function filtraPosts(filtro){
 setupCartas();
 setupUsuarioseJogos();
 setupJogos("");
+createPost();

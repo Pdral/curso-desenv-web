@@ -102,6 +102,7 @@ app.get('/comunidade', (req, res) => {
 		return a;
 	})
 	.then(jogos => {
+		console.log(jogos);
 		fetch(api + '/posts?filtro=' + filtro).then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
