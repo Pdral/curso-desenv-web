@@ -1,43 +1,43 @@
 {
-    "usuarios": [
+  "usuarios": [
+    {
+      "id": 0,
+      "username": "Carla Mariana",
+      "moedas": "5000,00",
+      "perfil": "admin",
+      "icon": "/img/gato.png",
+      "cartas-compradas": [
         {
-            "id": 0,
-            "username" : "Carla Mariana",
-            "moedas": "5000,00",
-            "perfil": "admin",
-            "icon": "/img/gato.png",
-            "cartas-compradas":[
-                {
-                    "img":"/img/magic3.png",
-                    "nome": "Aquisição Hostil",
-                    "preco": "5,99"
-                }
-            ],
-            "cartas-vendidas": [
-                {
-                "img":"/img/magic4.png",
-                "nome": "Guardião das Eras",
-                "preco": "0,50"
-                }
-            ]
-        },
-        {
-            "id": 1,
-            "username" : "Paulo Davi",
-            "moedas": "2,00",
-            "perfil": "premium",
-            "icon": "/img/cachorro.png",
-            "cartas-compradas":[],
-            "cartas-vendidas": []
-        },
-        {
-            "id": 2,
-            "username" : "Joãozinho",
-            "moedas": "100,00",
-            "perfil": "simples",
-            "icon": "/img/porco.png",
-            "cartas-compradas":[],
-            "cartas-vendidas": []
+          "img": "/img/magic3.png",
+          "nome": "Aquisição Hostil",
+          "preco": "5,99"
         }
-    ]
+      ],
+      "cartas-vendidas": [
+        {
+          "img": "/img/magic4.png",
+          "nome": "Guardião das Eras",
+          "preco": "0,50"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "username": "Paulo Davi",
+      "moedas": "2,00",
+      "perfil": "premium",
+      "icon": "/img/cachorro.png",
+      "cartas-compradas": [],
+      "cartas-vendidas": []
+    },
+    {
+      "id": 2,
+      "username": "Joãozinho",
+      "moedas": "100,00",
+      "perfil": "simples",
+      "icon": "/img/porco.png",
+      "cartas-compradas": [],
+      "cartas-vendidas": []
+    }
+  ]
 }
