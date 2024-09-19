@@ -624,7 +624,7 @@ function filtraPostsTitulo(){
 }
 
 function createComentario() {
-    if (window.location.pathname !== '/post') {
+    if (!window.location.pathname.includes('/post')) {
         return;
     }
 
@@ -643,10 +643,9 @@ function createComentario() {
 
         // Obtém os dados do formulário
         const formData = new FormData(form);
-        formData.append('user', userId);
 
         // Cria uma requisição POST para adicionar o comentário ao post com o ID específico
-        fetch(`/post/${postId}`, {
+        fetch(`http://localhost:8084/post/${postId}`, {
             method: 'POST',
             body: new URLSearchParams(formData) // Converte FormData para URLSearchParams
         })

@@ -217,6 +217,11 @@ function listPosts(posts, params){
 
 function find(fileName, entity, id){
 	var data = list(fileName, entity);
+	if(entity == 'posts'){
+		for (let index = 0; index < data.length; index++) {
+			data[index]["user"] = find(users_path, "usuarios",data[index]["user"]);
+		}
+	}
 	return data.filter(o => Number(o["id"]) === Number(id))[0];
 }
 

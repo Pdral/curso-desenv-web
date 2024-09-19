@@ -37,9 +37,9 @@
     </div>
 
     <div class="comment-form">
-        <form id="comentar" class="comment-form" action="/post/<%= postId %>" method="POST">
+        <form id="comentar" class="comment-form" action="http://localhost:8084/post/<%= postId %>" method="POST">
             <input type="hidden" id="post-id" name="postId" value="<%= postId %>">
-            <input type="hidden" id="user-id" name="user" value="<%= user %>">
+            <input type="hidden" id="user-id" name="user" value="<%= user["id"] %>">
             <textarea id="comment-text" name="texto" placeholder="Digite seu comentário"></textarea>
             <button type="submit">Comentar</button>
         </form>
