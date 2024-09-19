@@ -14,11 +14,12 @@ http.createServer((req, res) => {
 	 res.setHeader('Access-Control-Allow-Origin', '*'); // Permite todas as origens
 	 res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 	 res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+	 res.setHeader("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self';");
 
 	 if(req.method == 'OPTIONS'){
 		res.end();
 	 }
-	 res.setHeader("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self';");
+	 
 
 	 // Verificar o caminho e o método da requisição
 	 if (u.pathname.match(/^\/post\/(\d+)$/) && req.method === 'POST') {
