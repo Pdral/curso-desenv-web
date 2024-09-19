@@ -6,10 +6,10 @@
 <div class="postar-container">
     <div class="postar">
         <div class="post-header">
-            <img src=<%= post["user"]["icon"] %> alt="Imagem do Usuário">
-            <div class="nickname"><%= post["user"]["username"] %></div>
+            <img src="<%= post.user && post.user.icon ? post.user.icon : 'default-icon.png' %>" alt="Imagem do Usuário">
+            <div class="nickname"><%= post.user && post.user.username ? post.user.username : 'Desconhecido' %></div>
         </div>
-        <h2><%= post["titulo"] %></h2>
+        <h2><%= post.titulo %></h2>
         <span class="tags"><%= post["jogo"] %></span>
         <p><%= post["texto"] %></p>
         <div class="post-actions">
@@ -26,13 +26,22 @@
     <div class="comments-section">
         <h3>Comentários</h3>
         <div id="comments">
-            <!-- Comentários serão adicionados aqui -->
+            <% if (post.comentarios && Array.isArray(post.comentarios)) { %>
+                <% post.comentarios.forEach(function(comentario) { %>
+                    <img src="<%- comentario.user.icon %>" alt="<%- comentario.user.username %> Icon" class="user-icon">
+                    <strong><%- comentario.user.username %>:</strong>
+                    <p><%- comentario.texto %></p>
+                <% }); %>
+            <% }  %>
         </div>
     </div>
 
     <div class="comment-form">
-        <h3>Deixe um comentário</h3>
-        <textarea id="comment-input" placeholder="Escreva seu comentário aqui"></textarea>
-        <button id="submit-comment">Comentar</button>
+        <form id="comentar" class="comment-form" action="/post/<%= postId %>" method="POST">
+            <input type="hidden" id="post-id" name="postId" value="<%= postId %>">
+            <input type="hidden" id="user-id" name="user" value="<%= user %>">
+            <textarea id="comment-text" name="texto" placeholder="Digite seu comentário"></textarea>
+            <button type="submit">Comentar</button>
+        </form>
     </div>
 </div>

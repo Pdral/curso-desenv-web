@@ -5,10 +5,11 @@ const jogos_path = "data/jogos/dados.json";
 const posts_path = "data/posts/dados.json";
 const users_path = "data/users/dados.json";
 const ids_path = "data/ids.json";
+const path = require('path');
 
 http.createServer((req, res) => {
 	const u = new URL(req.url, `http://${req.headers.host}`);
-
+	
 	 // Configurar cabeçalhos CORS
 	 res.setHeader('Access-Control-Allow-Origin', '*'); // Permite todas as origens
 	 res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -17,6 +18,30 @@ http.createServer((req, res) => {
 	 if(req.method == 'OPTIONS'){
 		res.end();
 	 }
+	 res.setHeader("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self';");
+
+	 // Verificar o caminho e o método da requisição
+	 if (u.pathname.match(/^\/post\/(\d+)$/) && req.method === 'POST') {
+		const postId = parseInt(u.pathname.split('/')[2], 10);
+	
+		let body = '';
+		req.on('data', chunk => {
+			body += chunk.toString();
+		});
+	
+		req.on('end', () => {
+			// Usa URLSearchParams para processar dados application/x-www-form-urlencoded
+			const commentData = new URLSearchParams(body);
+			const newComment = createComentario(postId, {
+				userId: commentData.get('user'),
+				texto: commentData.get('texto')
+			});
+			res.writeHead(200, { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify(newComment));
+		});
+	
+		return; // Adiciona um return para evitar o processamento de outras rotas
+	}
 
     switch (u.pathname) {
 
@@ -57,6 +82,22 @@ http.createServer((req, res) => {
 				res.end('Method Not Allowed');
 			}
 			break;
+		case '/favicon.ico':
+			const faviconPath = path.join(__dirname, 'public', 'favicon.ico');
+            fs.readFile(faviconPath, (err, data) => {
+                if (err) {
+                    res.writeHead(500, { 'Content-Type': 'text/plain' });
+                    res.end('Erro ao carregar favicon.ico');
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'image/x-icon' });
+                    res.end(data);
+                }
+            });
+            break;
+		default:
+			res.writeHead(404,{'Content-Type': 'text/html; charset=utf-8'});
+			res.write(`<h1> O recurso ${u.pathname} é desconhecido.</h1>`);
+			res.end()
     }
 
 }).listen(port, () => console.log(`Api is running on port ${port}`));
@@ -72,6 +113,9 @@ function handleGeneralFiles(req, res, u, fileName, entity){
 			} else {
 				response = find(fileName, entity, id);
 			}
+			if (response === undefined) {
+                response = {}; // Garantir que `response` nunca seja undefined
+            }
 			res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8'});
 			res.write(JSON.stringify(response, null, 2));
 			return res.end(); break;
@@ -250,6 +294,12 @@ function getCarta(id){
 	}
 }
 
+function getUserData(userId) {
+    const data = fs.readFileSync(users_path, 'utf8');
+    const users = JSON.parse(data).usuarios;
+    return users.find(user => user.id === parseInt(userId, 10));
+}
+
 // Função para criar um novo post
 function createPost(postData) {
     const newId = nextId('posts'); // Gera um novo ID para o post
@@ -267,4 +317,36 @@ function createPost(postData) {
     fs.writeFileSync(posts_path, JSON.stringify({ posts }, null, 2), 'utf8');
     
     return post;
+}
+
+function createComentario(postId, commentData) {
+    const data = JSON.parse(fs.readFileSync(posts_path, 'utf8'));
+
+    const post = data.posts.find(post => post.id === postId);
+
+    if (post) {
+        const user = getUserData(commentData.userId);
+
+        if (!user) {
+            throw new Error('Usuário não encontrado!');
+        }
+
+        const comentario = {
+            user: {
+                id: user.id,
+                username: user.username,
+                icon: user.icon
+            },
+            texto: commentData.texto
+        };
+
+        post.comentarios = post.comentarios || [];
+        post.comentarios.unshift(comentario);
+
+        fs.writeFileSync(posts_path, JSON.stringify(data, null, 2), 'utf8');
+
+        return comentario;
+    } else {
+        throw new Error('Post não encontrado!');
+    }
 }
