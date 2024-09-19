@@ -15,6 +15,10 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware para parsing de dados JSON (application/json), caso precise usar JSON
 app.use(express.json());
 
+app.get('/favicon.ico', (req, res) => {
+    res.redirect('http://localhost:8084/favicon.ico');
+});
+
 app.use((req, res, next) => {
     const userId = req.query.user;
 
@@ -117,6 +121,7 @@ app.get('/comunidade', (req, res) => {
 
 app.get('/post/:id', (req, res) => {
 	const user = req.query.user;
+    const postId = req.params.id;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/post2.css' : '/css/post.css';
 	fetch(api + '/posts?id='+req.params.id).then(response => {
@@ -127,7 +132,7 @@ app.get('/post/:id', (req, res) => {
 		return a;
 	})
 	.then(post => {
-		res.render('post', {header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, post: post, css: selectedCSS});
+		res.render('post', {header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, postId: postId, post: post, css: selectedCSS});
 	})
 })
 

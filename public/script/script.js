@@ -57,29 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Função para enviar um comentário
-    function setupCommentForm() {
-        const submitCommentButton = document.getElementById('submit-comment');
-        if (submitCommentButton) {
-            submitCommentButton.addEventListener('click', () => {
-                const commentInput = document.getElementById('comment-input');
-                const commentText = commentInput.value;
-
-                if (commentText.trim() !== "") {
-                    const comment = document.createElement('div');
-                    comment.classList.add('comment');
-                    comment.innerHTML = `<p>${commentText}</p>`;
-
-                    const commentsSection = document.getElementById('comments');
-                    if (commentsSection) {
-                        commentsSection.appendChild(comment);
-                    }
-                    commentInput.value = "";
-                }
-            });
-        }
-    }
-
     // Função para aplicar o tamanho da fonte ao carregar a página
     function applyFontSize() {
         const fontSize = getCookie('fontSize');
@@ -175,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupLikeButtons();
     setupDropdown();
     setupChat();
-    setupCommentForm();
     applyFontSize();
 });
 
@@ -211,7 +187,6 @@ function createPost() {
         })
         .then(data => {
             console.log('Post criado com sucesso:', data);
-            // Opcional: redirecionar para outra página ou atualizar a interface
             window.location.href = '/comunidade?user=' + user; // Exemplo: redirecionar para a página da comunidade
         })
         .catch(error => {
@@ -487,7 +462,52 @@ function filtraPosts(filtro){
     window.location.href = '/comunidade?user=' + userId + '&filtro=' + filtro;
 }
 
+function createComentario() {
+    if (window.location.pathname !== '/post') {
+        return;
+    }
+
+    const form = document.getElementById('comentar');
+    
+    // Obtém o ID do usuário da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
+
+    // Extrai o ID do post da URL
+    const pathParts = window.location.pathname.split('/');
+    const postId = pathParts[2]; 
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita o envio padrão do formulário
+
+        // Obtém os dados do formulário
+        const formData = new FormData(form);
+        formData.append('user', userId);
+
+        // Cria uma requisição POST para adicionar o comentário ao post com o ID específico
+        fetch(`/post/${postId}`, {
+            method: 'POST',
+            body: new URLSearchParams(formData) // Converte FormData para URLSearchParams
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao criar comentário: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Comentário criado com sucesso:', data);
+            window.location.href = '/post/' + postId + '?user=' + userId; // Redireciona para a página do post atualizado
+        })
+        .catch(error => {
+            console.error('Erro ao criar comentário:', error);
+        });
+    });
+}
+
+
 setupCartas();
 setupUsuarioseJogos();
 setupJogos("");
 createPost();
+createComentario();

@@ -6,7 +6,16 @@
       "titulo": "teste",
       "jogo": "Magic",
       "texto": "teste",
-      "comentarios": []
+      "comentarios": [
+        {
+          "user": {
+            "id": "0",
+            "username": "Carla Mariana",
+            "icon": "/img/gato.png"
+          },
+          "texto": "Teste"
+        }
+      ]
     },
     {
       "id": 2,
