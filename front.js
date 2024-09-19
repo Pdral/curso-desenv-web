@@ -268,11 +268,20 @@ app.get('/add-produto', (req, res) => {
 
 app.get('/adm', (req, res) => {
 	const user = req.query.user;
+	var nomeUsuario = req.query.nomeUsuario;
+	var nomeJogo = req.query.nomeJogo;
+
+	if(nomeUsuario == undefined){
+		nomeUsuario = '';
+	}
+	if(nomeJogo == undefined){
+		nomeJogo = '';
+	}
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
 
 	if (req.xhr) {
-		fetch(api + '/jogos').then(response => {
+		fetch(api + '/jogos?nome=' + nomeJogo).then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
 			}
@@ -280,7 +289,7 @@ app.get('/adm', (req, res) => {
 			return a;
 		})
 		.then(jogos => {
-			fetch(api + '/usuarios').then(response => {
+			fetch(api + '/usuarios?username=' + nomeUsuario).then(response => {
 				if (!response.ok) {
 					throw new Error('Network response was not ok');
 				}
@@ -325,21 +334,24 @@ app.get('/editar-jogo/:id', (req, res) => {
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
 
-	if(jogoId == 'new'){
-		jogo = {"nome": 'Nome do jogo'};
+	fetch(api + '/jogos?id=' + jogoId).then(response => {
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		var a = response.json();
+		return a;
+	})
+	.then(jogo => {
 		res.render('editar-jogo', {jogo: jogo, header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
-	} else{
-		fetch(api + '/jogos?id=' + jogoId).then(response => {
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-			var a = response.json();
-			return a;
-		})
-		.then(jogo => {
-			res.render('editar-jogo', {jogo: jogo, header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
-		})
-	}
+	})
+})
+
+app.get('/criar-jogo', (req, res) => {
+	const user = req.query.user;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
+
+	res.render('criar-jogo', {header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
 })
 
 app.listen(port, function () {

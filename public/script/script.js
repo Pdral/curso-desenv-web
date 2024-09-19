@@ -258,7 +258,6 @@ function editarUsuario() {
 }
 
 function excluirUsuario() {
-    console.log("Função chamada");
     const urlParams = new URLSearchParams(window.location.search);
     const user = urlParams.get('user');
 
@@ -273,6 +272,99 @@ function excluirUsuario() {
     });
     
 }
+
+function criarJogo() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const user = urlParams.get('user');
+
+    const nome = document.getElementById('nome').value;
+
+    const url = 'http://localhost:8084/jogos';
+
+    jogo = {
+        nome: nome,
+        cartas: []
+    };
+
+    fetch(url, {
+        method: 'POST', 
+        body: JSON.stringify(jogo)
+    })
+    .then(response => {
+        window.location.href = '/adm?user=' + user; 
+    })
+    .catch(error => {
+        console.error(error);
+    });
+    
+}
+
+function editarJogo() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const user = urlParams.get('user');
+
+    const nome = document.getElementById('nome').value;
+
+    const jogoId = window.location.pathname.split("/editar-jogo/").at(-1);
+
+    const url = 'http://localhost:8084/jogos?id=' + jogoId;
+
+    fetch(url)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro ao criar post: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(jogo => {
+        jogo['nome'] = nome;
+        fetch(url, {
+            method: 'PUT', 
+            body: JSON.stringify(jogo)
+        })
+        .then(response => {
+            window.location.href = '/adm?user=' + user; 
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    })
+    .catch(error => {
+        console.error(error);
+    });
+    
+}
+
+function excluirJogo() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const user = urlParams.get('user');
+
+    const jogoId = window.location.pathname.split("/editar-jogo/").at(-1);
+
+    const url = 'http://localhost:8084/jogos?id=' + jogoId;
+
+    fetch(url, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        window.location.href = '/adm?user=' + user; 
+    })
+    .catch(error => {
+        console.error(error);
+    });
+    
+}
+
+// function redirectAdm() {
+//     const urlParams = new URLSearchParams(window.location.search);
+//     const user = urlParams.get('user');
+
+//     const nomeUsuario = document.getElementById('nomeUsuario').value;
+//     const nomeJogo = document.getElementById('nomeJogo').value;
+
+//     window.location.href = '/adm?nomeUsuario=' + nomeUsuario + '&nomeJogo=' + nomeJogo + '&user=' + user;
+    
+// }
 
 // Carrega as cartas na pagina de meus-produtos
 function setupCartas() {
@@ -385,7 +477,9 @@ function setupUsuarioseJogos() {
     }
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get('user'); 
-    fetch('/adm', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+    const nomeUsuario = document.getElementById('nomeUsuario').value;
+    const nomeJogo = document.getElementById('nomeJogo').value;
+    fetch('/adm?nomeUsuario=' + nomeUsuario + '&nomeJogo=' + nomeJogo, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');

@@ -15,7 +15,7 @@
         <button id="filterButton">Filtros</button>
         <div class="dropdown-content" id="dropdownContent">
             <% for (var i=0; i<jogos.length; i++) {%>
-                <a href="#" onclick=setupJogos('<%= jogos[i]["nome"] %>')><%= jogos[i]["nome"] %></a>
+                <a href="#" onclick="setupJogos('<%= jogos[i]["nome"] %>')"><%= jogos[i]["nome"] %></a>
             <% } %>
         </div>
     </div>

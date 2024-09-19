@@ -5,8 +5,8 @@
 
 <div class="container">
     <div class="search-bar">            
-        <input type="text" placeholder="Buscar usuário...">
-        <button id="pesquisar">Pesquisar</button>
+        <input id="nomeUsuario" type="text" placeholder="Buscar usuário...">
+        <button onclick="setupUsuarioseJogos()" id="pesquisar">Pesquisar</button>
     </div>
 
     <div class="usuarios" id="usuarios-container">
@@ -14,8 +14,8 @@
     </div>
         
     <div class="search-bar">            
-        <input type="text" placeholder="Buscar jogo...">
-        <button id="pesquisar2">Pesquisar</button>
+        <input id="nomeJogo" type="text" placeholder="Buscar jogo...">
+        <button onclick="setupUsuarioseJogos()" id="pesquisar2">Pesquisar</button>
     </div>
 
     <div class="jogos" id="jogos-container">
@@ -23,7 +23,7 @@
     </div>
 
     <div class="botao-adicionar-div">
-        <a class="botao-adicionar" href="/editar-jogo/new?user=<%= user["id"] %>"></a>
+        <a class="botao-adicionar" href="/criar-jogo?user=<%= user["id"] %>"></a>
     </div>
 
 </div>
