@@ -38,16 +38,20 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res) => {
 	const user = req.query.user;
-	var filtro = req.query.filtro;
-	if(filtro == undefined){
-		filtro = "";
+	var nome = req.query.nome;
+	if(nome == undefined){
+		nome = "";
+	}
+	var cartaNome = req.query.cartaNome;
+	if(cartaNome == undefined){
+		cartaNome = "";
 	}
 	// Lê o cookie 'theme' enviado pelo cliente
 	const theme = req.cookies.theme || 'light';
 	// Define o CSS com base no tema
 	const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 
-	fetch(api + '/jogos?filtro=' + filtro).then(response => {
+	fetch(api + '/jogos?nome=' + nome + '&cartaNome=' + cartaNome).then(response => {
 		if (!response.ok) {
 			throw new Error('Network response was not ok');
 		}
@@ -89,9 +93,13 @@ app.get('/comunidade', (req, res) => {
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/comunidade2.css' : '/css/comunidade.css';
 
-	var filtro = req.query.filtro;
-	if(filtro == undefined){
-		filtro = "";
+	var titulo = req.query.titulo;
+	if(titulo == undefined){
+		titulo = "";
+	}
+	var jogo = req.query.jogo;
+	if(jogo == undefined){
+		jogo = "";
 	}
 
 	fetch(api + '/jogos').then(response => {
@@ -102,7 +110,7 @@ app.get('/comunidade', (req, res) => {
 		return a;
 	})
 	.then(jogos => {
-		fetch(api + '/posts?filtro=' + filtro).then(response => {
+		fetch(api + '/posts?jogo=' + jogo + '&titulo=' + titulo).then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
 			}

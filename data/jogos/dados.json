@@ -1,118 +1,118 @@
 {
-    "jogos": [
+  "jogos": [
+    {
+      "id": 0,
+      "nome": "Magic",
+      "cartas": [
         {
-            "id": 0,
-            "nome": "Magic",
-            "cartas": [
-                {
-                    "id": 0,
-                    "nome" : "Vampiro Esquelético",
-                    "preco": "1,69",
-                    "vendedor": "0",
-                    "frente": "/img/magic1.png",
-                    "verso": "/img/magic-verso.png"
-                },
-                {
-                    "id": 1,
-                    "nome" : "Especialidade de Rishkar",
-                    "preco": "16,99",
-                    "vendedor": "0",
-                    "frente": "/img/magic2.png",
-                    "verso": "/img/magic-verso.png"
-                },
-                {
-                    "id": 2,
-                    "nome" : "Aquisição Hostil",
-                    "preco": "0,84",
-                    "vendedor": "0",
-                    "frente": "/img/magic3.png",
-                    "verso": "/img/magic-verso.png"
-                },
-                {
-                    "id": 3,
-                    "nome" : "Guardião das Eras",
-                    "preco": "1,27",
-                    "vendedor": "0",
-                    "frente": "/img/magic4.png",
-                    "verso": "/img/magic-verso.png"
-                }
-            ]
+          "id": 0,
+          "nome": "Vampiro Esquelético",
+          "preco": "1,69",
+          "vendedor": "0",
+          "frente": "/img/magic1.png",
+          "verso": "/img/magic-verso.png"
         },
         {
-            "id": 1,
-            "nome": "Pokémon",
-            "cartas": [
-                {
-                    "id": 4,
-                    "nome" : "Genesect",
-                    "preco": "2,99",
-                    "vendedor": "1",
-                    "frente": "/img/pokemon1.png",
-                    "verso": "/img/pokemon-verso.png"
-                },
-                {
-                    "id": 5,
-                    "nome" : "Falinks-V",
-                    "preco": "23,99",
-                    "vendedor": "1",
-                    "frente": "/img/pokemon2.png",
-                    "verso": "/img/pokemon-verso.png"
-                },
-                {
-                    "id": 6,
-                    "nome" : "Goodra de Hisui",
-                    "preco": "14,99",
-                    "vendedor": "1",
-                    "frente": "/img/pokemon3.png",
-                    "verso": "/img/pokemon-verso.png"
-                },
-                {
-                    "id": 7,
-                    "nome" : "Muk da Equipe Aqua",
-                    "preco": "4,99",
-                    "vendedor": "1",
-                    "frente": "/img/pokemon4.png",
-                    "verso": "/img/pokemon-verso.png"
-                }
-            ]
+          "id": 1,
+          "nome": "Especialidade de Rishkar",
+          "preco": "16,99",
+          "vendedor": "0",
+          "frente": "/img/magic2.png",
+          "verso": "/img/magic-verso.png"
         },
         {
-            "id": 2,
-            "nome": "Yu-gi-oh!",
-            "cartas": [
-                {
-                    "id": 8,
-                    "nome" : "Monstro Marinho de Teseu",
-                    "preco": "11,99",
-                    "vendedor": "2",
-                    "frente": "/img/yugioh1.png",
-                    "verso": "/img/yugioh-verso.png"
-                },
-                {
-                    "id": 9,
-                    "nome" : "Negrodragão do Trovão",
-                    "preco": "39,90",
-                    "vendedor": "2",
-                    "frente": "/img/yugioh2.png",
-                    "verso": "/img/yugioh-verso.png"
-                },
-                {
-                    "id": 10,
-                    "nome" : "Dragão Secular",
-                    "preco": "19,99",
-                    "vendedor": "2",
-                    "frente": "/img/yugioh3.png",
-                    "verso": "/img/yugioh-verso.png"
-                },
-                {
-                    "id": 11,
-                    "nome" : "Sinais do Adamancipador",
-                    "preco": "14,99",
-                    "vendedor": "2",
-                    "frente": "/img/yugioh4.png",
-                    "verso": "/img/yugioh-verso.png"
-                }
-            ]
+          "id": 2,
+          "nome": "Aquisição Hostil",
+          "preco": "0,84",
+          "vendedor": "0",
+          "frente": "/img/magic3.png",
+          "verso": "/img/magic-verso.png"
+        },
+        {
+          "id": 3,
+          "nome": "Guardião das Eras",
+          "preco": "1,27",
+          "vendedor": "0",
+          "frente": "/img/magic4.png",
+          "verso": "/img/magic-verso.png"
         }
-    ]
+      ]
+    },
+    {
+      "id": 1,
+      "nome": "Pokémon",
+      "cartas": [
+        {
+          "id": 4,
+          "nome": "Genesect",
+          "preco": "2,99",
+          "vendedor": "1",
+          "frente": "/img/pokemon1.png",
+          "verso": "/img/pokemon-verso.png"
+        },
+        {
+          "id": 5,
+          "nome": "Falinks-V",
+          "preco": "23,99",
+          "vendedor": "1",
+          "frente": "/img/pokemon2.png",
+          "verso": "/img/pokemon-verso.png"
+        },
+        {
+          "id": 6,
+          "nome": "Goodra de Hisui",
+          "preco": "14,99",
+          "vendedor": "1",
+          "frente": "/img/pokemon3.png",
+          "verso": "/img/pokemon-verso.png"
+        },
+        {
+          "id": 7,
+          "nome": "Muk da Equipe Aqua",
+          "preco": "4,99",
+          "vendedor": "1",
+          "frente": "/img/pokemon4.png",
+          "verso": "/img/pokemon-verso.png"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "nome": "Yu-gi-oh!",
+      "cartas": [
+        {
+          "id": 8,
+          "nome": "Monstro Marinho de Teseu",
+          "preco": "11,99",
+          "vendedor": "2",
+          "frente": "/img/yugioh1.png",
+          "verso": "/img/yugioh-verso.png"
+        },
+        {
+          "id": 9,
+          "nome": "Negrodragão do Trovão",
+          "preco": "39,90",
+          "vendedor": "2",
+          "frente": "/img/yugioh2.png",
+          "verso": "/img/yugioh-verso.png"
+        },
+        {
+          "id": 10,
+          "nome": "Dragão Secular",
+          "preco": "19,99",
+          "vendedor": "2",
+          "frente": "/img/yugioh3.png",
+          "verso": "/img/yugioh-verso.png"
+        },
+        {
+          "id": 11,
+          "nome": "Sinais do Adamancipador",
+          "preco": "14,99",
+          "vendedor": "2",
+          "frente": "/img/yugioh4.png",
+          "verso": "/img/yugioh-verso.png"
+        }
+      ]
+    }
+  ]
 }

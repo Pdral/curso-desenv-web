@@ -6,8 +6,8 @@
 <div class="container">
         
     <div class="search-bar">            
-        <input type="text" placeholder="Buscar tópico de fórum...">
-        <button id="pesquisar">Pesquisar</button>
+        <input id="titulo" type="text" placeholder="Buscar tópico de fórum...">
+        <button id="pesquisar" onclick="filtraPostsTitulo()">Pesquisar</button>
         <button id="filterButton">Filtros</button>
         <div class="dropdown-content" id="dropdownContent">
             <% for (var i=0; i<jogos.length; i++) {%>
