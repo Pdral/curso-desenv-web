@@ -14,6 +14,10 @@ http.createServer((req, res) => {
 	 res.setHeader('Access-Control-Allow-Origin', '*'); // Permite todas as origens
 	 res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 	 res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+	 if(req.method == 'OPTIONS'){
+		res.end();
+	 }
 	 res.setHeader("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self';");
 
 	 // Verificar o caminho e o método da requisição
@@ -99,22 +103,20 @@ http.createServer((req, res) => {
 }).listen(port, () => console.log(`Api is running on port ${port}`));
 
 function handleGeneralFiles(req, res, u, fileName, entity){
-	const cors = {'Access-Control-Allow-Origin': '*'};
 	params = u.searchParams;
 	const id = params.get("id");
-	const filtro = params.get("filtro");
 	switch(req.method) {
 		case 'GET':
 			let response
 			if(id == undefined){
-				response = list(fileName, entity, filtro);
+				response = list(fileName, entity, params);
 			} else {
 				response = find(fileName, entity, id);
 			}
 			if (response === undefined) {
                 response = {}; // Garantir que `response` nunca seja undefined
             }
-			res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' , 'Access-Control-Allow-Origin': '*'});
+			res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8'});
 			res.write(JSON.stringify(response, null, 2));
 			return res.end(); break;
 		case 'POST':
@@ -126,26 +128,25 @@ function handleGeneralFiles(req, res, u, fileName, entity){
 				save(fileName, entity, user);
 			});
 			req.on('end', function () {
-				res.writeHead(201, cors);
+				res.writeHead(201, { 'Content-Type': 'text/html; charset=utf-8'});
 				return res.end();
 			}); break;
 		case 'PUT':
-			del(fileName, entity, id);
+			del(fileName, entity, id, true);
 			var body = '';
 			req.on('data', function (data) {
 				body += data;
 				body = JSON.parse(body);
 				var user = body;
-				console.log(user);
 				save(fileName, entity, user);
 			}); 
 			req.on('end', function () {
-				res.writeHead(201, cors);
+				res.writeHead(201, { 'Content-Type': 'text/html; charset=utf-8'});
 				return res.end();
 			}); break;
 		case 'DELETE':
 			del(fileName, entity, id);
-			res.writeHead(204, cors);
+			res.writeHead(204, { 'Content-Type': 'text/html; charset=utf-8'});
 			return res.end(); break;
 	}; 
 }
@@ -159,27 +160,59 @@ function nextId(entity){
 	return id;
 }
 
-function list(fileName, entity, filtro){
+function list(fileName, entity, params){
 	var file = fs.readFileSync(fileName , "utf8");
 	var data = JSON.parse(file)[entity];
-	if(entity == 'posts'){
-		for (let index = 0; index < data.length; index++) {
-			data[index]["user"] = find(users_path, "usuarios",data[index]["user"]);
-		}
+	if(params == undefined){
+		return data;
 	}
-	return filtrar(data, entity, filtro);
+	switch(entity){
+		case 'usuarios':
+			return listUsuarios(data, params);
+		case 'jogos':
+			return listJogos(data, params);
+		case 'posts':
+			return listPosts(data, params);
+	}
 }
 
-function filtrar(data, entity, filtro){
-	if(filtro != undefined && filtro != null && filtro != ""){
-		switch(entity){
-			case 'posts':
-				return data.filter(post => post["jogo"] == filtro);
-			case 'jogos':
-				return data.filter(jogo => jogo["nome"] == filtro);
-		}
+function listUsuarios(usuarios, params){
+	const username = params.get("username");
+	if(username != undefined && username != null && username != ""){
+		usuarios = usuarios.filter(user => user["username"].toLowerCase().includes(username.toLowerCase()));
 	}
-	return data;
+	return usuarios;
+}
+
+function listJogos(jogos, params){
+	const nome = params.get("nome");
+	const cartaNome = params.get("cartaNome");
+	if(nome != undefined && nome != null && nome != ""){
+		jogos = jogos.filter(jogo => jogo["nome"].toLowerCase().includes(nome.toLowerCase()));
+	}
+	if(cartaNome != undefined && cartaNome != null && cartaNome != ""){
+		jogos.forEach(jogo => {
+			var cartas = jogo['cartas'];
+			cartas = cartas.filter(carta => carta["nome"].toLowerCase().includes(cartaNome.toLowerCase()));
+			jogo['cartas'] = cartas;
+		})
+	}
+	return jogos;
+}
+
+function listPosts(posts, params){
+	const titulo = params.get("titulo");
+	const jogo = params.get("jogo");
+	if(titulo != undefined && titulo != null && titulo != ""){
+		posts = posts.filter(post => post["titulo"].toLowerCase().includes(titulo.toLowerCase()));
+	}
+	if(jogo != undefined && jogo != null && jogo != ""){
+		posts = posts.filter(post => post["jogo"].toLowerCase().includes(jogo.toLowerCase()));
+	}
+	for (let index = 0; index < posts.length; index++) {
+		posts[index]["user"] = find(users_path, "usuarios",posts[index]["user"]);
+	}
+	return posts;
 }
 
 function find(fileName, entity, id){
@@ -196,10 +229,27 @@ function save(fileName, entity, data){
 	fs.writeFileSync(fileName, JSON.stringify({[entity]: allData}, null, 2), 'utf8');
 }
 
-function del(fileName, entity, id){
+function del(fileName, entity, id, update){
 	var data = list(fileName, entity);
 	const newData = data.filter(o => Number(o["id"]) !== Number(id));
 	fs.writeFileSync(fileName, JSON.stringify({[entity]: newData}, null, 2), 'utf8');
+	if(entity == 'usuarios' && update == undefined){
+
+		var jogos = list(jogos_path, 'jogos');
+		jogos.forEach(jogo => {
+			var cartas = jogo['cartas'];
+			cartas = cartas.filter(carta => Number(carta["vendedor"]) !== Number(id));
+			jogo['cartas'] = cartas;
+		})
+
+		fs.writeFileSync(jogos_path, JSON.stringify({jogos: jogos}, null, 2), 'utf8');
+
+		var file = fs.readFileSync(posts_path , "utf8");
+		var posts = JSON.parse(file)['posts'];
+		posts = posts.filter(post => Number(post["user"]) !== Number(id));
+
+		fs.writeFileSync(posts_path, JSON.stringify({posts: posts}, null, 2), 'utf8');
+	}
 }
 
 function getCartasOfUser(res, u){
@@ -216,7 +266,7 @@ function getCartasOfUser(res, u){
 			}
 		}
 	}
-	res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' , 'Access-Control-Allow-Origin': '*'});
+	res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8'});
 	res.write(JSON.stringify(cartas, null, 2));
 	return res.end();
 }
@@ -225,7 +275,7 @@ function handleGetCarta(res, u){
 	params = u.searchParams;
 	const id = params.get("id");
 	const carta = getCarta(id);
-	res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' , 'Access-Control-Allow-Origin': '*'});
+	res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8'});
 	res.write(JSON.stringify(carta, null, 2));
 	return res.end();
 }

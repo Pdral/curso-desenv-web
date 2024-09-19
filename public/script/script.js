@@ -195,6 +195,60 @@ function createPost() {
     });
 }
 
+function editarUsuario() {
+    // const form = document.getElementById('form');
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const user = urlParams.get('user');
+    const userId = window.location.pathname.split("/editar-usuario/").at(-1);
+
+    // const formData = new FormData(form);
+    // console.log(formData);
+
+    const moedas = document.getElementById('moedas').value.split(" ")[1];
+    
+    fetch('http://localhost:8084/usuarios?id=' + userId)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro ao criar post: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(usuario => {
+        usuario['moedas'] = moedas;
+        fetch('http://localhost:8084/usuarios?id=' + userId, {
+            method: 'PUT', 
+            body: JSON.stringify(usuario)
+        })
+        .then(response => {
+            window.location.href = '/adm?user=' + user; 
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
+function excluirUsuario() {
+    console.log("Função chamada");
+    const urlParams = new URLSearchParams(window.location.search);
+    const user = urlParams.get('user');
+
+    const userId = window.location.pathname.split("/editar-usuario/").at(-1);
+
+    const url = 'http://localhost:8084/usuarios?id=' + userId;
+
+    fetch(url, {method: 'DELETE'}).then(response => {
+        window.location.href = '/adm?user=' + user;
+    }).catch(error => {
+        console.error(error);
+    });
+    
+}
+
 // Carrega as cartas na pagina de meus-produtos
 function setupCartas() {
     const cartasContainer = document.getElementById('cartas-container');
@@ -379,14 +433,20 @@ function setupUsuarioseJogos() {
         });
 }
 
-function setupJogos(filtro) {
+function setupJogos(filtro, cartaNome) {
     // Verifique se estamos na página de produtos
     if (window.location.pathname !== '/') {
         return undefined;
     }
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get('user'); 
-    fetch('/?filtro=' + filtro, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+    
+    if(cartaNome == undefined){
+        cartaNome = '';
+    } else{
+        cartaNome = document.getElementById('cartaNome').value;
+    }
+    fetch('/?nome=' + filtro + '&cartaNome=' + cartaNome, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -459,7 +519,14 @@ function setupJogos(filtro) {
 function filtraPosts(filtro){
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get('user');
-    window.location.href = '/comunidade?user=' + userId + '&filtro=' + filtro;
+    window.location.href = '/comunidade?user=' + userId + '&jogo=' + filtro;
+}
+
+function filtraPostsTitulo(){
+    const filtro = document.getElementById('titulo').value;
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user');
+    window.location.href = '/comunidade?user=' + userId + '&titulo=' + filtro;
 }
 
 function createComentario() {

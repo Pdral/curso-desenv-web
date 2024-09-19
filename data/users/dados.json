@@ -2,6 +2,7 @@
   "usuarios": [
     {
       "id": 0,
+      "senha": "1234",
       "username": "Carla Mariana",
       "moedas": "5000,00",
       "perfil": "admin",
@@ -23,6 +24,7 @@
     },
     {
       "id": 1,
+      "senha": "1234",
       "username": "Paulo Davi",
       "moedas": "2,00",
       "perfil": "premium",
@@ -32,6 +34,7 @@
     },
     {
       "id": 2,
+      "senha": "1234",
       "username": "Joãozinho",
       "moedas": "100,00",
       "perfil": "simples",
