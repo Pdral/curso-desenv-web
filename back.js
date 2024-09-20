@@ -1,12 +1,16 @@
+// Dependência: npm i ws express
+
 const http = require('http');
 const fs = require('fs');
 const port = 8084;
 const jogos_path = "data/jogos/dados.json";
 const posts_path = "data/posts/dados.json";
 const users_path = "data/users/dados.json";
+const conversas_path = "data/conversas/dados.json";
 const ids_path = "data/ids.json";
 const path = require('path');
 const multer = require('multer');
+const WebSocket = require('ws');
 
 const maxSize = 1024*1024*2; // 2MB - Limite para upload
 
@@ -28,7 +32,7 @@ const upload = multer({
     limits  : { fileSize: maxSize }
 }).array('filename',2);
 
-http.createServer((req, res) => {
+const server = http.createServer((req, res) => {
 	const u = new URL(req.url, `http://${req.headers.host}`);
 	
 	 // Configurar cabeçalhos CORS
@@ -62,6 +66,53 @@ http.createServer((req, res) => {
 			res.end(JSON.stringify(newComment));
 		});
 	
+		return; // Adiciona um return para evitar o processamento de outras rotas
+	}
+
+	// Carregar mensagens no chat com usuario
+	if (req.method === 'GET' && req.url.startsWith('/chat/history')) {
+		const urlParams = new URLSearchParams(req.url.split('?')[1]);
+		const userId = urlParams.get('user');
+		const receiverId = urlParams.get('receiver');
+		console.log(`Buscando conversa entre ${userId} e ${receiverId}`);
+		
+		try {
+			// Ler o arquivo de conversas
+			const data = fs.readFileSync(conversas_path, 'utf8');
+			const jsonData = JSON.parse(data); // Parse do JSON
+			
+			// Verificar se 'conversas' existe e é um array
+			if (!Array.isArray(jsonData.conversas)) {
+				throw new Error('Estrutura de conversas inválida');
+			}
+			
+			const conversations = jsonData.conversas;
+	
+			const conversation = conversations.find(convo => {
+				return (
+					convo.users.includes(userId) &&
+					convo.users.includes(receiverId) &&
+					userId !== receiverId // Garante que não é a mesma conversa
+				);
+			});
+		
+			if (conversation) {
+				// Enviar as mensagens da conversa
+				res.writeHead(200, { 'Content-Type': 'application/json' });
+				res.end(JSON.stringify({ messages: conversation.messages }));
+				console.log('Mensagens:', conversation.messages); 
+			} else {
+				// Se não houver conversa, retornar array vazio
+				res.writeHead(200, { 'Content-Type': 'application/json' });
+				res.end(JSON.stringify({ messages: [] }));
+				console.log('Mensagens:', []); 
+			}
+		} catch (error) {
+			// Tratamento de erros na leitura ou formatação
+			console.error('Erro ao processar o arquivo de conversas:', error);
+			res.writeHead(500, { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({ error: 'Erro ao carregar conversas' }));
+		}
 		return; // Adiciona um return para evitar o processamento de outras rotas
 	}
 
@@ -388,3 +439,57 @@ function createComentario(postId, commentData) {
         throw new Error('Post não encontrado!');
     }
 }
+
+// Cria o servidor WebSocket
+const wss = new WebSocket.Server({ server });
+
+// Quando o WebSocket recebe uma nova conexão
+wss.on('connection', (ws) => {
+    // Quando o usuário envia uma mensagem
+    ws.on('message', (message) => {
+        try {
+            const parsedMessage = JSON.parse(message);
+            const { sender, receiver, content } = parsedMessage;
+
+			console.log('Mensagem recebida:', { sender, receiver, content });
+
+            // Carrega as conversas do JSON
+            const conversationsData = fs.readFileSync(conversas_path, 'utf8');
+            const conversations = JSON.parse(conversationsData).conversas;
+
+            // Encontra a conversa entre os dois usuários
+            let conversation = conversations.find(convo =>
+                convo.users.includes(sender) && convo.users.includes(receiver)
+            );
+
+            const user = getUserData(sender);
+
+            const newMessage = {
+                sender,
+                message: content,
+                timestamp: new Date().toISOString(),
+                icon: user.icon,
+				username: user.username
+            };
+
+            if (conversation) {
+                // Se a conversa já existir, adiciona a nova mensagem
+                conversation.messages.push(newMessage);
+            } else {
+                // Se a conversa não existir, cria uma nova
+                conversations.push({
+                    id: conversations.length + 1, // gera um novo ID
+                    users: [sender, receiver],
+                    messages: [newMessage]
+                });
+            }
+
+            // Salva as conversas atualizadas no JSON
+            fs.writeFileSync(conversas_path, JSON.stringify({ conversas: conversations }, null, 2));
+
+            console.log('Mensagem recebida e salva:', newMessage);
+        } catch (error) {
+            console.error('Erro ao processar a mensagem:', error);
+        }
+    });
+});

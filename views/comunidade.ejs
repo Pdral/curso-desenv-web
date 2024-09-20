@@ -25,7 +25,9 @@
             <div class="post">
                 <div class="post-header">
                     <img src=<%= posts[i]["user"]["icon"] %> alt="Imagem do Usuário">
-                    <div class="nickname"><%= posts[i]["user"]["username"] %></div>
+                    <span class="nickname" data-receiver-id="<%= posts[i].user.id %>">
+                        <%= posts[i]["user"]["username"] %>
+                    </span>
                 </div>
                 <h2><%= posts[i]["titulo"] %></h2>
                 <span class="tags"><%= posts[i]["jogo"] %></span>
@@ -44,29 +46,40 @@
 
 </div>
 
-<div class="chat-icon">
-    <img src="./img/chat.png" alt="Chat Icon">
+<div class="icon-container">
+    <div class="chat-icon" id="chatIconConversas">
+        <img src="../img/chat.png" alt="Conversas">
+    </div>
+    <div class="chat-icon" id="chatIconUsuario" style="display:none;">
+        <img src="../img/chat.png" alt="Chat Usuario">
+    </div>
 </div>
 
-<div class="chat-window" id="chatWindow">
-    <div class="chat-header">
-        <h4>Mensagens</h4>
-        <span id="closeChat">X</span>
+<!-- Container para os chats -->
+<div class="chat-container">
+    <!-- Janela de Conversas -->
+    <div class="chat-window" id="chatWindowConversas">
+        <div class="chat-header">
+            <h4>Mensagens</h4>
+            <span id="closeChatConversas">X</span>
+        </div>
+        <div class="chat-messages" id="chatMessagesConversas">
+         <!-- As conversas serão adicionadas aqui dinamicamente -->
+        </div>
     </div>
-    <div class="chat-messages">
-        <div class="chat-message">
-            <img src="./img/porco.png" alt="User Avatar">
-            <div class="chat-details">
-                <span class="nickname">nickname3</span>
-                <p>Olá! Tudo bem?</p>
-            </div>
+
+    <!-- Janela de Chat com Usuario -->
+    <div class="chat-window" id="chatWindowUsuario">
+        <div class="chat-header">
+            <h4>Chat com <span id="chatUsername"></span></h4>
+            <span id="closeChatUsuario">X</span>
         </div>
-        <div class="chat-message">
-            <img src="./img/cachorro.png" alt="User Avatar">
-            <div class="chat-details">
-                <span class="nickname">nickname1</span>
-                <p>Olá! Tudo bem?</p>
-            </div>
+        <div class="chat-messages" id="chatMessagesUsuario">
+            <!-- Mensagens do chat com usuário serão adicionadas aqui dinamicamente -->
         </div>
+        <form id="enviarMessagem" class="chat-input">
+            <input type="text" id="messageInput" placeholder="Digite sua mensagem..." required>
+            <button type="submit">Enviar</button>
+        </form>
     </div>
 </div>

@@ -147,6 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.remove('dark-mode');
         }
     }
+
+    if (window.location.pathname.includes('/comunidade')) {
+        configurarLinksNickname();
+    }
     
     // Chama as funções para configurar as funcionalidades
     setupLikeButtons();
@@ -727,6 +731,155 @@ function redirecionarAoCriarCarta(){
     });
 }
 
+let socket;
+let isChatOpen = false; // Variável para controlar se o chat está aberto
+
+function configurarLinksNickname() {
+    if (!window.location.pathname.includes('/comunidade')) {
+        return;
+    }
+
+    const nicknameLinks = document.querySelectorAll('span.nickname');
+    const chatWindowUsuario = document.getElementById('chatWindowUsuario');
+    const closeChatUsuario = document.getElementById('closeChatUsuario');
+    let receiverIdAtual = null; // Variável para armazenar o receiverId atual
+
+    // Função para fechar o WebSocket
+    function fecharWebSocket() {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.close();
+            console.log('Conexão WebSocket fechada');
+        }
+    }
+
+    // Função para fechar o chat
+    function fecharChat() {
+        fecharWebSocket();
+        chatWindowUsuario.style.display = 'none';
+        isChatOpen = false;
+    }
+
+    // Fechar chat ao clicar no botão de fechar
+    closeChatUsuario.addEventListener('click', fecharChat);
+
+    // Configurar os links de nickname
+    nicknameLinks.forEach(span => {
+        span.addEventListener('click', (event) => {
+            event.preventDefault();
+            receiverIdAtual = span.getAttribute('data-receiver-id');
+            const receiverName = span.textContent.trim(); 
+            console.log('Receiver', receiverIdAtual)
+
+            // Atualiza o chatUsername
+            document.getElementById('chatUsername').textContent = receiverName;
+
+            // Carregar mensagens antigas
+            carregarMensagensAntigas(receiverIdAtual);
+
+            // Exibir a janela de chat
+            chatWindowUsuario.style.display = 'block';
+            isChatOpen = true; // Marcar que o chat está aberto
+
+            // Fechar qualquer conexão WebSocket anterior
+            fecharWebSocket();
+
+            // Criar o WebSocket após o clique em um nome de usuário
+            socket = new WebSocket('ws://localhost:8084');
+
+            socket.onopen = function() {
+                console.log('Conectado ao WebSocket com o usuário', receiverIdAtual);
+            };
+
+            socket.onmessage = (event) => {
+                const messageData = JSON.parse(event.data);
+                console.log('Mensagem recebida:', messageData);
+                exibirMensagem(messageData); // Função para exibir as mensagens recebidas no chat
+            };
+
+            socket.onclose = function() {
+                console.log('Conexão WebSocket fechada');
+            };
+
+            // Listener para envio do formulário, associado ao receiverId atual
+            document.getElementById('enviarMessagem').addEventListener('submit', function(event) {
+                event.preventDefault();
+                criarMensagem(receiverIdAtual);
+            });
+        });
+    });
+}
+
+// Função para carregar mensagens antigas
+function carregarMensagensAntigas(receiverId) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user');
+
+    fetch(`http://localhost:8084/chat/history?user=${userId}&receiver=${receiverId}`)
+        .then(response => response.json()) 
+        .then(data => {
+            const chatMessagesUsuario = document.getElementById('chatMessagesUsuario');
+            chatMessagesUsuario.innerHTML = ''; // Limpa mensagens anteriores
+
+            // Adiciona todas as mensagens ao chat
+            data.messages.forEach(msg => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                messageElement.innerHTML = `
+                    <img src="${msg.icon}" alt="Imagem do Usuário" class="user-icon">
+                    <span><strong>${msg.username}:</strong> ${msg.message}</span>
+                `;
+                chatMessagesUsuario.appendChild(messageElement);
+            });
+        })
+        .catch(error => console.error('Erro ao carregar mensagens:', error));
+}
+
+// Função para enviar mensagem
+function criarMensagem(receiverId) {
+    const form = document.getElementById('enviarMessagem');
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user');
+    console.log('REceiver Id', receiverId);
+
+    const messageInput = document.getElementById('messageInput').value;
+
+    if (!messageInput) {
+        console.error('Mensagem vazia não pode ser enviada');
+        return;
+    }
+            const userIcon = '/img/porco.png';
+            const username = 'Teste';
+
+            const messageData = {
+                sender: userId,
+                receiver: receiverId,
+                content: messageInput,
+                icon: userIcon,
+                username: username
+            };
+
+            console.log('Id do receiver', receiverId);
+
+            // Verifica se o WebSocket está aberto
+            if (socket && socket.readyState === WebSocket.OPEN) {                
+                socket.send(JSON.stringify(messageData));
+                document.getElementById('messageInput').value = ''; // Limpa o campo de entrada
+            } else {
+                console.error('WebSocket não está aberto. Mensagem não enviada.');
+            }
+}
+
+// Função para exibir mensagem
+function exibirMensagem(data) {
+    const chatMessagesUsuario = document.getElementById('chatMessagesUsuario');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message');
+    messageElement.innerHTML = `
+        <img src="${data.icon}" alt="Imagem do Usuário" class="user-icon">
+        <span><strong>${data.username}:</strong> ${data.content}</span>
+    `;
+    chatMessagesUsuario.appendChild(messageElement);
+}
 
 setupCartas();
 setupUsuarioseJogos();
