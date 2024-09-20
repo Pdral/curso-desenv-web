@@ -215,16 +215,25 @@ app.get('/editar-produto/:id', (req, res) => {
 	const cartaId = req.params.id;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
-	
-	fetch(api + '/carta?id=' + cartaId).then(response => {
+
+	fetch(api + '/jogos').then(response => {
 		if (!response.ok) {
 			throw new Error('Network response was not ok');
 		}
 		var a = response.json();
 		return a;
 	})
-	.then(carta => {
-		res.render('editar-produto', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, carta: carta, css: selectedCSS});
+	.then(jogos => {
+		fetch(api + '/carta?id=' + cartaId).then(response => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			var a = response.json();
+			return a;
+		})
+		.then(carta => {
+			res.render('editar-produto', {jogos: jogos, header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, carta: carta, css: selectedCSS});
+		})
 	})
 })
 
@@ -268,7 +277,16 @@ app.get('/add-produto', (req, res) => {
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 
-	res.render('add-produto', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, css: selectedCSS});
+	fetch(api + '/jogos').then(response => {
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		var a = response.json();
+		return a;
+	})
+	.then(jogos => {
+		res.render('add-produto', {jogos: jogos, header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, css: selectedCSS});
+	})
 })
 
 app.get('/adm', (req, res) => {

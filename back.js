@@ -6,6 +6,27 @@ const posts_path = "data/posts/dados.json";
 const users_path = "data/users/dados.json";
 const ids_path = "data/ids.json";
 const path = require('path');
+const multer = require('multer');
+
+const maxSize = 1024*1024*2; // 2MB - Limite para upload
+
+const storage = multer.diskStorage({
+    // destino do arquivo 
+    destination: function (req, file, cb) {
+        cb(null, 'public/img')
+    },
+    // nome do arquivo
+    filename: function (req, file, cb) {
+        // Muda o nome original no caso de uploads de files com o mesmo nome
+        cb(null, file.originalname);
+    }
+});
+
+// configuração da instância do multer
+const upload = multer({
+    storage : storage,
+    limits  : { fileSize: maxSize }
+}).array('filename',2);
 
 http.createServer((req, res) => {
 	const u = new URL(req.url, `http://${req.headers.host}`);
@@ -60,6 +81,16 @@ http.createServer((req, res) => {
 			break;
 		case '/carta':
 			handleGetCarta(res, u);
+			break;
+		case '/criarCarta':
+			upload(req, res, function (err) {
+				if (err) {
+					return console.log(err.message);
+				}
+				console.log(req.body.nome);
+				res.writeHead(200, { 'Content-Type': 'application/json' });
+				res.end();
+			});
 			break;
 		case '/criar-post':
 			if (req.method === 'POST') {
@@ -294,6 +325,7 @@ function getCarta(id){
 			var carta = jogo["cartas"][j];
 			if(carta["id"] == id){
 				carta["vendedor"] = find(users_path, "usuarios", carta["vendedor"]);
+				carta["jogo"] = jogo["nome"];
 				return carta;
 			}
 		}

@@ -1,114 +1,58 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
-    <meta charset="utf-8">
-    <title>Editar</title>
-    <link rel="stylesheet" href="./css/adm.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botão de Arquivo Personalizado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #arquivoInput {
+            display: none; /* Esconde o botão padrão */
+        }
+        .botao-personalizado {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50; /* Verde */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .botao-personalizado:hover {
+            background-color: #45a049; /* Verde escuro ao passar o mouse */
+        }
+    </style>
 </head>
-
-<body id="es">
-
-    <header class="header">
-        <div class="logo">
-            <img src="./img/logo.png" alt="Logo"> 
-            GrapeCards
-        </div>
-        <div class="perfil">
-            <div class="usuario">
-                <div class="user-icon">
-                    <img src="./img/gato.png" alt="User Icon">
-                </div>
-                <div class="username">
-                    Carla Mariana
-                </div>
-            </div>
-            <div>
-                <button id="increaseFont">A+</button>
-                <button id="decreaseFont">A-</button>
-            </div>
-        </div>
-    </header>
-
-    
-    <nav class="nav">
-        <a href="/">Produtos</a>
-        <a href="adm" class="active">Usuários</a>
-        <a href="comunidade">Comunidade</a>
-        <a href="adm-dark">Dark mode</a>
-    </nav>
-
-    <div class="container">
-        <div class="search-bar">            
-            <input type="text" placeholder="Buscar usuário...">
-            <button id="pesquisar">Pesquisar</button>
-        </div>
-
-
-        <div class="usuarios">
-            <div class="editar-usuario">
-                <div class="usuario">
-                    <img src="./img/cachorro.png" alt="Imagem do Usuário">
-                    <div class="nickname">Joãozinho</div>
-                    <div class="moedas">GC$ 100</div>
-                </div>
-                <a class="botao-editar" href="editar-usuario"></a>
-            </div>
-            <div class="editar-usuario">
-                <div class="usuario">
-                    <img src="./img/gato.png" alt="Imagem do Usuário">
-                    <div class="nickname">Carla Mariana</div>
-                    <div class="moedas">GC$ 100</div>
-                </div>
-                <a class="botao-editar" href="editar-usuario"></a>
-            </div>
-            <div class="editar-usuario">
-                <div class="usuario">
-                    <img src="./img/porco.png" alt="Imagem do Usuário">
-                    <div class="nickname">Paulo Davi</div>
-                    <div class="moedas">GC$ 100</div>
-                </div>
-                <a class="botao-editar" href="editar-usuario"></a>
-            </div>
-        </div>
-            
-        <div class="search-bar">            
-            <input type="text" placeholder="Buscar jogo...">
-            <button id="pesquisar2">Pesquisar</button>
-        </div>
-
-        <div class="jogos">
-            <div class="editar-jogo">
-                <div class="jogo">
-                    <div class="name">Magic</div>
-                </div>
-                <a class="botao-editar" href="editar-jogo"></a>
-            </div>
-            <div class="editar-jogo">
-                <div class="jogo">
-                    <div class="name">Pokémon</div>
-                </div>
-                <a class="botao-editar" href="editar-jogo"></a>
-            </div>   
-            <div class="editar-jogo">
-                <div class="jogo">
-                    <div class="name">Yu-Gi-Oh</div>
-                </div>
-                <a class="botao-editar" href="editar-jogo"></a>
-            </div>
-        </div>
-
-        <div class="botao-adicionar-div">
-            <a class="botao-adicionar" href="editar-jogo">
-                <img class="adicionar" src="./img/botao-add.png" alt="Botão de adicionar">
-            </a>
-        </div>
-
+<body>
+    <form id="meuFormulario">
+        <input type="file" id="arquivoInput" accept="image/*" required />
+        <label for="arquivoInput" class="botao-personalizado">Selecionar Arquivo</label>
+        <button type="submit">Enviar</button>
+    </form>
+    <div id="previa" style="margin-top: 20px;">
+        <img id="imagemPrevia" src="" alt="Prévia da imagem" style="display: none; max-width: 300px;" />
     </div>
 
+    <script>
+        document.getElementById('arquivoInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
 
+            reader.onload = function(e) {
+                const imagemPrevia = document.getElementById('imagemPrevia');
+                imagemPrevia.src = e.target.result;
+                imagemPrevia.style.display = 'block';
+            };
 
-    <script src="../src/script.js"></script> 
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </body>
-
 </html>

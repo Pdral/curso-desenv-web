@@ -304,6 +304,11 @@ body, html {
     width: 300px;
 }
 
+.frente-verso-add .carta-grande{
+    position: relative;
+    width: 300px;
+}
+
 .editar-imagem{
     position: absolute;
     top: 60%; 
@@ -386,7 +391,7 @@ body, html {
     margin-bottom: 30px;
 }
 
-.descricao-produto input{
+.descricao-produto .input-moedas{
     width: 100px;
     height: 20px;
     text-align: center;
@@ -442,4 +447,20 @@ input{
 .jogo .botao-adicionar-div a {
     width: 100px;
     height: 100px;
+}
+
+.input-img{
+    background-color: #2B2B2B;
+    margin-top: auto;
+    margin-bottom: auto;
+    color: #cbb7f1;
+}
+
+.div-moedas{
+    color: #cbb7f1;
+}
+
+#select-jogo-descricao-produto{
+    width: auto;
+    height: 32px;
 }

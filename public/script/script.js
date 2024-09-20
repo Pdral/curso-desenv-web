@@ -665,9 +665,72 @@ function createComentario() {
     });
 }
 
+function redirecionarAoCriarCarta(){
+    if (!window.location.pathname.includes('/add-produto')) {
+        return;
+    }
+
+    const form = document.getElementById('add-produto-form');
+    
+    // Obtém o ID do usuário da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
+
+    document.getElementById('frente-input').addEventListener('change', function(event) {
+        const file = event.target.files[0]; // Obtém o arquivo selecionado
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const imagemPrevia = document.getElementById('frente');
+            imagemPrevia.src = e.target.result; // Define a fonte da imagem
+        };
+
+        if (file) {
+            reader.readAsDataURL(file); // Lê o arquivo como URL
+        }
+    });
+
+    document.getElementById('verso-input').addEventListener('change', function(event) {
+        const file = event.target.files[0]; // Obtém o arquivo selecionado
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const imagemPrevia = document.getElementById('verso');
+            imagemPrevia.src = e.target.result; // Define a fonte da imagem
+        };
+
+        if (file) {
+            reader.readAsDataURL(file); // Lê o arquivo como URL
+        }
+    });
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita o envio padrão do formulário
+
+        // Obtém os dados do formulário
+        const formData = new FormData(form);
+
+        // Cria uma requisição POST para adicionar o comentário ao post com o ID específico
+        fetch(`http://localhost:8084/criarCarta`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao criar carta: ' + response.statusText);
+            }
+            window.location.href = '/meus-produtos?user=' + userId;
+        })
+        .catch(error => {
+            console.error('Erro ao criar carta:', error);
+        });
+    });
+}
+
 
 setupCartas();
 setupUsuarioseJogos();
 setupJogos("");
 createPost();
 createComentario();
+redirecionarAoCriarCarta();

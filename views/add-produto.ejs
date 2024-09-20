@@ -5,27 +5,54 @@
 
 <div class="container">
         
-    <div class="carta-a-venda">
-        <div class="input-editar">
-            <input class="nome" value="Nome da carta">
+    <form id="add-produto-form" action='http://localhost:8084/criarCarta' method='post' encType="multipart/form-data">
+        <div class="carta-a-venda">
+            <div class="input-editar">
+                <input class="nome" type="text" name="nome" value="Nome da carta">
+            </div>
+            <div class="frente-verso-add">
+                <img id="frente" class="carta-grande" src="" alt="Frente da carta">
+                <img id="verso" class="carta-grande" src="" alt="Verso da carta">
+            </div>
         </div>
-        <div class="frente-verso-add"></div>
-        <a class="editar-imagem" href=""></a>
-    </div>
 
-    <div class="descricao-produto">
-        <h3 class="cabecalho-descricao">Vendedor: </h3>
-        <a href="/meus-produtos?user=<%= user["id"] %>">
-            <h3 class="descricao"><%= user["username"] %></h3>
-        </a>
-    </div>
+        <input type="hidden" name="vendedor" value="<%= user["id"] %>">
 
-    <div class="descricao-produto">
-        <h3 class="cabecalho-descricao">Preço: </h3>
-        <input value="GC$ 0,00">
-    </div>
+        <div class="descricao-produto">
+            <h3 class="cabecalho-descricao">Frente da carta: </h3>
+            <input required id="frente-input" class="input-img" type="file" name="filename">
+        </div>
 
-    <div class="botoes-editar">
-        <button class="botao-salvar">Criar</button>
-    </div>
+        <div class="descricao-produto">
+            <h3 class="cabecalho-descricao">Verso da carta: </h3>
+            <input required id="verso-input" class="input-img" type="file" name="filename">
+        </div>
+
+        <div class="descricao-produto">
+            <h3 class="cabecalho-descricao">Vendedor: </h3>
+            <a href="/meus-produtos?user=<%= user["id"] %>">
+                <h3 class="descricao"><%= user["username"] %></h3>
+            </a>
+        </div>
+
+        <div class="descricao-produto">
+            <h3 class="cabecalho-descricao">Preço: </h3>
+            <div class="div-moedas">
+                GC$<input class="input-moedas" type="text" name="preco" value="0,00">
+            </div>
+        </div>
+
+        <div class="descricao-produto">
+            <h3 class="cabecalho-descricao">Jogo: </h3>
+            <select id="select-jogo-descricao-produto" name="tipo" required>
+                <% for (var i=0; i<jogos.length; i++) {%>
+                    <option value="<%= jogos[i]["nome"] %>"><%= jogos[i]["nome"] %></option>
+                <% } %>
+            </select>
+        </div>
+
+        <div class="botoes-editar">
+            <button type="submit" class="botao-salvar">Criar</button>
+        </div>
+    </form>
 </div>
