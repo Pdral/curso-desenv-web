@@ -404,7 +404,7 @@ function setupCartas() {
                 cartaDiv.innerHTML = `
                     <img src="${carta.frente}" alt="${carta.nome}" class="carta">
                     <div class="nome">${carta.nome}</div>
-                    <div class="preco">Preço: R$ ${carta.preco}</div>
+                    <div class="preco">Preço: GC$ ${carta.preco}</div>
                 `;
                 prodEditavel.appendChild(cartaDiv);
 
@@ -715,7 +715,7 @@ function redirecionarAoCriarCarta(){
         const formData = new FormData(form);
 
         // Cria uma requisição POST para adicionar o comentário ao post com o ID específico
-        fetch(`http://localhost:8084/criarCarta`, {
+        fetch(`http://localhost:8084/cartas`, {
             method: 'POST',
             body: formData
         })
@@ -728,6 +728,89 @@ function redirecionarAoCriarCarta(){
         .catch(error => {
             console.error('Erro ao criar carta:', error);
         });
+    });
+}
+
+function redirecionarAoAtualizarCarta(){
+    if (!window.location.pathname.includes('/editar-produto')) {
+        return;
+    }
+
+    const form = document.getElementById('edit-produto-form');
+    
+    // Obtém o ID do usuário da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
+
+    document.getElementById('frente-input').addEventListener('change', function(event) {
+        const file = event.target.files[0]; // Obtém o arquivo selecionado
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const imagemPrevia = document.getElementById('frente');
+            imagemPrevia.src = e.target.result; // Define a fonte da imagem
+        };
+
+        if (file) {
+            reader.readAsDataURL(file); // Lê o arquivo como URL
+        }
+    });
+
+    document.getElementById('verso-input').addEventListener('change', function(event) {
+        const file = event.target.files[0]; // Obtém o arquivo selecionado
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const imagemPrevia = document.getElementById('verso');
+            imagemPrevia.src = e.target.result; // Define a fonte da imagem
+        };
+
+        if (file) {
+            reader.readAsDataURL(file); // Lê o arquivo como URL
+        }
+    });
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita o envio padrão do formulário
+
+        // Obtém os dados do formulário
+        const formData = new FormData(form);
+        formData.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
+        });
+        const pathParts = window.location.pathname.split('/');
+        const pageId = pathParts[2]; 
+
+        // Cria uma requisição POST para adicionar o comentário ao post com o ID específico
+        fetch(`http://localhost:8084/cartas?id=` + pageId, {
+            method: 'PUT',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao criar carta: ' + response.statusText);
+            }
+            window.location.href = '/meus-produtos?user=' + userId;
+        })
+        .catch(error => {
+            console.error('Erro ao criar carta:', error);
+        });
+    });
+}
+
+function excluirCarta(){
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
+    const pathParts = window.location.pathname.split('/');
+    const pageId = pathParts[2]; 
+    fetch(`http://localhost:8084/cartas?id=` + pageId, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        window.location.href = '/meus-produtos?user=' + userId;
+    })
+    .catch(error => {
+        console.error('Erro ao criar carta:', error);
     });
 }
 
@@ -887,3 +970,4 @@ setupJogos("");
 createPost();
 createComentario();
 redirecionarAoCriarCarta();
+redirecionarAoAtualizarCarta();

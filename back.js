@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
     // nome do arquivo
     filename: function (req, file, cb) {
         // Muda o nome original no caso de uploads de files com o mesmo nome
-        cb(null, file.originalname);
+        cb(null, file.originalname.replace(/\s+/g, '_'));
     }
 });
 
@@ -127,21 +127,11 @@ const server = http.createServer((req, res) => {
 		case '/posts':
 			handleGeneralFiles(req, res, u, posts_path, "posts");
 			break;
-		case '/cartas':
+		case '/cartasUser':
 			getCartasOfUser(res, u);
 			break;
-		case '/carta':
-			handleGetCarta(res, u);
-			break;
-		case '/criarCarta':
-			upload(req, res, function (err) {
-				if (err) {
-					return console.log(err.message);
-				}
-				console.log(req.body.nome);
-				res.writeHead(200, { 'Content-Type': 'application/json' });
-				res.end();
-			});
+		case '/cartas':
+			handleCartas(req, res, u);
 			break;
 		case '/criar-post':
 			if (req.method === 'POST') {
@@ -359,13 +349,75 @@ function getCartasOfUser(res, u){
 	return res.end();
 }
 
-function handleGetCarta(res, u){
+function handleCartas(req, res, u){
 	params = u.searchParams;
 	const id = params.get("id");
-	const carta = getCarta(id);
-	res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8'});
-	res.write(JSON.stringify(carta, null, 2));
-	return res.end();
+	switch(req.method) {
+		case 'GET':
+			let response
+			response = JSON.stringify(getCarta(id), null, 2);
+			if (response === undefined) {
+                response = {}; // Garantir que `response` nunca seja undefined
+            }
+			res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8'});
+			res.write(response);
+			return res.end(); break;
+		case 'POST':
+			upload(req, res, function (err) {
+				if (err) {
+					return console.log(err.message);
+				}
+				saveCarta(req, {
+					nome: req.body.nome, 
+					vendedor: req.body.vendedor, 
+					preco: req.body.preco, 
+					id: nextId("cartas"),
+					frente: "/img/" + req.files[0].filename,
+					verso: "/img/" + req.files[1].filename
+				})
+				res.writeHead(201, { 'Content-Type': 'application/json' });
+				return res.end();
+			});break;
+		case 'PUT':
+			upload(req, res, function (err) {
+				if (err) {
+					return console.log(err.message);
+				}
+				var oldCarta = undefined;
+				let frente;
+				let verso;
+				if(req.files[0] === undefined){
+					oldCarta = getCarta(id);
+					frente = oldCarta.frente;
+				} else{
+					frente = "/img/" + req.files[0].filename;
+				}
+				if(req.files[1] === undefined){
+					if(oldCarta === undefined){
+						oldCarta = getCarta(id);
+					}
+					verso = oldCarta.verso;
+				} else{
+					verso = "/img/" + req.files[1].filename;
+				}
+				deleteCarta(id);
+				var carta = {
+					nome: req.body.nome, 
+					vendedor: req.body.vendedor, 
+					preco: req.body.preco, 
+					id: id,
+					frente: frente,
+					verso: verso
+				};
+				saveCarta(req, carta);
+				res.writeHead(201, { 'Content-Type': 'application/json' });
+				return res.end();
+			});break;
+		case 'DELETE':
+			deleteCarta(id);
+			res.writeHead(204, { 'Content-Type': 'text/html; charset=utf-8'});
+			return res.end(); break;
+	}; 
 }
 
 function getCarta(id){
@@ -381,6 +433,26 @@ function getCarta(id){
 			}
 		}
 	}
+}
+
+function saveCarta(req, carta){
+	var jogo = find(jogos_path, "jogos", req.body.jogo);
+	if(carta.id == undefined){
+		carta.id = nextId("cartas");
+	}
+	jogo.cartas.push(carta);
+	del(jogos_path, "jogos", jogo.id, true);
+	save(jogos_path, "jogos", jogo);
+}
+
+function deleteCarta(id){
+	var jogos = list(jogos_path, 'jogos');
+		jogos.forEach(jogo => {
+			var cartas = jogo['cartas'];
+			cartas = cartas.filter(carta => Number(carta["id"]) !== Number(id));
+			jogo['cartas'] = cartas;
+	})
+	fs.writeFileSync(jogos_path, JSON.stringify({jogos: jogos}, null, 2), 'utf8');
 }
 
 function getUserData(userId) {
@@ -438,6 +510,10 @@ function createComentario(postId, commentData) {
     } else {
         throw new Error('Post não encontrado!');
     }
+}
+
+function createCarta(carta){
+	
 }
 
 // Cria o servidor WebSocket

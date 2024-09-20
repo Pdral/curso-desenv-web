@@ -150,7 +150,7 @@ app.get('/meus-produtos', (req, res) => {
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 
 	if (req.xhr) {
-		fetch(api + '/cartas?id=' + user["id"]).then(response => {
+		fetch(api + '/cartasUser?id=' + user["id"]).then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
 			}
@@ -184,7 +184,7 @@ app.get('/meus-produtos/:id', (req, res) => {
 	})
 	.then(dono => {
 		if (req.xhr) {
-			fetch(api + '/cartas?id=' + donoId).then(response => {
+			fetch(api + '/cartasUser?id=' + donoId).then(response => {
 				if (!response.ok) {
 					throw new Error('Network response was not ok');
 				}
@@ -224,7 +224,7 @@ app.get('/editar-produto/:id', (req, res) => {
 		return a;
 	})
 	.then(jogos => {
-		fetch(api + '/carta?id=' + cartaId).then(response => {
+		fetch(api + '/cartas?id=' + cartaId).then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
 			}
@@ -243,7 +243,7 @@ app.get('/produto/:id', (req, res) => {
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	
-	fetch(api + '/carta?id=' + cartaId).then(response => {
+	fetch(api + '/cartas?id=' + cartaId).then(response => {
 		if (!response.ok) {
 			throw new Error('Network response was not ok');
 		}

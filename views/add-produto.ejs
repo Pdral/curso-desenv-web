@@ -5,7 +5,7 @@
 
 <div class="container">
         
-    <form id="add-produto-form" action='http://localhost:8084/criarCarta' method='post' encType="multipart/form-data">
+    <form id="add-produto-form" action='http://localhost:8084/cartas' method='post' encType="multipart/form-data">
         <div class="carta-a-venda">
             <div class="input-editar">
                 <input class="nome" type="text" name="nome" value="Nome da carta">
@@ -44,9 +44,9 @@
 
         <div class="descricao-produto">
             <h3 class="cabecalho-descricao">Jogo: </h3>
-            <select id="select-jogo-descricao-produto" name="tipo" required>
+            <select id="select-jogo-descricao-produto" name="jogo" required>
                 <% for (var i=0; i<jogos.length; i++) {%>
-                    <option value="<%= jogos[i]["nome"] %>"><%= jogos[i]["nome"] %></option>
+                    <option value="<%= jogos[i]["id"] %>"><%= jogos[i]["nome"] %></option>
                 <% } %>
             </select>
         </div>
