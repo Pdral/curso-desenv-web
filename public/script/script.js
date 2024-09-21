@@ -775,9 +775,6 @@ function redirecionarAoAtualizarCarta(){
 
         // Obtém os dados do formulário
         const formData = new FormData(form);
-        formData.forEach((value, key) => {
-            console.log(`${key}: ${value}`);
-        });
         const pathParts = window.location.pathname.split('/');
         const pageId = pathParts[2]; 
 
@@ -811,6 +808,55 @@ function excluirCarta(){
     })
     .catch(error => {
         console.error('Erro ao criar carta:', error);
+    });
+}
+
+function criarUsuario(){
+    if (!window.location.pathname.includes('/cadastro')) {
+        return;
+    }
+
+    const form = document.getElementById('f2');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita o envio padrão do formulário
+
+        // Obtém os dados do formulário
+        const formData = new FormData(form);
+
+        const senha = document.getElementById("senha").value;
+        const confirmarSenha = document.getElementById("confirmar-senha").value;
+        const mensagemErro = document.getElementById('mensagemErro');
+
+        if(senha !== confirmarSenha){
+            mensagemErro.textContent = 'As senhas não são iguais. Tente novamente.';
+        } else{
+            var user = {
+                "username": formData.get("username"),
+                "moedas": "100,00",
+                "perfil": "simples",
+                "icon": "/img/default.png",
+                "cartas-compradas": [],
+                "cartas-vendidas": [],
+                "senha": senha
+            }
+            fetch(`http://localhost:8084/usuarios`, {
+                method: 'POST',
+                body: JSON.stringify(user)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao criar carta: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(id => {
+                window.location.href = '/?user=' + id.id;
+            })
+            .catch(error => {
+                console.error('Erro ao criar carta:', error);
+            });
+        }
     });
 }
 
@@ -971,3 +1017,4 @@ createPost();
 createComentario();
 redirecionarAoCriarCarta();
 redirecionarAoAtualizarCarta();
+criarUsuario();

@@ -247,10 +247,11 @@ function handleGeneralFiles(req, res, u, fileName, entity){
 				body += data;
 				body = JSON.parse(body);
 				var user = body;
-				save(fileName, entity, user);
+				var id = save(fileName, entity, user);
+				res.writeHead(201, { 'Content-Type': 'text/html; charset=utf-8'});
+				res.write(JSON.stringify({id: id}, null, 2));
 			});
 			req.on('end', function () {
-				res.writeHead(201, { 'Content-Type': 'text/html; charset=utf-8'});
 				return res.end();
 			}); break;
 		case 'PUT':
@@ -351,9 +352,13 @@ function save(fileName, entity, data){
 	if(data.id == undefined){
 		data.id = nextId(entity);
 	}
+	if(entity === 'usuarios' && data.senha !== undefined){
+		data.senha = sha512(data.senha, process.env.SECRET_USERS);
+	}
 	var allData = list(fileName, entity);
 	allData.push(data);
 	fs.writeFileSync(fileName, JSON.stringify({[entity]: allData}, null, 2), 'utf8');
+	return data.id;
 }
 
 function del(fileName, entity, id, update){
