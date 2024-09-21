@@ -82,7 +82,17 @@ app.get('/login', (req, res) => {
 	const user = req.query.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/style2.css' : '/css/style.css';
-	res.render('login', {layout: "no-header", "user": user, css: selectedCSS});
+	let errorMessage = null;
+
+    if (req.query.error) {
+        try {
+            errorMessage = decodeURIComponent(req.query.error);
+        } catch (e) {
+            console.error('Erro ao decodificar a mensagem de erro:', e);
+            errorMessage = 'Erro de login'; // mensagem genérica em caso de erro
+        }
+    }
+	res.render('login', {layout: "no-header", "user": user, css: selectedCSS, error: errorMessage});
 })
 
 app.get('/esquecer-senha', (req, res) => {

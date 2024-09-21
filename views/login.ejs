@@ -23,6 +23,9 @@
                 <h1>Login</h1>
                 <p>Usuário <input type="text" name="username"></p>
                 <p>Senha <input type="password" name="senha"></p>
+                <% if (error) { %>
+                    <div class="error-message">*<%= error %></div>
+                <% } %>
                 <p><input id="btok_login" type="submit" value="Entrar"></p>
                 <p><a href="/esquecer-senha" class="link">Esqueceu a senha?</a></p>
                 <p><a href="/cadastro" class="link">Ainda não tem conta? Cadastre-se!</a></p>

@@ -191,8 +191,10 @@ const server = http.createServer((req, res) => {
 								res.end();
 							} else {
 								console.log('### 0 - erro no login');
-								res.writeHead(401, { 'Content-Type': 'text/plain; charset=utf-8' }); // Adiciona charset UTF-8
-								res.end('usuário e/ou senha inválidos'); // não autorizado
+								res.writeHead(302, {
+									'Location': 'http://localhost:8083/login?error=' + encodeURIComponent('Usuário e/ou senha inválidos')
+								});
+								res.end();
 							}
 						} else {
 							res.writeHead(400, { 'Content-Type': 'text/plain' });
