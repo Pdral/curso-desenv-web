@@ -165,7 +165,7 @@ body, html {
 
 /* Estilo de mensagem de erro no login */
 .error-message {
-  color: rgb(240, 118, 118);
+  color: rgb(240, 143, 143);
   font-size: 18px; 
   font-weight: bold;
 }
