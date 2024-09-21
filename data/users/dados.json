@@ -2,7 +2,7 @@
   "usuarios": [
     {
       "id": 0,
-      "senha": "1234",
+      "senha": "e6a3a6151b066f0a86abc57f44c68b28f3a6069404e10cedc504162771c5d6e08c806bfcb09a2d1ae91fa38c63fb0ca75bd71d0dea7f47d8f38004632d184b77",
       "username": "Carla Mariana",
       "moedas": "5000,00",
       "perfil": "admin",
@@ -24,7 +24,7 @@
     },
     {
       "id": 1,
-      "senha": "1234",
+      "senha": "e6a3a6151b066f0a86abc57f44c68b28f3a6069404e10cedc504162771c5d6e08c806bfcb09a2d1ae91fa38c63fb0ca75bd71d0dea7f47d8f38004632d184b77",
       "username": "Paulo Davi",
       "moedas": "2,00",
       "perfil": "premium",
@@ -34,7 +34,7 @@
     },
     {
       "id": 2,
-      "senha": "1234",
+      "senha": "e6a3a6151b066f0a86abc57f44c68b28f3a6069404e10cedc504162771c5d6e08c806bfcb09a2d1ae91fa38c63fb0ca75bd71d0dea7f47d8f38004632d184b77",
       "username": "Joãozinho",
       "moedas": "100,00",
       "perfil": "simples",
