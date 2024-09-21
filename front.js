@@ -251,7 +251,11 @@ app.get('/produto/:id', (req, res) => {
 		return a;
 	})
 	.then(carta => {
-		res.render('produto', {header: setHeader(user), navclass: {"produtos": "active"}, "user": user, carta: carta, css: selectedCSS});
+		if(carta.vendedor.id === user.id){
+			res.redirect('/editar-produto/' + cartaId + '?user=' + user.id);
+		} else{
+			res.render('produto', {header: setHeader(user), navclass: {"produtos": "active"}, "user": user, carta: carta, css: selectedCSS});
+		}
 	})
 })
 
@@ -375,6 +379,14 @@ app.get('/criar-jogo', (req, res) => {
     const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
 
 	res.render('criar-jogo', {header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
+})
+
+app.get('/perfil', (req, res) => {
+	const user = req.query.user;
+	const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
+
+	res.render('perfil', {usuario: user, header: setHeader(user), navclass: {}, "user": user, css: selectedCSS});
 })
 
 app.listen(port, function () {

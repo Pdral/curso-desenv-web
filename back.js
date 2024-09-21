@@ -159,51 +159,89 @@ const server = http.createServer((req, res) => {
 				res.end('Method Not Allowed');
 			}
 			break;
-			case '/login':
-				if (req.method === 'POST') {
-					let body = '';
-					req.on('data', chunk => {
-						body += chunk.toString(); // Concatena os chunks recebidos
-					});
-					req.on('end', () => {
-						const loginData = new URLSearchParams(body);
-						const username = loginData.get('username');
-						const senha = sha512(loginData.get('senha'), process.env.SECRET_USERS);
-						console.log('Usuário:', username);
-						console.log('Senha (hash):', senha);
-						if (username && senha) {
-							// Authenticação
-							var users = JSON.parse(fs.readFileSync(users_path, 'utf8')).usuarios;
-							var userloc = users.find((item) => {
-								return (item.username === username && item.senha === senha);
-							});
-		
-							if (userloc) {
-								const token = jwt.sign(
-									{ id: userloc.id }, // payload
-									process.env.SECRET, // chave definida em .env
-									{ expiresIn: 300 }  // em segundos
-								);
-		
-								// Define o cookie com o token
-								res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Max-Age=300`); // 5 minutos
-								res.writeHead(302, { Location: `http://localhost:8083/?user=${userloc.id}` }); // Redireciona para a home
-								res.end();
-							} else {
-								console.log('### 0 - erro no login');
-								res.writeHead(401, { 'Content-Type': 'text/plain; charset=utf-8' }); // Adiciona charset UTF-8
-								res.end('usuário e/ou senha inválidos'); // não autorizado
-							}
+		case '/login':
+			if (req.method === 'POST') {
+				let body = '';
+				req.on('data', chunk => {
+					body += chunk.toString(); // Concatena os chunks recebidos
+				});
+				req.on('end', () => {
+					const loginData = new URLSearchParams(body);
+					const username = loginData.get('username');
+					const senha = sha512(loginData.get('senha'), process.env.SECRET_USERS);
+					console.log('Usuário:', username);
+					console.log('Senha (hash):', senha);
+					if (username && senha) {
+						// Authenticação
+						var users = JSON.parse(fs.readFileSync(users_path, 'utf8')).usuarios;
+						var userloc = users.find((item) => {
+							return (item.username === username && item.senha === senha);
+						});
+	
+						if (userloc) {
+							const token = jwt.sign(
+								{ id: userloc.id }, // payload
+								process.env.SECRET, // chave definida em .env
+								{ expiresIn: 300 }  // em segundos
+							);
+	
+							// Define o cookie com o token
+							res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Max-Age=300`); // 5 minutos
+							res.writeHead(302, { Location: `http://localhost:8083/?user=${userloc.id}` }); // Redireciona para a home
+							res.end();
 						} else {
-							res.writeHead(400, { 'Content-Type': 'text/plain' });
-							res.end('Dados inválidos');
+							console.log('### 0 - erro no login');
+							res.writeHead(401, { 'Content-Type': 'text/plain; charset=utf-8' }); // Adiciona charset UTF-8
+							res.end('usuário e/ou senha inválidos'); // não autorizado
 						}
-					});
-				} else {
-					res.writeHead(405, { 'Content-Type': 'text/plain' });
-					res.end('Method Not Allowed');
+					} else {
+						res.writeHead(400, { 'Content-Type': 'text/plain' });
+						res.end('Dados inválidos');
+					}
+				});
+			} else {
+				res.writeHead(405, { 'Content-Type': 'text/plain' });
+				res.end('Method Not Allowed');
+			}
+			break;
+		case '/comprarCarta':
+			var body = '';
+			req.on('data', function (data) {
+				body += data;
+				body = JSON.parse(body);
+				var user = find(users_path, 'usuarios', body.user);
+				var carta = getCarta(body.carta);
+				var moedas = Number(user.moedas.replace(/,/g, '.'));
+				var preco = Number(carta.preco.replace(/,/g, '.'));
+				if(moedas < preco){
+					res.writeHead(401, { 'Content-Type': 'text/html; charset=utf-8'});	
+					res.write("O usuário não tem moedas suficientes");
+				} else{
+					user.moedas = (moedas - preco).toString();
+					user['cartas-compradas'].push({
+						nome: carta.nome,
+						preco: carta.preco,
+						img: carta.frente
+					})
+					del(users_path, 'usuarios', user.id, true);
+					save(users_path, 'usuarios', user);
+					var vendedor = carta.vendedor;
+					vendedor.moedas = (moedas + preco).toString();
+					vendedor['cartas-vendidas'].push({
+						nome: carta.nome,
+						preco: carta.preco,
+						img: carta.frente
+					})
+					del(users_path, 'usuarios', vendedor.id, true);
+					save(users_path, 'usuarios', vendedor);
+					deleteCarta(carta.id);
+					res.writeHead(201, { 'Content-Type': 'text/html; charset=utf-8'});
+					res.end();
 				}
-				break;
+			});
+			req.on('end', function () {
+				return res.end();
+			}); break;
 		case '/favicon.ico':
 			const faviconPath = path.join(__dirname, 'public', 'favicon.ico');
             fs.readFile(faviconPath, (err, data) => {

@@ -1,0 +1,30 @@
+<%- contentFor('title') %>
+<title>Perfil</title>
+
+<%- contentFor('body') %>
+
+<div class="container">
+        
+    <div class="usuario-a-editar">
+        <div class="user-icon-perfil">
+            <img id="icon-img" src=<%= usuario["icon"] %> alt="User Icon">
+        </div>
+        <div class="descricao-produto">
+            <h3 class="cabecalho-descricao">Ícone de perfil: </h3>
+            <input id="icon-input" class="input-img" type="file" name="filename">
+        </div>
+    </div>
+
+    <div class="descricao-produto">
+        <h3 class="cabecalho-descricao">Nome de usuário: </h3>
+        <input style="height: 37px;margin-top: auto;margin-bottom: auto;" name="nome" class="nome" value="<%= usuario["username"] %>">
+    </div>
+    <div class="descricao-produto">
+        <h3 class="cabecalho-descricao">Moedas: </h3>
+        <div style="margin-top: auto;margin-bottom: auto;">GC$ <%= usuario["moedas"] %></div>
+    </div>
+
+    <div class="botoes-editar">
+        <button class="botao-salvar" onclick="editarUsuario()">Salvar</button>
+    </div>
+</div>

@@ -596,7 +596,7 @@ function setupJogos(filtro, cartaNome) {
 
                     const cartaPreco = document.createElement('div');
                     cartaPreco.className = 'preco';
-                    cartaPreco.textContent = carta["preco"];
+                    cartaPreco.textContent = 'GC$ ' + carta["preco"];
                     produtoDiv.appendChild(cartaPreco);
 
                     cartasDiv.appendChild(produtoDiv);
@@ -860,6 +860,54 @@ function criarUsuario(){
     });
 }
 
+function editarPerfilUsuario(){
+    if (!window.location.pathname.includes('/perfil')) {
+        return;
+    }
+    
+    // Obtém o ID do usuário da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
+
+    document.getElementById('icon-input').addEventListener('change', function(event) {
+        const file = event.target.files[0]; // Obtém o arquivo selecionado
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const imagemPrevia = document.getElementById('icon-img');
+            imagemPrevia.src = e.target.result; // Define a fonte da imagem
+        };
+
+        if (file) {
+            reader.readAsDataURL(file); // Lê o arquivo como URL
+        }
+    });
+
+    // form.addEventListener('submit', function(event) {
+    //     event.preventDefault(); // Evita o envio padrão do formulário
+
+    //     // Obtém os dados do formulário
+    //     const formData = new FormData(form);
+    //     const pathParts = window.location.pathname.split('/');
+    //     const pageId = pathParts[2]; 
+
+    //     // Cria uma requisição POST para adicionar o comentário ao post com o ID específico
+    //     fetch(`http://localhost:8084/cartas?id=` + pageId, {
+    //         method: 'PUT',
+    //         body: formData
+    //     })
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error('Erro ao criar carta: ' + response.statusText);
+    //         }
+    //         window.location.href = '/meus-produtos?user=' + userId;
+    //     })
+    //     .catch(error => {
+    //         console.error('Erro ao criar carta:', error);
+    //     });
+    // });
+}
+
 let socket;
 let isChatOpen = false; // Variável para controlar se o chat está aberto
 
@@ -1010,6 +1058,37 @@ function exibirMensagem(data) {
     chatMessagesUsuario.appendChild(messageElement);
 }
 
+function comprarCarta(){
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
+    console.log(userId);
+    if(userId == null || userId == undefined || userId == "" || userId == "null"){
+        window.location.href = '/login';
+    }else {
+        const pathParts = window.location.pathname.split('/');
+        const pageId = pathParts[2]; 
+        fetch(`http://localhost:8084/comprarCarta`, {
+            method: 'POST',
+            body: JSON.stringify({
+                user: userId,
+                carta: pageId
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                const mensagem = document.getElementById('mensagem');
+                mensagem.textContent = 'Você não possui moedas suficientes';
+                mensagem.style.display = 'flex'; // Exibe a mensagem
+            } else{
+                window.location.href = '/meus-produtos?user=' + userId;
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao criar carta:', error);
+        });
+    }
+}
+
 setupCartas();
 setupUsuarioseJogos();
 setupJogos("");
@@ -1018,3 +1097,4 @@ createComentario();
 redirecionarAoCriarCarta();
 redirecionarAoAtualizarCarta();
 criarUsuario();
+editarPerfilUsuario();
