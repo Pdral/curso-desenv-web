@@ -43,12 +43,53 @@ const server = http.createServer((req, res) => {
 	 res.setHeader('Access-Control-Allow-Origin', '*'); // Permite todas as origens
 	 res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 	 res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+	 res.setHeader('Access-Control-Allow-Credentials', 'true');
 	 res.setHeader("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self';");
 
 	 if(req.method == 'OPTIONS'){
 		res.end();
 	 }
-	 
+
+	  // Verificar token
+	  if (req.method === 'GET' && req.url === '/verificar-token') {
+		verifyJWT(req, res, () => {
+			res.writeHead(200, { 'Content-Type': 'application/json' });
+        	res.end(JSON.stringify({ userId: req.id }));
+		});
+		return;
+	} 
+
+	// Verificar perfil ADM e Premium
+	if (req.method === 'GET' && req.url === '/verificar-perfil-adm-premium') {
+		const userId = req.headers['user-id']; // Captura o userId do cabeçalho
+
+    	verifyPerfilAdmePremium(userId, (err, usuario) => {
+        	if (err) {
+            	res.writeHead(403, { 'Content-Type': 'application/json' });
+            	res.end(JSON.stringify({ error: err.message }));
+        	} else {
+            	res.writeHead(200, { 'Content-Type': 'application/json' });
+            	res.end(JSON.stringify({ message: 'Perfil válido', usuario }));
+        	}
+    	});
+		return;
+	} 
+
+	// Verificar perfil ADM
+	if (req.method === 'GET' && req.url === '/verificar-perfil-adm') {
+		const userId = req.headers['user-id']; // Captura o userId do cabeçalho
+
+    	verifyPerfilAdm(userId, (err, usuario) => {
+        	if (err) {
+            	res.writeHead(403, { 'Content-Type': 'application/json' });
+            	res.end(JSON.stringify({ error: err.message }));
+        	} else {
+            	res.writeHead(200, { 'Content-Type': 'application/json' });
+            	res.end(JSON.stringify({ message: 'Perfil válido', usuario }));
+        	}
+    	});
+		return;
+	} 
 
 	 // Verificar o caminho e o método da requisição
 	 if (u.pathname.match(/^\/post\/(\d+)$/) && req.method === 'POST') {
@@ -182,11 +223,10 @@ const server = http.createServer((req, res) => {
 								const token = jwt.sign(
 									{ id: userloc.id }, // payload
 									process.env.SECRET, // chave definida em .env
-									{ expiresIn: 300 }  // em segundos
-								);
-		
+									{ expiresIn: 10800 }  // em segundos
+								);	
 								// Define o cookie com o token
-								res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Max-Age=300`); // 5 minutos
+								res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=10800; SameSite=None; Secure`); // 5 minutos
 								res.writeHead(302, { Location: `http://localhost:8083/?user=${userloc.id}` }); // Redireciona para a home
 								res.end();
 							} else {
@@ -626,8 +666,6 @@ wss.on('connection', (ws) => {
     });
 });
 
-
-
 //========================================================== Login
 var sha512 = (pwd, key) => {
     /* Gera um HMAC (Hash-based Message Authentication Code) 
@@ -642,26 +680,84 @@ var sha512 = (pwd, key) => {
 //========================================================== Verificação
 const blacklist = []
 
+// Função para ler cookies do header
+function parseCookies(req) {
+    const cookieHeader = req.headers.cookie; 
+    const cookies = {};
+
+    if (cookieHeader) {
+        cookieHeader.split(';').forEach(cookie => {
+            const [name, value] = cookie.split('=');
+            cookies[name.trim()] = decodeURIComponent(value); 
+        });
+    }
+
+    return cookies;
+}
+
+// Verificação do perfil do usuário ADM e Premium
+function verifyPerfilAdmePremium(userId, callback) {
+    fs.readFile(users_path, 'utf8', (err, data) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+
+        const usuarios = JSON.parse(data).usuarios;
+        const usuario = usuarios.find(u => u.id === Number(userId));
+
+        if (usuario && (usuario.perfil === 'admin' || usuario.perfil === 'premium')) {
+            callback(null, usuario); // Retorna o usuário se permitido
+        } else {
+            callback(new Error('Acesso negado'), null);
+        }
+    });
+}
+
+// Verificação do perfil do ADM
+function verifyPerfilAdm(userId, callback) {
+    fs.readFile(users_path, 'utf8', (err, data) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+
+        const usuarios = JSON.parse(data).usuarios;
+        const usuario = usuarios.find(u => u.id === Number(userId));
+
+        if (usuario && (usuario.perfil === 'admin')) {
+            callback(null, usuario); // Retorna o usuário se permitido
+        } else {
+            callback(new Error('Acesso negado'), null);
+        }
+    });
+}
+
+
 // Verificação da validade do token 
 // (função usada como middleware na rota '/clients')
-function verifyJWT(req, res, next) {
-    const token = req.cookies.token;
+function verifyJWT(req, res, callback) {
+    const cookies = parseCookies(req);
+    const token = cookies.token;
 
-    // verifica se o token foi incluindo na blacklist devido a logout
-    const index = blacklist.findIndex(item => item === token)
- 
-    if (index !== -1) {// está na blacklist!
-        console.log('### 1 - está na blacklist')
-        res.status(401).end('está na blacklist - fazer login novamente!') 
+    const index = blacklist.findIndex(item => item === token);
+
+    if (index !== -1) {
+        console.log('### 1 - está na blacklist');
+        res.writeHead(401, { 'Content-Type': 'text/plain' });
+        res.end('está na blacklist - fazer login novamente!');
+        return;
     } else {
         jwt.verify(token, process.env.SECRET, (err, decoded) => {
             if (err) {
-                console.log('### 2 - erro na verificação')
-                res.status(403).end('token inválido - fazer login novamente');
+                console.log('### 2 - erro na verificação');
+                res.writeHead(403, { 'Content-Type': 'text/plain' });
+                res.end('token inválido - fazer login novamente');
+                return;
             } else {
-                req.id = decoded.id;
-                next();
+                req.id = decoded.id; 
+                callback(); 
             }
-        })
+        });
     }
 }
