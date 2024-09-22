@@ -14,7 +14,7 @@
 		</div>
 		<div class="usuario">
 			<div class="user-icon">
-				<a class="user-icon-link" href="/perfil?user=<%= user["id"] %>">
+				<a class="user-icon-link" href="/perfil">
 					<img src=<%= user["icon"] %> alt="User Icon">
 				</a>
 			</div>
@@ -36,7 +36,8 @@
 </header>
 
 <nav class="nav">
-	<a href="/?user=<%= user["id"] %>" class=<%= navclass["produtos"] %>>Produtos</a>
-	<a href="/meus-produtos?user=<%= user["id"] %>" class=<%= navclass["meus-produtos"] %>>Meus Produtos</a>
+	<a href="/" class=<%= navclass["produtos"] %>>Produtos</a>
+	<a href="/meus-produtos" class=<%= navclass["meus-produtos"] %>>Meus Produtos</a>
 	<a href="#" class="theme-switch">Switch mode</a>
 </nav>
+<input type="hidden" id="userId" value="<%= user["id"] %>">

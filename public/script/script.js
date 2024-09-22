@@ -168,8 +168,7 @@ function createPost() {
     const form = document.getElementById('f2');
     
     // Adicione o campo user ao formulário
-    const urlParams = new URLSearchParams(window.location.search);
-    const user = urlParams.get('user');
+    const user = document.getElementById("userId").value;
 
     form.addEventListener('submit', function(event) {
         event.preventDefault(); // Evita o envio padrão do formulário
@@ -191,7 +190,7 @@ function createPost() {
         })
         .then(data => {
             console.log('Post criado com sucesso:', data);
-            window.location.href = '/comunidade?user=' + user; // Exemplo: redirecionar para a página da comunidade
+            window.location.href = '/comunidade'; // Exemplo: redirecionar para a página da comunidade
         })
         .catch(error => {
             console.error('Erro ao criar post:', error);
@@ -200,9 +199,6 @@ function createPost() {
 }
 
 function editarUsuario() {
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const user = urlParams.get('user');
     const userId = window.location.pathname.split("/editar-usuario/").at(-1);
 
     const moedas = document.getElementById('moedas').value.split(" ")[1];
@@ -221,7 +217,7 @@ function editarUsuario() {
             body: JSON.stringify(usuario)
         })
         .then(response => {
-            window.location.href = '/adm?user=' + user; 
+            window.location.href = '/adm'; 
         })
         .catch(error => {
             console.error(error);
@@ -233,15 +229,12 @@ function editarUsuario() {
 }
 
 function excluirUsuario() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const user = urlParams.get('user');
-
     const userId = window.location.pathname.split("/editar-usuario/").at(-1);
 
     const url = 'http://localhost:8084/usuarios?id=' + userId;
 
     fetch(url, {method: 'DELETE'}).then(response => {
-        window.location.href = '/adm?user=' + user;
+        window.location.href = '/adm';
     }).catch(error => {
         console.error(error);
     });
@@ -249,9 +242,6 @@ function excluirUsuario() {
 }
 
 function criarJogo() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const user = urlParams.get('user');
-
     const nome = document.getElementById('nome').value;
 
     const url = 'http://localhost:8084/jogos';
@@ -266,7 +256,7 @@ function criarJogo() {
         body: JSON.stringify(jogo)
     })
     .then(response => {
-        window.location.href = '/adm?user=' + user; 
+        window.location.href = '/adm'; 
     })
     .catch(error => {
         console.error(error);
@@ -275,9 +265,6 @@ function criarJogo() {
 }
 
 function editarJogo() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const user = urlParams.get('user');
-
     const nome = document.getElementById('nome').value;
 
     const jogoId = window.location.pathname.split("/editar-jogo/").at(-1);
@@ -298,7 +285,7 @@ function editarJogo() {
             body: JSON.stringify(jogo)
         })
         .then(response => {
-            window.location.href = '/adm?user=' + user; 
+            window.location.href = '/adm'; 
         })
         .catch(error => {
             console.error(error);
@@ -311,9 +298,6 @@ function editarJogo() {
 }
 
 function excluirJogo() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const user = urlParams.get('user');
-
     const jogoId = window.location.pathname.split("/editar-jogo/").at(-1);
 
     const url = 'http://localhost:8084/jogos?id=' + jogoId;
@@ -322,24 +306,13 @@ function excluirJogo() {
         method: 'DELETE'
     })
     .then(response => {
-        window.location.href = '/adm?user=' + user; 
+        window.location.href = '/adm'; 
     })
     .catch(error => {
         console.error(error);
     });
     
 }
-
-// function redirectAdm() {
-//     const urlParams = new URLSearchParams(window.location.search);
-//     const user = urlParams.get('user');
-
-//     const nomeUsuario = document.getElementById('nomeUsuario').value;
-//     const nomeJogo = document.getElementById('nomeJogo').value;
-
-//     window.location.href = '/adm?nomeUsuario=' + nomeUsuario + '&nomeJogo=' + nomeJogo + '&user=' + user;
-    
-// }
 
 // Carrega as cartas na pagina de meus-produtos
 function setupCartas() {
@@ -353,14 +326,13 @@ function setupCartas() {
         const pageId = pathParts[2]; 
         
         // Extrair o ID do usuário dos parâmetros da URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('user'); 
+        const userId = document.getElementById("userId").value;
         var fetchUrl = '';
 
         if(pageId == undefined){
-            fetchUrl = '/meus-produtos?user=' + userId;
+            fetchUrl = '/meus-produtos';
         } else{
-            fetchUrl = '/meus-produtos/' + pageId + '?user=' + userId;
+            fetchUrl = '/meus-produtos/' + pageId;
         }
         
         // Faz a requisição via Fetch para carregar as cartas usando o ID da página
@@ -383,7 +355,7 @@ function setupCartas() {
             if(pageId == undefined || pageId == userId){
                 const botaoAdd = document.createElement('a');
                 botaoAdd.classList.add('botao-adicionar');
-                botaoAdd.href = '/add-produto?user=' + userId;
+                botaoAdd.href = '/add-produto';
                 const adddiv = document.createElement('div');
                 adddiv.classList.add("botao-adicionar-div");
                 botaoAdd.appendChild(adddiv);
@@ -407,7 +379,7 @@ function setupCartas() {
                 if(pageId == undefined || pageId == userId){
                     const botaoEditar = document.createElement('a');
                     botaoEditar.classList.add('botao-editar');
-                    botaoEditar.href = '/editar-produto/' + carta["id"] + '?user=' + userId;
+                    botaoEditar.href = '/editar-produto/' + carta["id"];
                     prodEditavel.appendChild(botaoEditar);
                 }
                 
@@ -450,8 +422,6 @@ function setupUsuarioseJogos() {
     if (window.location.pathname !== '/adm') {
         return undefined;
     }
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user'); 
     const nomeUsuario = document.getElementById('nomeUsuario').value;
     const nomeJogo = document.getElementById('nomeJogo').value;
     fetch('/adm?nomeUsuario=' + nomeUsuario + '&nomeJogo=' + nomeJogo, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
@@ -459,9 +429,7 @@ function setupUsuarioseJogos() {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            var a = response.json();
-            console.log(a);
-            return a;
+            return response.json();
         })
         .then(data => {
             const jogos = data.jogos;
@@ -483,7 +451,7 @@ function setupUsuarioseJogos() {
                         <div class="nickname">${usuario.username}</div>
                         <div class="moedas">GC$ ${usuario.moedas}</div>
                     </div>
-                    <a class="botao-editar" href="/editar-usuario/${usuario.id}?user=${userId}"></a>
+                    <a class="botao-editar" href="/editar-usuario/${usuario.id}"></a>
                 `;
 
                 usuarioDiv.innerHTML = usuarioContent;
@@ -513,7 +481,7 @@ function setupUsuarioseJogos() {
 
                 const botaoEditar = document.createElement('a');
                 botaoEditar.classList.add('botao-editar');
-                botaoEditar.href = '/editar-jogo/' + jogo["id"] + '?user=' + userId;
+                botaoEditar.href = '/editar-jogo/' + jogo["id"];
                 editarJogo.appendChild(botaoEditar);
 
                 
@@ -532,8 +500,8 @@ function setupJogos(filtro, cartaNome) {
     if (window.location.pathname !== '/') {
         return undefined;
     }
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user'); 
+
+    // const userId = getUserId() || "";
     
     if(cartaNome == undefined){
         cartaNome = '';
@@ -545,9 +513,7 @@ function setupJogos(filtro, cartaNome) {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            var a = response.json();
-            console.log(a);
-            return a;
+            return response.json();
         })
         .then(data => {
             const jogos = data.jogos;
@@ -575,7 +541,7 @@ function setupJogos(filtro, cartaNome) {
                     produtoDiv.className = 'produto';
 
                     const produtoLink = document.createElement('a');
-                    produtoLink.href = '/produto/' + carta["id"] + '?user=' + userId;
+                    produtoLink.href = '/produto/' + carta["id"];
 
                     const produtoImg = document.createElement('img');
                     produtoImg.className = 'carta';
@@ -611,16 +577,12 @@ function setupJogos(filtro, cartaNome) {
 }
 
 function filtraPosts(filtro){
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user');
-    window.location.href = '/comunidade?user=' + userId + '&jogo=' + filtro;
+    window.location.href = '/comunidade' + '?jogo=' + filtro;
 }
 
 function filtraPostsTitulo(){
     const filtro = document.getElementById('titulo').value;
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user');
-    window.location.href = '/comunidade?user=' + userId + '&titulo=' + filtro;
+    window.location.href = '/comunidade' + '?titulo=' + filtro;
 }
 
 function createComentario() {
@@ -629,10 +591,6 @@ function createComentario() {
     }
 
     const form = document.getElementById('comentar');
-    
-    // Obtém o ID do usuário da URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
 
     // Extrai o ID do post da URL
     const pathParts = window.location.pathname.split('/');
@@ -657,7 +615,7 @@ function createComentario() {
         })
         .then(data => {
             console.log('Comentário criado com sucesso:', data);
-            window.location.href = '/post/' + postId + '?user=' + userId; // Redireciona para a página do post atualizado
+            window.location.href = '/post/' + postId; // Redireciona para a página do post atualizado
         })
         .catch(error => {
             console.error('Erro ao criar comentário:', error);
@@ -671,10 +629,6 @@ function redirecionarAoCriarCarta(){
     }
 
     const form = document.getElementById('add-produto-form');
-    
-    // Obtém o ID do usuário da URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
 
     document.getElementById('frente-input').addEventListener('change', function(event) {
         const file = event.target.files[0]; // Obtém o arquivo selecionado
@@ -719,7 +673,7 @@ function redirecionarAoCriarCarta(){
             if (!response.ok) {
                 throw new Error('Erro ao criar carta: ' + response.statusText);
             }
-            window.location.href = '/meus-produtos?user=' + userId;
+            window.location.href = '/meus-produtos';
         })
         .catch(error => {
             console.error('Erro ao criar carta:', error);
@@ -733,10 +687,6 @@ function redirecionarAoAtualizarCarta(){
     }
 
     const form = document.getElementById('edit-produto-form');
-    
-    // Obtém o ID do usuário da URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
 
     document.getElementById('frente-input').addEventListener('change', function(event) {
         const file = event.target.files[0]; // Obtém o arquivo selecionado
@@ -783,7 +733,7 @@ function redirecionarAoAtualizarCarta(){
             if (!response.ok) {
                 throw new Error('Erro ao criar carta: ' + response.statusText);
             }
-            window.location.href = '/meus-produtos?user=' + userId;
+            window.location.href = '/meus-produtos';
         })
         .catch(error => {
             console.error('Erro ao criar carta:', error);
@@ -792,15 +742,13 @@ function redirecionarAoAtualizarCarta(){
 }
 
 function excluirCarta(){
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
     const pathParts = window.location.pathname.split('/');
     const pageId = pathParts[2]; 
     fetch(`http://localhost:8084/cartas?id=` + pageId, {
         method: 'DELETE'
     })
     .then(response => {
-        window.location.href = '/meus-produtos?user=' + userId;
+        window.location.href = '/meus-produtos';
     })
     .catch(error => {
         console.error('Erro ao criar carta:', error);
@@ -808,8 +756,7 @@ function excluirCarta(){
 }
 
 function upgrade(){
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user'); 
+    const userId = document.getElementById("userId").value;
     fetch(`http://localhost:8084/upgrade?id=` + userId, {
         method: 'POST'
     })
@@ -819,7 +766,7 @@ function upgrade(){
             mensagem.textContent = 'Você precisa de 100 moedas para se tornar premium';
             mensagem.style.display = 'flex'; // Exibe a mensagem
         } else{
-            window.location.href = '/perfil?user=' + userId;
+            window.location.href = '/perfil';
         }
     })
     .catch(error => {
@@ -880,10 +827,9 @@ function editarPerfilUsuario(){
     if (!window.location.pathname.includes('/perfil')) {
         return;
     }
-    
-    // Obtém o ID do usuário da URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
+
+    const userId = document.getElementById("userId").value;
+    console.log(userId);
 
     const form = document.getElementById('perfil-form');
 
@@ -906,16 +852,13 @@ function editarPerfilUsuario(){
 
         // Obtém os dados do formulário
         const formData = new FormData(form);
-        formData.forEach((value, key) => {
-            console.log(`${key}: ${value}`);
-        });
 
         fetch('http://localhost:8084/updateUsuario?id=' + userId, {
             method: 'PUT', 
             body: formData
         })
         .then(response => {
-            window.location.href = '/?user=' + userId; 
+            window.location.href = '/'; 
         })
         .catch(error => {
             console.error(error);
@@ -1003,10 +946,7 @@ function configurarLinksNickname() {
 
 // Função para carregar mensagens antigas
 function carregarMensagensAntigas(receiverId) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user');
-
-    fetch(`http://localhost:8084/chat/history?user=${userId}&receiver=${receiverId}`)
+    fetch(`http://localhost:8084/chat/history?receiver=${receiverId}`)
         .then(response => response.json()) 
         .then(data => {
             const chatMessagesUsuario = document.getElementById('chatMessagesUsuario');
@@ -1029,8 +969,7 @@ function carregarMensagensAntigas(receiverId) {
 // Função para enviar mensagem
 function criarMensagem(receiverId) {
     const form = document.getElementById('enviarMessagem');
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user');
+    const userId = document.getElementById("userId").value;
     console.log('REceiver Id', receiverId);
 
     const messageInput = document.getElementById('messageInput').value;
@@ -1074,9 +1013,7 @@ function exibirMensagem(data) {
 }
 
 function comprarCarta(){
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
-    console.log(userId);
+    const userId = document.getElementById("userId").value; // Deve ser uma string ou número, não um objeto
     if(userId == null || userId == undefined || userId == "" || userId == "null"){
         window.location.href = '/login';
     }else {
@@ -1095,7 +1032,7 @@ function comprarCarta(){
                 mensagem.textContent = 'Você não possui moedas suficientes';
                 mensagem.style.display = 'flex'; // Exibe a mensagem
             } else{
-                window.location.href = '/meus-produtos?user=' + userId;
+                window.location.href = '/meus-produtos';
             }
         })
         .catch(error => {

@@ -246,7 +246,7 @@ const server = http.createServer((req, res) => {
 								);	
 								// Define o cookie com o token
 								res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=10800; SameSite=None; Secure`); // 5 minutos
-								res.writeHead(302, { Location: `http://localhost:8083/?user=${userloc.id}` }); // Redireciona para a home
+								res.writeHead(302, { Location: `http://localhost:8083` }); // Redireciona para a home
 								res.end();
 							} else {
 								console.log('### 0 - erro no login');
@@ -287,6 +287,26 @@ const server = http.createServer((req, res) => {
 						res.end('Method Not Allowed');
 					}
 				break;
+			case '/updateUsuario':
+				updateUsuario(req, res, u);
+				break;
+			case '/upgrade':
+				params = u.searchParams;
+				const id = params.get("id");
+				var user = find(users_path, 'usuarios', id);
+				var moedas = Number(user.moedas.replace(/,/g, '.'));
+				if(moedas < 100){
+					res.writeHead(401, { 'Content-Type': 'text/plain' });
+					res.end('Você precisa de 100 moedas para se tornar premium');
+				} else{
+					user.moedas = (moedas - 100).toFixed(2).toString().replace(/\./g, ',');
+					user.perfil = 'premium'
+					del(users_path, 'usuarios', user.id, true);
+					save(users_path, 'usuarios', user);
+					res.writeHead(200, { 'Content-Type': 'text/html' });
+					res.end();
+				}
+			break;
 		case '/favicon.ico':
 			const faviconPath = path.join(__dirname, 'public', 'favicon.ico');
             fs.readFile(faviconPath, (err, data) => {
@@ -613,7 +633,7 @@ function createPost(postData) {
     const posts = JSON.parse(fs.readFileSync(posts_path, 'utf8')).posts;
     posts.unshift(post);
     fs.writeFileSync(posts_path, JSON.stringify({ posts }, null, 2), 'utf8');
-    
+    ganharMoedas(post.user, 10);
     return post;
 }
 
@@ -642,15 +662,11 @@ function createComentario(postId, commentData) {
         post.comentarios.unshift(comentario);
 
         fs.writeFileSync(posts_path, JSON.stringify(data, null, 2), 'utf8');
-
+		ganharMoedas(user.id, 5);
         return comentario;
     } else {
         throw new Error('Post não encontrado!');
     }
-}
-
-function createCarta(carta){
-	
 }
 
 // Cria o servidor WebSocket
@@ -820,4 +836,33 @@ function verifyJWT(req, res, callback) {
             }
         });
     }
+}
+
+function updateUsuario(req, res, u){
+	params = u.searchParams;
+	const id = params.get("id");
+	switch(req.method) {
+		case 'PUT':
+			upload(req, res, function (err) {
+				if (err) {
+					return console.log(err.message);
+				}
+				var user = find(users_path, 'usuarios', id);
+				user.username = req.body.username;
+				if(req.files[0] !== undefined){
+					user.icon = "/img/" + req.files[0].filename;
+				}
+				del(users_path, 'usuarios', user.id, true);
+				save(users_path, 'usuarios', user);
+				res.writeHead(201, { 'Content-Type': 'application/json' });
+				return res.end();
+			});break;
+	}; 
+}
+
+function ganharMoedas(id, moedas){
+	var user = find(users_path, 'usuarios', id);
+	user.moedas = (Number(user.moedas.replace(/,/g, '.')) + moedas).toFixed(2).toString().replace(/\./g, ',');
+	del(users_path, 'usuarios', id, true);
+	save(users_path, 'usuarios', user);
 }

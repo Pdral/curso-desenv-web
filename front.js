@@ -20,29 +20,33 @@ app.get('/favicon.ico', (req, res) => {
 });
 
 app.use((req, res, next) => {
-    const userId = req.query.user;
-
-	if(userId == undefined || userId == ""){
-		req.query.user = {"perfil": "visitante", "id": undefined};
-		next();
-	} else{
-		fetch(api + '/usuarios?id=' + userId).then(response => {
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-			var a = response.json();
-			return a;
-		})
-		.then(user => {
-			req.query.user = user;
+    // Verifica o token na API
+	fetch(api + '/verificar-token', {
+        method: 'GET',
+        headers: {
+            Cookie: req.headers.cookie // Inclui os cookies na requisição
+        }
+    })
+    .then(tokenResponse => {
+		if(!tokenResponse.ok){
+			req.user = undefined;
 			next();
-		})
-	}
+		} 
+		return tokenResponse.json();
+    })
+	.then(json => {
+		req.user = json.userId;
+		next();
+	})
+    .catch(error => {
+        console.error('Erro ao ler token:', error);
+    });
 });
 
 app.get('/', async (req, res) => {
     const nome = req.query.nome || "";
     const cartaNome = req.query.cartaNome || "";
+	const userId = req.user;
     
     // Lê o cookie 'theme' enviado pelo cliente
     const theme = req.cookies.theme || 'light';
@@ -50,65 +54,53 @@ app.get('/', async (req, res) => {
     
     const cookies = req.headers.cookie;
 
-    try {
-        // Busca os jogos
-        const jogosResponse = await fetch(api + '/jogos?nome=' + nome + '&cartaNome=' + cartaNome);
-        if (!jogosResponse.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const jogos = await jogosResponse.json();
+	// Busca os jogos
+	const jogosResponse = await fetch(api + '/jogos?nome=' + nome + '&cartaNome=' + cartaNome);
+	if (!jogosResponse.ok) {
+		throw new Error('Network response was not ok');
+	}
+	const jogos = await jogosResponse.json();
 
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
+    if(!req.xhr){
+		try {
+			if(userId == undefined){
+				return res.render('index', {jogos: jogos, header: setHeader("visitante"), navclass: {"produtos": "active"}, user: { perfil: "visitante", id: undefined }, css: selectedCSS});
+			}
 
-        // Se o token for inválido, renderiza como visitante
-        if (!tokenResponse.ok) {
-			console.log("jogos", jogos);
-            return res.render('index', {jogos: jogos, header: setHeader("visitante"), navclass: {"produtos": "active"}, user: { perfil: "visitante", id: undefined }, css: selectedCSS});
-        }
-
-        const { userId } = await tokenResponse.json(); // Captura o userId da resposta
-
-        // Verifica o perfil na API
-        const perfilResponse = await fetch(api + '/verificar-perfil', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Cookie: cookies,
-                'User-ID': userId
-            }
-        });
-
-        if (!perfilResponse.ok) {
-            throw new Error('Perfil inválido');
-        }
-
-        const { usuario } = await perfilResponse.json();
-
-		console.log("jogos", jogos);
-        return res.render('index', {jogos: jogos, header: setHeader(usuario.perfil), navclass: { "produtos": "active" }, user: usuario, css: selectedCSS});
-        
-    } catch (error) {
-        console.error('Erro:', error);
-        return res.redirect('/login'); // Redireciona em caso de erro
-    }
+			// Verifica o perfil na API
+			const perfilResponse = await fetch(api + '/verificar-perfil', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					Cookie: cookies,
+					'User-ID': userId
+				}
+			});
+	
+			if (!perfilResponse.ok) {
+				throw new Error('Perfil inválido');
+			}
+	
+			const { usuario } = await perfilResponse.json();
+			return res.render('index', {jogos: jogos, header: setHeader(usuario.perfil), navclass: { "produtos": "active" }, user: usuario, css: selectedCSS});
+			
+		} catch (error) {
+			console.error('Erro:', error);
+			return res.redirect('/login'); // Redireciona em caso de erro
+		}
+	} else{
+		res.json({jogos : jogos});
+	}
 });
 
 
 app.get('/cadastro', (req, res) => {
-	const user = req.query.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/style2.css' : '/css/style.css';
-	res.render('cadastro', {layout: "no-header", "user": user, css: selectedCSS});
+	res.render('cadastro', {layout: "no-header", css: selectedCSS});
 })
 
 app.get('/login', (req, res) => {
-	const user = req.query.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/style2.css' : '/css/style.css';
 	let errorMessage = null;
@@ -121,17 +113,17 @@ app.get('/login', (req, res) => {
             errorMessage = 'Erro de login'; // mensagem genérica em caso de erro
         }
     }
-	res.render('login', {layout: "no-header", "user": user, css: selectedCSS, error: errorMessage});
+	res.render('login', {layout: "no-header", css: selectedCSS, error: errorMessage});
 })
 
 app.get('/esquecer-senha', (req, res) => {
-	const user = req.query.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/style2.css' : '/css/style.css';
-	res.render('esquecer-senha', {layout: "no-header", "user": user, css: selectedCSS});
+	res.render('esquecer-senha', {layout: "no-header", css: selectedCSS});
 })
 
 app.get('/comunidade', async (req, res) => {
+	const userId = req.user;
     const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/comunidade2.css' : '/css/comunidade.css';
 
@@ -140,19 +132,10 @@ app.get('/comunidade', async (req, res) => {
     const cookies = req.headers.cookie;
 
     try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
 
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
-        }
-
-        const { userId } = await tokenResponse.json(); // Captura o userId da resposta
+		if(userId == undefined){
+			throw new Error('Token inválido'); // Caso o token não seja válido
+		}
 
         // Verifica o perfil na API
         const perfilResponse = await fetch(api + '/verificar-perfil-adm-premium', {
@@ -197,25 +180,17 @@ app.get('/comunidade', async (req, res) => {
 });
 
 app.get('/post/:id', async (req, res) => {
+	const userId = req.user;
     const postId = req.params.id;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/post2.css' : '/css/post.css';
 	const cookies = req.headers.cookie;
 
 	try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
-
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
-        }
-
-		const { userId } = await tokenResponse.json(); // Captura o userId da resposta
+		
+        if(userId == undefined){
+			throw new Error('Token inválido'); // Caso o token não seja válido
+		}
 
         // Verifica o perfil na API
         const perfilResponse = await fetch(api + '/verificar-perfil-adm-premium', {
@@ -259,24 +234,15 @@ app.get('/post/:id', async (req, res) => {
 })
 
 app.get('/meus-produtos', async (req, res) => {
+	const userId = req.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	const cookies = req.headers.cookie;
 
 	try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
-
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
-        }
-
-		const { userId } = await tokenResponse.json(); 
+        if(userId == undefined){
+			throw new Error('Token inválido'); // Caso o token não seja válido
+		}
 
 		// Verifica o perfil na API
         const perfilResponse = await fetch(api + '/verificar-perfil', {
@@ -320,85 +286,87 @@ app.get('/meus-produtos', async (req, res) => {
 	})
 
 app.get('/meus-produtos/:id', async (req, res) => {
-    const user = req.query.user;
+    const userId = req.user;
     const donoId = req.params.id;
     const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	const cookies = req.headers.cookie;
 
+	const donoResponse = await fetch(api + '/usuarios?id=' + donoId);
+	if (!donoResponse.ok) {
+		throw new Error('Network response was not ok');
+	}
+	const dono = await donoResponse.json();
+
 	try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
-
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
-        }
-
-		fetch(api + '/usuarios?id=' + donoId).then(response => {
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-			var a = response.json();
-			return a;
-		})
-		.then(dono => {
-			if (req.xhr) {
-				fetch(api + '/cartasUser?id=' + donoId).then(response => {
-					if (!response.ok) {
-						throw new Error('Network response was not ok');
-					}
-					var a = response.json();
-					return a;
-				})
-				.then(cartas => {
-					res.json({ 
-						cartasCompradas: dono["cartas-compradas"],
-						cartasVendidas: dono["cartas-vendidas"],
-						cartas: cartas || [] 
-					});
-				})
-				
-			} else {
-				res.render('meus-produtos', {
-					header: setHeader(user), 
-					navclass: { "meus-produtos": "active" }, 
-					user: user, 
+		if (req.xhr) {
+			fetch(api + '/cartasUser?id=' + donoId).then(response => {
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
+				var a = response.json();
+				return a;
+			})
+			.then(cartas => {
+				res.json({ 
+					cartasCompradas: dono["cartas-compradas"],
+					cartasVendidas: dono["cartas-vendidas"],
+					cartas: cartas || [] 
+				});
+			})
+			
+		} else {
+			if(userId == undefined){
+				return res.render('meus-produtos', {
+					header: setHeader('visitante'), 
+					navclass: { "meus-produtos": "active" },
 					dono: dono, 
 					css: selectedCSS
 				});
-			}})
-    } catch (error) {
-        console.error('Erro:', error);
-		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
+			}
+	
+			// Verifica o perfil na API
+			const perfilResponse = await fetch(api + '/verificar-perfil', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					Cookie: cookies,
+					'User-ID': userId // Enviando o userId no cabeçalho
+				}
+			});
+	
+			if (!perfilResponse.ok) {
+				throw new Error('Perfil inválido'); // Caso o perfil não seja válido
+			}
+	
+			const { usuario } = await perfilResponse.json(); 
+	
+			res.render('meus-produtos', {
+				header: setHeader(usuario.perfil), 
+				navclass: { "meus-produtos": "active" }, 
+				user: usuario, 
+				dono: dono, 
+				css: selectedCSS
+			});
+		}
+		
+	} catch (error) {
+		console.error('Erro:', error);
+		res.redirect(`/`); // Redireciona para a home
 	}
 	});
 
 app.get('/editar-produto/:id', async (req, res) => {
+	const userId = req.user;
 	const cartaId = req.params.id;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	const cookies = req.headers.cookie;
 
 	try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
-
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
-        }
-
-		const { userId } = await tokenResponse.json();
+        if(userId == undefined){
+			throw new Error('Token inválido'); // Caso o token não seja válido
+		}
 
 		// Verifica o perfil na API
         const perfilResponse = await fetch(api + '/verificar-perfil', {
@@ -442,65 +410,61 @@ app.get('/editar-produto/:id', async (req, res) => {
 })
 
 app.get('/produto/:id', async (req, res) => {
-	const user = req.query.user;
+	const userId = req.user;
 	const cartaId = req.params.id;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	const cookies = req.headers.cookie;
 
+	const cartaResponse = await fetch(api + '/cartas?id=' + cartaId);
+	if (!cartaResponse.ok) {
+		throw new Error('Network response was not ok');
+	}
+	const carta = await cartaResponse.json();
+
+	if(carta.vendedor.id === userId){
+		return res.redirect('/editar-produto/' + cartaId);
+	} 
+
 	try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
+		if(userId == undefined){
+			return res.render('produto', {header: setHeader('visitante'), navclass: {"produtos": "active"}, carta: carta, css: selectedCSS});
+		}
 
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
-        }
+		// Verifica o perfil na API
+		const perfilResponse = await fetch(api + '/verificar-perfil', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Cookie: cookies,
+				'User-ID': userId // Enviando o userId no cabeçalho
+			}
+		});
 
-		fetch(api + '/cartas?id=' + cartaId).then(response => {
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-			var a = response.json();
-			return a;
-		})
-		.then(carta => {
-			if(carta.vendedor.id === user.id){
-				res.redirect('/editar-produto/' + cartaId + '?user=' + user.id);
-			} else{
-				res.render('produto', {header: setHeader(user), navclass: {"produtos": "active"}, "user": user, carta: carta, css: selectedCSS});
-			}
-		})
-    } catch (error) {
-        console.error('Erro:', error);
-		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
+		if (!perfilResponse.ok) {
+			throw new Error('Perfil inválido'); // Caso o perfil não seja válido
+		}
+
+		const { usuario } = await perfilResponse.json(); 
+
+		res.render('produto', {header: setHeader(usuario.perfil), navclass: {"produtos": "active"}, "user": usuario, carta: carta, css: selectedCSS});
+		
+	} catch (error) {
+		console.error('Erro:', error);
+		res.redirect(`/`); // Redireciona para a home
 	}
 })
 
 app.get('/criar-post', async (req, res) => {
+	const userId = req.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/post2.css' : '/css/post.css';
 	const cookies = req.headers.cookie;
 
 	try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
-
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
-        }
-
-		const { userId } = await tokenResponse.json(); // Captura o userId da resposta
+        if(userId == undefined){
+			throw new Error('Token inválido'); // Caso o token não seja válido
+		}
 
         // Verifica o perfil na API
         const perfilResponse = await fetch(api + '/verificar-perfil-adm-premium', {
@@ -536,24 +500,15 @@ app.get('/criar-post', async (req, res) => {
 })
 
 app.get('/add-produto', async (req, res) => {
+	const userId = req.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	const cookies = req.headers.cookie;
 
 	try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
-
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
-        }
-
-		const { userId } = await tokenResponse.json(); // Captura o userId da resposta
+        if(userId == undefined){
+			throw new Error('Token inválido'); // Caso o token não seja válido
+		}
 
         // Verifica o perfil na API
         const perfilResponse = await fetch(api + '/verificar-perfil', {
@@ -588,6 +543,7 @@ app.get('/add-produto', async (req, res) => {
 })
 
 app.get('/adm', async (req, res) => {
+	const userId = req.user;
 	var nomeUsuario = req.query.nomeUsuario;
 	var nomeJogo = req.query.nomeJogo;
 
@@ -602,19 +558,9 @@ app.get('/adm', async (req, res) => {
 	const cookies = req.headers.cookie;
 
 	try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
-
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
-        }
-
-		const { userId } = await tokenResponse.json(); // Captura o userId da resposta
+        if(userId == undefined){
+			throw new Error('Token inválido'); // Caso o token não seja válido
+		}
 
         // Verifica o perfil na API
         const perfilResponse = await fetch(api + '/verificar-perfil-adm', {
@@ -665,25 +611,16 @@ app.get('/adm', async (req, res) => {
 })
 
 app.get('/editar-usuario/:id', async (req, res) => {
-	const userid = req.params.id;
+	const userToChangeId = req.params.id;
+	const userId = req.user; 
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
 	const cookies = req.headers.cookie;
 
 	try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
-
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
-        }
-
-		const { userId } = await tokenResponse.json(); // Captura o userId da resposta
+        if(userId == undefined){
+			throw new Error('Token inválido'); // Caso o token não seja válido
+		}
 
         // Verifica o perfil na API
         const perfilResponse = await fetch(api + '/verificar-perfil-adm', {
@@ -701,15 +638,15 @@ app.get('/editar-usuario/:id', async (req, res) => {
 
 		const { usuario } = await perfilResponse.json(); 
 
-		fetch(api + '/usuarios?id=' + userid).then(response => {
+		fetch(api + '/usuarios?id=' + userToChangeId).then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
 			}
 			var a = response.json();
 			return a;
 		})
-		.then(usuarios => {
-			res.render('editar-usuario', {usuarios: usuarios, header: setHeader(usuario.perfil), navclass: {"adm": "active"}, "user": usuario, css: selectedCSS});
+		.then(userToChange => {
+			res.render('editar-usuario', {header: setHeader(usuario.perfil), navclass: {"adm": "active"}, usuarios:userToChange, "user": usuario, css: selectedCSS});
 		})
     } catch (error) {
         console.error('Erro:', error);
@@ -719,25 +656,16 @@ app.get('/editar-usuario/:id', async (req, res) => {
 
 app.get('/editar-jogo/:id', async (req, res) => {
 	const jogoId = req.params.id;
+	const userId = req.user;
 	let jogo;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
 	const cookies = req.headers.cookie;
 
 	try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
-
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
-        }
-
-		const { userId } = await tokenResponse.json(); // Captura o userId da resposta
+        if(userId == undefined){
+			throw new Error('Token inválido'); // Caso o token não seja válido
+		}
 
         // Verifica o perfil na API
         const perfilResponse = await fetch(api + '/verificar-perfil-adm', {
@@ -772,24 +700,15 @@ app.get('/editar-jogo/:id', async (req, res) => {
 })
 
 app.get('/criar-jogo', async (req, res) => {
+	const userId = req.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
 	const cookies = req.headers.cookie;
 
 	try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
-            method: 'GET',
-            headers: {
-                Cookie: cookies // Inclui os cookies na requisição
-            }
-        });
-
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
-        }
-
-		const { userId } = await tokenResponse.json(); // Captura o userId da resposta
+        if(userId == undefined){
+			throw new Error('Token inválido'); // Caso o token não seja válido
+		}
 
         // Verifica o perfil na API
         const perfilResponse = await fetch(api + '/verificar-perfil-adm', {
@@ -815,30 +734,37 @@ app.get('/criar-jogo', async (req, res) => {
 })
 
 app.get('/perfil', async (req, res) => {
-	const user = req.query.user;
+	const userId = req.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	const cookies = req.headers.cookie;
 
 	try {
-        // Verifica o token na API
-        const tokenResponse = await fetch(api + '/verificar-token', {
+        if(userId == undefined){
+			throw new Error('Token inválido'); // Caso o token não seja válido
+		}
+
+		// Verifica o perfil na API
+        const perfilResponse = await fetch(api + '/verificar-perfil', {
             method: 'GET',
             headers: {
-                Cookie: cookies // Inclui os cookies na requisição
+                'Content-Type': 'application/json',
+                Cookie: cookies,
+                'User-ID': userId // Enviando o userId no cabeçalho
             }
         });
 
-        if (!tokenResponse.ok) {
-            throw new Error('Token inválido'); // Caso o token não seja válido
+        if (!perfilResponse.ok) {
+            throw new Error('Perfil inválido'); // Caso o perfil não seja válido
         }
 
-		res.render('perfil', {usuario: user, header: setHeader(user.perfil), navclass: {}, "user": user, css: selectedCSS});
+        const { usuario } = await perfilResponse.json(); 
+
+		res.render('perfil', {usuario: usuario, header: setHeader(usuario.perfil), navclass: {}, "user": usuario, css: selectedCSS});
     } catch (error) {
         console.error('Erro:', error);
-		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
-    }
+    	res.redirect(`/`); // Redireciona para a home
+	}
 })
 
 app.listen(port, function () {
