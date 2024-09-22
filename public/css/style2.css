@@ -162,6 +162,13 @@ body, html {
   background-color: #C4C4C4;
   outline: none;
 }
+
+/* Estilo de mensagem de erro no login */
+.error-message {
+  color: rgb(240, 143, 143);
+  font-size: 18px; 
+  font-weight: bold;
+}
   
 /* Estilo do link "Esqueceu a senha? e Cadastro" */
 .link {

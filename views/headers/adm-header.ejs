@@ -6,7 +6,9 @@
 	<div class="perfil">
 		<div class="usuario">
 			<div class="user-icon">
-				<img src=<%= user["icon"] %> alt="User Icon">
+				<a class="user-icon-link" href="/perfil?user=<%= user["id"] %>">
+					<img src=<%= user["icon"] %> alt="User Icon">
+				</a>
 			</div>
 			<div class="username">
 				<%= user["username"] %>

@@ -200,14 +200,10 @@ function createPost() {
 }
 
 function editarUsuario() {
-    // const form = document.getElementById('form');
     
     const urlParams = new URLSearchParams(window.location.search);
     const user = urlParams.get('user');
     const userId = window.location.pathname.split("/editar-usuario/").at(-1);
-
-    // const formData = new FormData(form);
-    // console.log(formData);
 
     const moedas = document.getElementById('moedas').value.split(" ")[1];
     
@@ -811,6 +807,26 @@ function excluirCarta(){
     });
 }
 
+function upgrade(){
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user'); 
+    fetch(`http://localhost:8084/upgrade?id=` + userId, {
+        method: 'POST'
+    })
+    .then(response => {
+        if(response.status === 401){
+            const mensagem = document.getElementById('mensagemErro');
+            mensagem.textContent = 'Você precisa de 100 moedas para se tornar premium';
+            mensagem.style.display = 'flex'; // Exibe a mensagem
+        } else{
+            window.location.href = '/perfil?user=' + userId;
+        }
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
 function criarUsuario(){
     if (!window.location.pathname.includes('/cadastro')) {
         return;
@@ -869,6 +885,8 @@ function editarPerfilUsuario(){
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get('user'); // Deve ser uma string ou número, não um objeto
 
+    const form = document.getElementById('perfil-form');
+
     document.getElementById('icon-input').addEventListener('change', function(event) {
         const file = event.target.files[0]; // Obtém o arquivo selecionado
         const reader = new FileReader();
@@ -883,29 +901,26 @@ function editarPerfilUsuario(){
         }
     });
 
-    // form.addEventListener('submit', function(event) {
-    //     event.preventDefault(); // Evita o envio padrão do formulário
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita o envio padrão do formulário
 
-    //     // Obtém os dados do formulário
-    //     const formData = new FormData(form);
-    //     const pathParts = window.location.pathname.split('/');
-    //     const pageId = pathParts[2]; 
+        // Obtém os dados do formulário
+        const formData = new FormData(form);
+        formData.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
+        });
 
-    //     // Cria uma requisição POST para adicionar o comentário ao post com o ID específico
-    //     fetch(`http://localhost:8084/cartas?id=` + pageId, {
-    //         method: 'PUT',
-    //         body: formData
-    //     })
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             throw new Error('Erro ao criar carta: ' + response.statusText);
-    //         }
-    //         window.location.href = '/meus-produtos?user=' + userId;
-    //     })
-    //     .catch(error => {
-    //         console.error('Erro ao criar carta:', error);
-    //     });
-    // });
+        fetch('http://localhost:8084/updateUsuario?id=' + userId, {
+            method: 'PUT', 
+            body: formData
+        })
+        .then(response => {
+            window.location.href = '/?user=' + userId; 
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    });
 }
 
 let socket;

@@ -145,6 +145,12 @@ body, html {
     outline: none;
   }
 
+/* Estilo de mensagem de erro no login */
+.error-message {
+  color: red;
+  font-size: 14px; 
+}
+
   /* Estilo do link "Esquecer Senha e Cadastro" */
 .link {
   display: inline-block;

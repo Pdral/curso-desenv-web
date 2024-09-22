@@ -43,12 +43,53 @@ const server = http.createServer((req, res) => {
 	 res.setHeader('Access-Control-Allow-Origin', '*'); // Permite todas as origens
 	 res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 	 res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+	 res.setHeader('Access-Control-Allow-Credentials', 'true');
 	 res.setHeader("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self';");
 
 	 if(req.method == 'OPTIONS'){
 		res.end();
 	 }
-	 
+
+	  // Verificar token
+	  if (req.method === 'GET' && req.url === '/verificar-token') {
+		verifyJWT(req, res, () => {
+			res.writeHead(200, { 'Content-Type': 'application/json' });
+        	res.end(JSON.stringify({ userId: req.id }));
+		});
+		return;
+	} 
+
+	// Verificar perfil ADM e Premium
+	if (req.method === 'GET' && req.url === '/verificar-perfil-adm-premium') {
+		const userId = req.headers['user-id']; // Captura o userId do cabeçalho
+
+    	verifyPerfilAdmePremium(userId, (err, usuario) => {
+        	if (err) {
+            	res.writeHead(403, { 'Content-Type': 'application/json' });
+            	res.end(JSON.stringify({ error: err.message }));
+        	} else {
+            	res.writeHead(200, { 'Content-Type': 'application/json' });
+            	res.end(JSON.stringify({ message: 'Perfil válido', usuario }));
+        	}
+    	});
+		return;
+	} 
+
+	// Verificar perfil ADM
+	if (req.method === 'GET' && req.url === '/verificar-perfil-adm') {
+		const userId = req.headers['user-id']; // Captura o userId do cabeçalho
+
+    	verifyPerfilAdm(userId, (err, usuario) => {
+        	if (err) {
+            	res.writeHead(403, { 'Content-Type': 'application/json' });
+            	res.end(JSON.stringify({ error: err.message }));
+        	} else {
+            	res.writeHead(200, { 'Content-Type': 'application/json' });
+            	res.end(JSON.stringify({ message: 'Perfil válido', usuario }));
+        	}
+    	});
+		return;
+	} 
 
 	 // Verificar o caminho e o método da requisição
 	 if (u.pathname.match(/^\/post\/(\d+)$/) && req.method === 'POST') {
@@ -177,22 +218,23 @@ const server = http.createServer((req, res) => {
 						var userloc = users.find((item) => {
 							return (item.username === username && item.senha === senha);
 						});
-	
+
 						if (userloc) {
 							const token = jwt.sign(
 								{ id: userloc.id }, // payload
 								process.env.SECRET, // chave definida em .env
-								{ expiresIn: 300 }  // em segundos
-							);
-	
+								{ expiresIn: 10800 }  // em segundos
+							);	
 							// Define o cookie com o token
-							res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Max-Age=300`); // 5 minutos
+							res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=10800; SameSite=None; Secure`); // 5 minutos
 							res.writeHead(302, { Location: `http://localhost:8083/?user=${userloc.id}` }); // Redireciona para a home
 							res.end();
 						} else {
 							console.log('### 0 - erro no login');
-							res.writeHead(401, { 'Content-Type': 'text/plain; charset=utf-8' }); // Adiciona charset UTF-8
-							res.end('usuário e/ou senha inválidos'); // não autorizado
+							res.writeHead(302, {
+								'Location': 'http://localhost:8083/login?error=' + encodeURIComponent('Usuário e/ou senha inválidos')
+							});
+							res.end();
 						}
 					} else {
 						res.writeHead(400, { 'Content-Type': 'text/plain' });
@@ -217,7 +259,7 @@ const server = http.createServer((req, res) => {
 					res.writeHead(401, { 'Content-Type': 'text/html; charset=utf-8'});	
 					res.write("O usuário não tem moedas suficientes");
 				} else{
-					user.moedas = (moedas - preco).toString();
+					user.moedas = (moedas - preco).toFixed(2).toString().replace(/\./g, ',');
 					user['cartas-compradas'].push({
 						nome: carta.nome,
 						preco: carta.preco,
@@ -226,7 +268,7 @@ const server = http.createServer((req, res) => {
 					del(users_path, 'usuarios', user.id, true);
 					save(users_path, 'usuarios', user);
 					var vendedor = carta.vendedor;
-					vendedor.moedas = (moedas + preco).toString();
+					vendedor.moedas = (moedas + preco).toFixed(2).toString().replace(/\./g, ',');
 					vendedor['cartas-vendidas'].push({
 						nome: carta.nome,
 						preco: carta.preco,
@@ -242,6 +284,26 @@ const server = http.createServer((req, res) => {
 			req.on('end', function () {
 				return res.end();
 			}); break;
+		case '/updateUsuario':
+			updateUsuario(req, res, u);
+			break;
+		case '/upgrade':
+			params = u.searchParams;
+			const id = params.get("id");
+			var user = find(users_path, 'usuarios', id);
+			var moedas = Number(user.moedas.replace(/,/g, '.'));
+			if(moedas < 100){
+				res.writeHead(401, { 'Content-Type': 'text/plain' });
+				res.end('Você precisa de 100 moedas para se tornar premium');
+			} else{
+				user.moedas = (moedas - 100).toFixed(2).toString().replace(/\./g, ',');
+				user.perfil = 'premium'
+				del(users_path, 'usuarios', user.id, true);
+				save(users_path, 'usuarios', user);
+				res.writeHead(200, { 'Content-Type': 'text/html' });
+				res.end();
+			}
+			break;
 		case '/favicon.ico':
 			const faviconPath = path.join(__dirname, 'public', 'favicon.ico');
             fs.readFile(faviconPath, (err, data) => {
@@ -512,6 +574,26 @@ function handleCartas(req, res, u){
 	}; 
 }
 
+function updateUsuario(req, res, u){
+	params = u.searchParams;
+	const id = params.get("id");
+	switch(req.method) {
+		case 'PUT':
+			upload(req, res, function (err) {
+				if (err) {
+					return console.log(err.message);
+				}
+				var user = find(users_path, 'usuarios', id);
+				user.username = req.body.username;
+				user.icon = "/img/" + req.files[0].filename;
+				del(users_path, 'usuarios', user.id, true);
+				save(users_path, 'usuarios', user);
+				res.writeHead(201, { 'Content-Type': 'application/json' });
+				return res.end();
+			});break;
+	}; 
+}
+
 function getCarta(id){
 	var jogos = list(jogos_path, "jogos");
 	for (let i = 0; i < jogos.length; i++) {
@@ -569,6 +651,8 @@ function createPost(postData) {
     posts.unshift(post);
     fs.writeFileSync(posts_path, JSON.stringify({ posts }, null, 2), 'utf8');
     
+	ganharMoedas(post.user, 10);
+
     return post;
 }
 
@@ -598,14 +682,19 @@ function createComentario(postId, commentData) {
 
         fs.writeFileSync(posts_path, JSON.stringify(data, null, 2), 'utf8');
 
+		ganharMoedas(user.id, 5);
+
         return comentario;
     } else {
         throw new Error('Post não encontrado!');
     }
 }
 
-function createCarta(carta){
-	
+function ganharMoedas(id, moedas){
+	var user = find(users_path, 'usuarios', id);
+	user.moedas = (Number(user.moedas.replace(/,/g, '.')) + moedas).toFixed(2).toString().replace(/\./g, ',');
+	del(users_path, 'usuarios', id, true);
+	save(users_path, 'usuarios', user);
 }
 
 // Cria o servidor WebSocket
@@ -662,8 +751,6 @@ wss.on('connection', (ws) => {
     });
 });
 
-
-
 //========================================================== Login
 var sha512 = (pwd, key) => {
     /* Gera um HMAC (Hash-based Message Authentication Code) 
@@ -678,26 +765,101 @@ var sha512 = (pwd, key) => {
 //========================================================== Verificação
 const blacklist = []
 
+// Função para ler cookies do header
+function parseCookies(req) {
+    const cookieHeader = req.headers.cookie; 
+    const cookies = {};
+
+    if (cookieHeader) {
+        cookieHeader.split(';').forEach(cookie => {
+            const [name, value] = cookie.split('=');
+            cookies[name.trim()] = decodeURIComponent(value); 
+        });
+    }
+
+    return cookies;
+}
+
+// Verificação do perfil do usuário ADM e Premium
+function verifyPerfilAdmePremium(userId, callback) {
+    fs.readFile(users_path, 'utf8', (err, data) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+
+        const usuarios = JSON.parse(data).usuarios;
+        const usuario = usuarios.find(u => u.id === Number(userId));
+
+        if (usuario && (usuario.perfil === 'admin' || usuario.perfil === 'premium')) {
+            callback(null, usuario); // Retorna o usuário se permitido
+        } else {
+            callback(new Error('Acesso negado'), null);
+        }
+    });
+}
+
+// Verificação do perfil do ADM
+function verifyPerfilAdm(userId, callback) {
+    fs.readFile(users_path, 'utf8', (err, data) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+
+        const usuarios = JSON.parse(data).usuarios;
+        const usuario = usuarios.find(u => u.id === Number(userId));
+
+        if (usuario && (usuario.perfil === 'admin')) {
+            callback(null, usuario); // Retorna o usuário se permitido
+        } else {
+            callback(new Error('Acesso negado'), null);
+        }
+    });
+}
+
+
 // Verificação da validade do token 
 // (função usada como middleware na rota '/clients')
-function verifyJWT(req, res, next) {
-    const token = req.cookies.token;
+function verifyJWT(req, res, callback) {
+    const cookies = parseCookies(req);
+    const token = cookies.token;
 
-    // verifica se o token foi incluindo na blacklist devido a logout
-    const index = blacklist.findIndex(item => item === token)
- 
-    if (index !== -1) {// está na blacklist!
-        console.log('### 1 - está na blacklist')
-        res.status(401).end('está na blacklist - fazer login novamente!') 
+    const index = blacklist.findIndex(item => item === token);
+
+    if (index !== -1) {
+        console.log('### 1 - está na blacklist');
+        res.writeHead(401, { 'Content-Type': 'text/plain' });
+        res.end('está na blacklist - fazer login novamente!');
+        return;
     } else {
         jwt.verify(token, process.env.SECRET, (err, decoded) => {
             if (err) {
-                console.log('### 2 - erro na verificação')
-                res.status(403).end('token inválido - fazer login novamente');
+                console.log('### 2 - erro na verificação');
+                res.writeHead(403, { 'Content-Type': 'text/plain' });
+                res.end('token inválido - fazer login novamente');
+                return;
             } else {
-                req.id = decoded.id;
-                next();
+                req.id = decoded.id; 
+                callback(); 
             }
-        })
+        });
     }
+}
+
+function plmdds(req, res, u){
+	params = u.searchParams;
+	const id = params.get("id");
+	upload(req, res, function (err) {
+		if (err) {
+			return console.log(err.message);
+		}
+		var user = find(users_path, 'usuarios', id);
+		user.username = req.body.username;
+		user.icon = "/img/" + req.files[0].filename;
+		del(users_path, 'usuarios', user.id, true);
+		save(users_path, 'usuarios', user);
+		res.writeHead(201, { 'Content-Type': 'application/json' });
+		return res.end();
+	});
 }
