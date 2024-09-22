@@ -862,12 +862,12 @@ function criarUsuario(){
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Erro ao criar carta: ' + response.statusText);
+                    throw new Error('Erro ao criar user: ' + response.statusText);
                 }
                 return response.json();
             })
             .then(id => {
-                window.location.href = '/?user=' + id.id;
+                this.submit();
             })
             .catch(error => {
                 console.error('Erro ao criar carta:', error);
