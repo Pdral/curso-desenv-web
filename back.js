@@ -585,7 +585,9 @@ function updateUsuario(req, res, u){
 				}
 				var user = find(users_path, 'usuarios', id);
 				user.username = req.body.username;
-				user.icon = "/img/" + req.files[0].filename;
+				if(req.files[0] !== undefined){
+					user.icon = "/img/" + req.files[0].filename;
+				}
 				del(users_path, 'usuarios', user.id, true);
 				save(users_path, 'usuarios', user);
 				res.writeHead(201, { 'Content-Type': 'application/json' });

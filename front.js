@@ -761,22 +761,6 @@ app.get('/perfil', async (req, res) => {
             throw new Error('Token inválido'); // Caso o token não seja válido
         }
 
-		const { userId } = await tokenResponse.json(); // Captura o userId da resposta
-
-        // Verifica o perfil na API
-        const perfilResponse = await fetch(api + '/verificar-perfil-adm-premium', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Cookie: cookies,
-                'User-ID': userId // Enviando o userId no cabeçalho, se necessário
-            }
-        });
-
-        if (!perfilResponse.ok) {
-            throw new Error('Perfil inválido'); // Caso o perfil não seja válido
-        }		
-
 		res.render('perfil', {usuario: user, header: setHeader(user), navclass: {}, "user": user, css: selectedCSS});
     } catch (error) {
         console.error('Erro:', error);
