@@ -200,110 +200,74 @@ const server = http.createServer((req, res) => {
 				res.end('Method Not Allowed');
 			}
 			break;
-		case '/login':
-			if (req.method === 'POST') {
-				let body = '';
-				req.on('data', chunk => {
-					body += chunk.toString(); // Concatena os chunks recebidos
-				});
-				req.on('end', () => {
-					const loginData = new URLSearchParams(body);
-					const username = loginData.get('username');
-					const senha = sha512(loginData.get('senha'), process.env.SECRET_USERS);
-					console.log('Usuário:', username);
-					console.log('Senha (hash):', senha);
-					if (username && senha) {
-						// Authenticação
-						var users = JSON.parse(fs.readFileSync(users_path, 'utf8')).usuarios;
-						var userloc = users.find((item) => {
-							return (item.username === username && item.senha === senha);
-						});
-
-						if (userloc) {
-							const token = jwt.sign(
-								{ id: userloc.id }, // payload
-								process.env.SECRET, // chave definida em .env
-								{ expiresIn: 10800 }  // em segundos
-							);	
-							// Define o cookie com o token
-							res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=10800; SameSite=None; Secure`); // 5 minutos
-							res.writeHead(302, { Location: `http://localhost:8083/?user=${userloc.id}` }); // Redireciona para a home
-							res.end();
-						} else {
-							console.log('### 0 - erro no login');
-							res.writeHead(302, {
-								'Location': 'http://localhost:8083/login?error=' + encodeURIComponent('Usuário e/ou senha inválidos')
+			case '/login':
+				if (req.method === 'POST') {
+					let body = '';
+					req.on('data', chunk => {
+						body += chunk.toString(); // Concatena os chunks recebidos
+					});
+					req.on('end', () => {
+						const loginData = new URLSearchParams(body);
+						const username = loginData.get('username');
+						const senha = sha512(loginData.get('senha'), process.env.SECRET_USERS);
+						console.log('Usuário:', username);
+						console.log('Senha (hash):', senha);
+						if (username && senha) {
+							// Authenticação
+							var users = JSON.parse(fs.readFileSync(users_path, 'utf8')).usuarios;
+							var userloc = users.find((item) => {
+								return (item.username === username && item.senha === senha);
 							});
-							res.end();
+		
+							if (userloc) {
+								const token = jwt.sign(
+									{ id: userloc.id }, // payload
+									process.env.SECRET, // chave definida em .env
+									{ expiresIn: 10800 }  // em segundos
+								);	
+								// Define o cookie com o token
+								res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=10800; SameSite=None; Secure`); // 5 minutos
+								res.writeHead(302, { Location: `http://localhost:8083/?user=${userloc.id}` }); // Redireciona para a home
+								res.end();
+							} else {
+								console.log('### 0 - erro no login');
+								res.writeHead(302, {
+									'Location': 'http://localhost:8083/login?error=' + encodeURIComponent('Usuário e/ou senha inválidos')
+								});
+								res.end();
+							}
+						} else {
+							res.writeHead(400, { 'Content-Type': 'text/plain' });
+							res.end('Dados inválidos');
 						}
-					} else {
-						res.writeHead(400, { 'Content-Type': 'text/plain' });
-						res.end('Dados inválidos');
-					}
-				});
-			} else {
-				res.writeHead(405, { 'Content-Type': 'text/plain' });
-				res.end('Method Not Allowed');
-			}
-			break;
-		case '/comprarCarta':
-			var body = '';
-			req.on('data', function (data) {
-				body += data;
-				body = JSON.parse(body);
-				var user = find(users_path, 'usuarios', body.user);
-				var carta = getCarta(body.carta);
-				var moedas = Number(user.moedas.replace(/,/g, '.'));
-				var preco = Number(carta.preco.replace(/,/g, '.'));
-				if(moedas < preco){
-					res.writeHead(401, { 'Content-Type': 'text/html; charset=utf-8'});	
-					res.write("O usuário não tem moedas suficientes");
-				} else{
-					user.moedas = (moedas - preco).toFixed(2).toString().replace(/\./g, ',');
-					user['cartas-compradas'].push({
-						nome: carta.nome,
-						preco: carta.preco,
-						img: carta.frente
-					})
-					del(users_path, 'usuarios', user.id, true);
-					save(users_path, 'usuarios', user);
-					var vendedor = carta.vendedor;
-					vendedor.moedas = (moedas + preco).toFixed(2).toString().replace(/\./g, ',');
-					vendedor['cartas-vendidas'].push({
-						nome: carta.nome,
-						preco: carta.preco,
-						img: carta.frente
-					})
-					del(users_path, 'usuarios', vendedor.id, true);
-					save(users_path, 'usuarios', vendedor);
-					deleteCarta(carta.id);
-					res.writeHead(201, { 'Content-Type': 'text/html; charset=utf-8'});
-					res.end();
+					});
+				} else {
+					res.writeHead(405, { 'Content-Type': 'text/plain' });
+					res.end('Method Not Allowed');
 				}
-			});
-			req.on('end', function () {
-				return res.end();
-			}); break;
-		case '/updateUsuario':
-			updateUsuario(req, res, u);
-			break;
-		case '/upgrade':
-			params = u.searchParams;
-			const id = params.get("id");
-			var user = find(users_path, 'usuarios', id);
-			var moedas = Number(user.moedas.replace(/,/g, '.'));
-			if(moedas < 100){
-				res.writeHead(401, { 'Content-Type': 'text/plain' });
-				res.end('Você precisa de 100 moedas para se tornar premium');
-			} else{
-				user.moedas = (moedas - 100).toFixed(2).toString().replace(/\./g, ',');
-				user.perfil = 'premium'
-				del(users_path, 'usuarios', user.id, true);
-				save(users_path, 'usuarios', user);
-				res.writeHead(200, { 'Content-Type': 'text/html' });
-				res.end();
-			}
-			break;
+				break;
+				case '/logout':
+					if (req.method === 'POST') {
+						// Função para obter o valor do cookie 'token'
+						const cookies = parseCookies(req);
+						const token = cookies.token; // Pega o token do cookie
+				
+						// Adiciona o token à blacklist se ele existir
+						if (token) {
+							blacklist.push(token); // Adiciona o token à blacklist
+						}
+				
+						// Redireciona o usuário para a página de home
+						res.writeHead(302, {
+							'Location': 'http://localhost:8083',
+							'Set-Cookie': 'token=; HttpOnly; Max-Age=0; Path=/;' // Limpa o cookie de token
+						});
+						res.end();
+					} else {
+						res.writeHead(405, { 'Content-Type': 'text/plain' });
+						res.end('Method Not Allowed');
+					}
+				break;
 		case '/favicon.ico':
 			const faviconPath = path.join(__dirname, 'public', 'favicon.ico');
             fs.readFile(faviconPath, (err, data) => {
@@ -574,28 +538,6 @@ function handleCartas(req, res, u){
 	}; 
 }
 
-function updateUsuario(req, res, u){
-	params = u.searchParams;
-	const id = params.get("id");
-	switch(req.method) {
-		case 'PUT':
-			upload(req, res, function (err) {
-				if (err) {
-					return console.log(err.message);
-				}
-				var user = find(users_path, 'usuarios', id);
-				user.username = req.body.username;
-				if(req.files[0] !== undefined){
-					user.icon = "/img/" + req.files[0].filename;
-				}
-				del(users_path, 'usuarios', user.id, true);
-				save(users_path, 'usuarios', user);
-				res.writeHead(201, { 'Content-Type': 'application/json' });
-				return res.end();
-			});break;
-	}; 
-}
-
 function getCarta(id){
 	var jogos = list(jogos_path, "jogos");
 	for (let i = 0; i < jogos.length; i++) {
@@ -653,8 +595,6 @@ function createPost(postData) {
     posts.unshift(post);
     fs.writeFileSync(posts_path, JSON.stringify({ posts }, null, 2), 'utf8');
     
-	ganharMoedas(post.user, 10);
-
     return post;
 }
 
@@ -684,19 +624,14 @@ function createComentario(postId, commentData) {
 
         fs.writeFileSync(posts_path, JSON.stringify(data, null, 2), 'utf8');
 
-		ganharMoedas(user.id, 5);
-
         return comentario;
     } else {
         throw new Error('Post não encontrado!');
     }
 }
 
-function ganharMoedas(id, moedas){
-	var user = find(users_path, 'usuarios', id);
-	user.moedas = (Number(user.moedas.replace(/,/g, '.')) + moedas).toFixed(2).toString().replace(/\./g, ',');
-	del(users_path, 'usuarios', id, true);
-	save(users_path, 'usuarios', user);
+function createCarta(carta){
+	
 }
 
 // Cria o servidor WebSocket
@@ -847,21 +782,4 @@ function verifyJWT(req, res, callback) {
             }
         });
     }
-}
-
-function plmdds(req, res, u){
-	params = u.searchParams;
-	const id = params.get("id");
-	upload(req, res, function (err) {
-		if (err) {
-			return console.log(err.message);
-		}
-		var user = find(users_path, 'usuarios', id);
-		user.username = req.body.username;
-		user.icon = "/img/" + req.files[0].filename;
-		del(users_path, 'usuarios', user.id, true);
-		save(users_path, 'usuarios', user);
-		res.writeHead(201, { 'Content-Type': 'application/json' });
-		return res.end();
-	});
 }
