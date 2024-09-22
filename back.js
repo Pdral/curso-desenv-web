@@ -59,6 +59,23 @@ const server = http.createServer((req, res) => {
 		return;
 	} 
 
+	// Verificar perfil 
+	if (req.method === 'GET' && req.url === '/verificar-perfil') {
+		const userId = req.headers['user-id']; // Captura o userId do cabeçalho
+
+    	verifyPerfil(userId, (err, usuario) => {
+        	if (err) {
+            	res.writeHead(403, { 'Content-Type': 'application/json' });
+            	res.end(JSON.stringify({ error: err.message }));
+        	} else {
+				const perfil = usuario.perfil;
+            	res.writeHead(200, { 'Content-Type': 'application/json' });
+            	res.end(JSON.stringify({ message: 'Perfil válido', usuario }));
+        	}
+    	});
+		return;
+	} 
+
 	// Verificar perfil ADM e Premium
 	if (req.method === 'GET' && req.url === '/verificar-perfil-adm-premium') {
 		const userId = req.headers['user-id']; // Captura o userId do cabeçalho
@@ -68,6 +85,7 @@ const server = http.createServer((req, res) => {
             	res.writeHead(403, { 'Content-Type': 'application/json' });
             	res.end(JSON.stringify({ error: err.message }));
         	} else {
+				const perfil = usuario.perfil;
             	res.writeHead(200, { 'Content-Type': 'application/json' });
             	res.end(JSON.stringify({ message: 'Perfil válido', usuario }));
         	}
@@ -84,6 +102,7 @@ const server = http.createServer((req, res) => {
             	res.writeHead(403, { 'Content-Type': 'application/json' });
             	res.end(JSON.stringify({ error: err.message }));
         	} else {
+				const perfil = usuario.perfil;
             	res.writeHead(200, { 'Content-Type': 'application/json' });
             	res.end(JSON.stringify({ message: 'Perfil válido', usuario }));
         	}
@@ -715,6 +734,25 @@ function parseCookies(req) {
     }
 
     return cookies;
+}
+
+// Verificação do perfil do usuário
+function verifyPerfil(userId, callback) {
+    fs.readFile(users_path, 'utf8', (err, data) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+
+        const usuarios = JSON.parse(data).usuarios;
+        const usuario = usuarios.find(u => u.id === Number(userId));
+
+        if (usuario && (usuario.perfil === 'admin' || usuario.perfil === 'premium' || usuario.perfil === 'simples')) {
+            callback(null, usuario); // Retorna o usuário se permitido
+        } else {
+            callback(new Error('Acesso negado'), null);
+        }
+    });
 }
 
 // Verificação do perfil do usuário ADM e Premium

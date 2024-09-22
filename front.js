@@ -40,36 +40,65 @@ app.use((req, res, next) => {
 	}
 });
 
-app.get('/', (req, res) => {
-	const user = req.query.user;
-	var nome = req.query.nome;
-	if(nome == undefined){
-		nome = "";
-	}
-	var cartaNome = req.query.cartaNome;
-	if(cartaNome == undefined){
-		cartaNome = "";
-	}
-	// Lê o cookie 'theme' enviado pelo cliente
-	const theme = req.cookies.theme || 'light';
-	// Define o CSS com base no tema
-	const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
+app.get('/', async (req, res) => {
+    const nome = req.query.nome || "";
+    const cartaNome = req.query.cartaNome || "";
+    
+    // Lê o cookie 'theme' enviado pelo cliente
+    const theme = req.cookies.theme || 'light';
+    const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
+    
+    const cookies = req.headers.cookie;
 
-	fetch(api + '/jogos?nome=' + nome + '&cartaNome=' + cartaNome).then(response => {
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-		var a = response.json();
-		return a;
-	})
-	.then(jogos => {
-		if (req.xhr) {
-			res.json({jogos : jogos});
-		} else {
-			res.render('index', {jogos: jogos, header: setHeader(user), navclass: {"produtos": "active"}, "user": user, css: selectedCSS});
-		}
-	})
-})
+    try {
+        // Busca os jogos
+        const jogosResponse = await fetch(api + '/jogos?nome=' + nome + '&cartaNome=' + cartaNome);
+        if (!jogosResponse.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const jogos = await jogosResponse.json();
+
+        // Verifica o token na API
+        const tokenResponse = await fetch(api + '/verificar-token', {
+            method: 'GET',
+            headers: {
+                Cookie: cookies // Inclui os cookies na requisição
+            }
+        });
+
+        // Se o token for inválido, renderiza como visitante
+        if (!tokenResponse.ok) {
+			console.log("jogos", jogos);
+            return res.render('index', {jogos: jogos, header: setHeader("visitante"), navclass: {"produtos": "active"}, user: { perfil: "visitante", id: undefined }, css: selectedCSS});
+        }
+
+        const { userId } = await tokenResponse.json(); // Captura o userId da resposta
+
+        // Verifica o perfil na API
+        const perfilResponse = await fetch(api + '/verificar-perfil', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Cookie: cookies,
+                'User-ID': userId
+            }
+        });
+
+        if (!perfilResponse.ok) {
+            throw new Error('Perfil inválido');
+        }
+
+        const { usuario } = await perfilResponse.json();
+
+		console.log("jogos", jogos);
+        return res.render('index', {jogos: jogos, header: setHeader(usuario.perfil), navclass: { "produtos": "active" }, user: usuario, css: selectedCSS});
+        
+    } catch (error) {
+        console.error('Erro:', error);
+        return res.redirect('/login'); // Redireciona em caso de erro
+    }
+});
+
 
 app.get('/cadastro', (req, res) => {
 	const user = req.query.user;
@@ -103,22 +132,14 @@ app.get('/esquecer-senha', (req, res) => {
 })
 
 app.get('/comunidade', async (req, res) => {
-	const user = req.query.user;
-	const theme = req.cookies.theme || 'light'; 
+    const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/comunidade2.css' : '/css/comunidade.css';
 
-	var titulo = req.query.titulo;
-	if(titulo == undefined){
-		titulo = "";
-	}
-	var jogo = req.query.jogo;
-	if(jogo == undefined){
-		jogo = "";
-	}
+    const titulo = req.query.titulo || "";
+    const jogo = req.query.jogo || "";
+    const cookies = req.headers.cookie;
 
-	const cookies = req.headers.cookie;
-
-	try {
+    try {
         // Verifica o token na API
         const tokenResponse = await fetch(api + '/verificar-token', {
             method: 'GET',
@@ -131,7 +152,7 @@ app.get('/comunidade', async (req, res) => {
             throw new Error('Token inválido'); // Caso o token não seja válido
         }
 
-		const { userId } = await tokenResponse.json(); // Captura o userId da resposta
+        const { userId } = await tokenResponse.json(); // Captura o userId da resposta
 
         // Verifica o perfil na API
         const perfilResponse = await fetch(api + '/verificar-perfil-adm-premium', {
@@ -139,15 +160,18 @@ app.get('/comunidade', async (req, res) => {
             headers: {
                 'Content-Type': 'application/json',
                 Cookie: cookies,
-                'User-ID': userId // Enviando o userId no cabeçalho, se necessário
+                'User-ID': userId // Enviando o userId no cabeçalho
             }
         });
 
         if (!perfilResponse.ok) {
             throw new Error('Perfil inválido'); // Caso o perfil não seja válido
-        }		
+        }
 
-		fetch(api + '/jogos').then(response => {
+        const { usuario } = await perfilResponse.json(); 
+
+        // Carrega os jogos e posts
+        fetch(api + '/jogos').then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
 			}
@@ -163,18 +187,16 @@ app.get('/comunidade', async (req, res) => {
 				return a;
 			})
 			.then(posts => {
-				res.render('comunidade', {posts: posts, jogos: jogos, header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, css: selectedCSS});
+				res.render('comunidade', {posts: posts,	jogos: jogos, header: setHeader(usuario.perfil), navclass: {"comunidade": "active"}, "user": usuario, css: selectedCSS});
 			})
 		})
     } catch (error) {
         console.error('Erro:', error);
-		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
+        res.redirect('/'); // Redireciona para a home 
     }
-})
+});
 
 app.get('/post/:id', async (req, res) => {
-	const user = req.query.user;
     const postId = req.params.id;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/post2.css' : '/css/post.css';
@@ -207,7 +229,9 @@ app.get('/post/:id', async (req, res) => {
 
         if (!perfilResponse.ok) {
             throw new Error('Perfil inválido'); // Caso o perfil não seja válido
-        }		
+        }
+		
+		const { usuario } = await perfilResponse.json(); 
 
 		fetch(api + '/jogos').then(response => {
 			if (!response.ok) {
@@ -225,18 +249,16 @@ app.get('/post/:id', async (req, res) => {
 				return a;
 			})
 			.then(post => {
-				res.render('post', {header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, postId: postId, post: post, css: selectedCSS});
+				res.render('post', {header: setHeader(usuario.perfil), navclass: {"comunidade": "active"}, "user": usuario, postId: postId, post: post, css: selectedCSS});
 			})
 		})
     } catch (error) {
         console.error('Erro:', error);
-		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
+    	res.redirect(`/`); // Redireciona para a home
     }
 })
 
 app.get('/meus-produtos', async (req, res) => {
-	const user = req.query.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	const cookies = req.headers.cookie;
@@ -254,8 +276,26 @@ app.get('/meus-produtos', async (req, res) => {
             throw new Error('Token inválido'); // Caso o token não seja válido
         }
 
+		const { userId } = await tokenResponse.json(); 
+
+		// Verifica o perfil na API
+        const perfilResponse = await fetch(api + '/verificar-perfil', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Cookie: cookies,
+                'User-ID': userId // Enviando o userId no cabeçalho
+            }
+        });
+
+        if (!perfilResponse.ok) {
+            throw new Error('Perfil inválido'); // Caso o perfil não seja válido
+        }
+
+        const { usuario } = await perfilResponse.json(); 
+
 		if (req.xhr) {
-			fetch(api + '/cartasUser?id=' + user["id"]).then(response => {
+			fetch(api + '/cartasUser?id=' + usuario.id).then(response => {
 				if (!response.ok) {
 					throw new Error('Network response was not ok');
 				}
@@ -264,19 +304,18 @@ app.get('/meus-produtos', async (req, res) => {
 			})
 			.then(cartas => {
 				res.json({ 
-					cartasCompradas: user["cartas-compradas"],
-					cartasVendidas: user["cartas-vendidas"],
+					cartasCompradas: usuario["cartas-compradas"],
+					cartasVendidas: usuario["cartas-vendidas"],
 					cartas: cartas || [] 
 				});
 			})
 			
 		} else {
-			res.render('meus-produtos', {header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, dono: user, css: selectedCSS});
+			res.render('meus-produtos', {header: setHeader(usuario.perfil), navclass: {"meus-produtos": "active"}, "user": usuario, dono: usuario, css: selectedCSS});
 		}
     } catch (error) {
         console.error('Erro:', error);
-		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
+    	res.redirect(`/`); // Redireciona para a home
 	}
 	})
 
@@ -341,7 +380,6 @@ app.get('/meus-produtos/:id', async (req, res) => {
 	});
 
 app.get('/editar-produto/:id', async (req, res) => {
-	const user = req.query.user;
 	const cartaId = req.params.id;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
@@ -360,6 +398,24 @@ app.get('/editar-produto/:id', async (req, res) => {
             throw new Error('Token inválido'); // Caso o token não seja válido
         }
 
+		const { userId } = await tokenResponse.json();
+
+		// Verifica o perfil na API
+        const perfilResponse = await fetch(api + '/verificar-perfil', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Cookie: cookies,
+                'User-ID': userId // Enviando o userId no cabeçalho
+            }
+        });
+
+        if (!perfilResponse.ok) {
+            throw new Error('Perfil inválido'); // Caso o perfil não seja válido
+        }
+
+        const { usuario } = await perfilResponse.json(); 
+
 		fetch(api + '/jogos').then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
@@ -376,13 +432,12 @@ app.get('/editar-produto/:id', async (req, res) => {
 				return a;
 			})
 			.then(carta => {
-				res.render('editar-produto', {jogos: jogos, header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, carta: carta, css: selectedCSS});
+				res.render('editar-produto', {jogos: jogos, header: setHeader(usuario.perfil), navclass: {"meus-produtos": "active"}, "user": usuario, carta: carta, css: selectedCSS});
 			})
 		})
     } catch (error) {
         console.error('Erro:', error);
-		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
+    	res.redirect(`/`); // Redireciona para a home
 	}	
 })
 
@@ -428,7 +483,6 @@ app.get('/produto/:id', async (req, res) => {
 })
 
 app.get('/criar-post', async (req, res) => {
-	const user = req.query.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/post2.css' : '/css/post.css';
 	const cookies = req.headers.cookie;
@@ -462,6 +516,8 @@ app.get('/criar-post', async (req, res) => {
             throw new Error('Perfil inválido'); // Caso o perfil não seja válido
         }		
 
+		const { usuario } = await perfilResponse.json(); 
+
 		fetch(api + '/jogos').then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
@@ -470,17 +526,16 @@ app.get('/criar-post', async (req, res) => {
 			return a;
 		})
 		.then(jogos => {
-			res.render('criar-post', {jogos: jogos, header: setHeader(user), navclass: {"comunidade": "active"}, "user": user, css: selectedCSS});
+			res.render('criar-post', {jogos: jogos, header: setHeader(usuario.perfil), navclass: {"comunidade": "active"}, "user": usuario, css: selectedCSS});
 		})
     } catch (error) {
         console.error('Erro:', error);
 		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
+    	res.redirect(`/`); // Redireciona para a home
     }
 })
 
 app.get('/add-produto', async (req, res) => {
-	const user = req.query.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
 	const cookies = req.headers.cookie;
@@ -498,6 +553,24 @@ app.get('/add-produto', async (req, res) => {
             throw new Error('Token inválido'); // Caso o token não seja válido
         }
 
+		const { userId } = await tokenResponse.json(); // Captura o userId da resposta
+
+        // Verifica o perfil na API
+        const perfilResponse = await fetch(api + '/verificar-perfil', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Cookie: cookies,
+                'User-ID': userId // Enviando o userId no cabeçalho, se necessário
+            }
+        });
+
+        if (!perfilResponse.ok) {
+            throw new Error('Perfil inválido'); // Caso o perfil não seja válido
+        }		
+
+		const { usuario } = await perfilResponse.json(); 
+
 		fetch(api + '/jogos').then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
@@ -506,17 +579,15 @@ app.get('/add-produto', async (req, res) => {
 			return a;
 		})
 		.then(jogos => {
-			res.render('add-produto', {jogos: jogos, header: setHeader(user), navclass: {"meus-produtos": "active"}, "user": user, css: selectedCSS});
+			res.render('add-produto', {jogos: jogos, header: setHeader(usuario.perfil), navclass: {"meus-produtos": "active"}, "user": usuario, css: selectedCSS});
 		})
     } catch (error) {
 		console.error('Erro:', error);
-		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
+    	res.redirect(`/`); // Redireciona para a home
 	}
 })
 
 app.get('/adm', async (req, res) => {
-	const user = req.query.user;
 	var nomeUsuario = req.query.nomeUsuario;
 	var nomeJogo = req.query.nomeJogo;
 
@@ -559,6 +630,8 @@ app.get('/adm', async (req, res) => {
             throw new Error('Perfil inválido'); // Caso o perfil não seja válido
         }		
 
+		const { usuario } = await perfilResponse.json(); 
+
 		if (req.xhr) {
 			fetch(api + '/jogos?nome=' + nomeJogo).then(response => {
 				if (!response.ok) {
@@ -583,18 +656,16 @@ app.get('/adm', async (req, res) => {
 				})
 			})
 		} else{
-			res.render('adm', {header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
+			res.render('adm', {header: setHeader(usuario.perfil), navclass: {"adm": "active"}, "user": usuario, css: selectedCSS});
 		}
     } catch (error) {
         console.error('Erro:', error);
-		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
+    	res.redirect(`/`); // Redireciona para a home
     }	
 })
 
 app.get('/editar-usuario/:id', async (req, res) => {
-	const user = req.query.user;
-	const userId = req.params.id;
+	const userid = req.params.id;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
 	const cookies = req.headers.cookie;
@@ -628,25 +699,25 @@ app.get('/editar-usuario/:id', async (req, res) => {
             throw new Error('Perfil inválido'); // Caso o perfil não seja válido
         }		
 
-		fetch(api + '/usuarios?id=' + userId).then(response => {
+		const { usuario } = await perfilResponse.json(); 
+
+		fetch(api + '/usuarios?id=' + userid).then(response => {
 			if (!response.ok) {
 				throw new Error('Network response was not ok');
 			}
 			var a = response.json();
 			return a;
 		})
-		.then(usuario => {
-			res.render('editar-usuario', {usuario: usuario, header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
+		.then(usuarios => {
+			res.render('editar-usuario', {usuarios: usuarios, header: setHeader(usuario.perfil), navclass: {"adm": "active"}, "user": usuario, css: selectedCSS});
 		})
     } catch (error) {
         console.error('Erro:', error);
-		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
+    	res.redirect(`/`); // Redireciona para a home
     }
 })
 
 app.get('/editar-jogo/:id', async (req, res) => {
-	const user = req.query.user;
 	const jogoId = req.params.id;
 	let jogo;
 	const theme = req.cookies.theme || 'light'; 
@@ -680,7 +751,9 @@ app.get('/editar-jogo/:id', async (req, res) => {
 
         if (!perfilResponse.ok) {
             throw new Error('Perfil inválido'); // Caso o perfil não seja válido
-        }		
+        }	
+		
+		const { usuario } = await perfilResponse.json(); // Captura o userId da resposta
 
 		fetch(api + '/jogos?id=' + jogoId).then(response => {
 			if (!response.ok) {
@@ -690,17 +763,15 @@ app.get('/editar-jogo/:id', async (req, res) => {
 			return a;
 		})
 		.then(jogo => {
-			res.render('editar-jogo', {jogo: jogo, header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
+			res.render('editar-jogo', {jogo: jogo, header: setHeader(usuario.perfil), navclass: {"adm": "active"}, "user": usuario, css: selectedCSS});
 		})
     } catch (error) {
         console.error('Erro:', error);
-		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
+    	res.redirect(`/`); // Redireciona para a home
     }
 })
 
 app.get('/criar-jogo', async (req, res) => {
-	const user = req.query.user;
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/adm2.css' : '/css/adm.css';
 	const cookies = req.headers.cookie;
@@ -732,13 +803,14 @@ app.get('/criar-jogo', async (req, res) => {
 
         if (!perfilResponse.ok) {
             throw new Error('Perfil inválido'); // Caso o perfil não seja válido
-        }		
+        }
+		
+		const { usuario } = await perfilResponse.json(); // Captura o userId da resposta
 
-		res.render('criar-jogo', {header: setHeader(user), navclass: {"adm": "active"}, "user": user, css: selectedCSS});
+		res.render('criar-jogo', {header: setHeader(usuario.perfil), navclass: {"adm": "active"}, "user": usuario, css: selectedCSS});
     } catch (error) {
         console.error('Erro:', error);
-		const userId = user.id;
-    	res.redirect(`/?user=${userId}`); // Redireciona para a home
+    	res.redirect(`/`); // Redireciona para a home
     }
 })
 
@@ -761,7 +833,7 @@ app.get('/perfil', async (req, res) => {
             throw new Error('Token inválido'); // Caso o token não seja válido
         }
 
-		res.render('perfil', {usuario: user, header: setHeader(user), navclass: {}, "user": user, css: selectedCSS});
+		res.render('perfil', {usuario: user, header: setHeader(user.perfil), navclass: {}, "user": user, css: selectedCSS});
     } catch (error) {
         console.error('Erro:', error);
 		const userId = user.id;
@@ -773,20 +845,20 @@ app.listen(port, function () {
 	console.log(`Server listening on port ${port}`);
 })
 
-function setHeader(user) {
+function setHeader(perfil) {
     let header;
-	switch(user["perfil"]){
-		case "simples":
-			header = "headers/default-header.ejs";
-			break;
-		case "premium":
-			header = "headers/premium-header.ejs";
-			break;
-		case "admin":
-			header = "headers/adm-header.ejs";
-			break;
-		default:
-			header = "headers/unlogged-header.ejs";
-	}
-	return header;
+    switch (perfil) {
+        case "simples":
+            header = "headers/default-header.ejs";
+            break;
+        case "premium":
+            header = "headers/premium-header.ejs";
+            break;
+        case "admin":
+            header = "headers/adm-header.ejs";
+            break;
+        default:
+            header = "headers/unlogged-header.ejs";
+    }
+    return header;
 }
