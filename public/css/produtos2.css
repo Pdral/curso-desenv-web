@@ -464,3 +464,18 @@ input{
     width: auto;
     height: 32px;
 }
+
+.user-icon-perfil {
+    width: 200px; 
+    margin: auto;
+    height: 200px; 
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.user-icon-perfil img {
+    width: 100%; 
+    height: 100%; 
+    border-radius: 50%; 
+    object-fit: cover; 
+}

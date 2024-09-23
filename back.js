@@ -15,7 +15,6 @@ require("dotenv-safe").config();
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
-
 const maxSize = 1024*1024*2; // 2MB - Limite para upload
 
 const storage = multer.diskStorage({
@@ -107,6 +106,21 @@ const server = http.createServer((req, res) => {
             	res.end(JSON.stringify({ message: 'Perfil válido', usuario }));
         	}
     	});
+		return;
+	} 
+
+	// Verificar usuario para recuperar senha
+	if (req.method === 'GET' && req.url === '/verificar-usuario') {
+		const username = req.headers['username']; // Captura o username do cabeçalho
+
+		user = findUser(username);
+    	if (user) {
+			res.writeHead(200, { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({ success: true, usuario: user }));
+		} else {
+			res.writeHead(404, { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({ success: false, message: 'Usuário não encontrado' }));
+		}
 		return;
 	} 
 
@@ -233,7 +247,6 @@ const server = http.createServer((req, res) => {
 					if (username) {
 						// Verifica se o nome de usuário já existe
 						const userExists = findUser(username);
-						console.log("Qual o usuario", userExists);
 		
 						if (userExists) {
 							// Mensagem de erro
@@ -341,6 +354,33 @@ const server = http.createServer((req, res) => {
 					save(users_path, 'usuarios', user);
 					res.writeHead(200, { 'Content-Type': 'text/html' });
 					res.end();
+				}
+			break;
+			case '/esquecer-senha':
+				if (req.method === 'POST') {
+					let body = '';
+					req.on('data', chunk => {
+						body += chunk.toString(); // Concatena os chunks recebidos
+					});
+					req.on('end', () => {
+						const params = new URLSearchParams(body);
+						const username = params.get('username');
+			
+						if (username) {
+							const user = findUser(username);
+			
+							if (user) {
+								res.writeHead(200, { 'Content-Type': 'application/json' });
+								res.end(JSON.stringify({ success: true, user }));
+							} else {
+								res.writeHead(404, { 'Content-Type': 'application/json' });
+								res.end(JSON.stringify({ success: false, message: 'Usuário não encontrado' }));
+							}
+						} else {
+							res.writeHead(400, { 'Content-Type': 'application/json' });
+							res.end(JSON.stringify({ success: false, message: 'Nome de usuário não fornecido' }));
+						}
+					});
 				}
 			break;
 		case '/favicon.ico':

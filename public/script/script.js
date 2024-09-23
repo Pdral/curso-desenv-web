@@ -190,7 +190,7 @@ function createPost() {
         })
         .then(data => {
             console.log('Post criado com sucesso:', data);
-            window.location.href = '/comunidade'; // Exemplo: redirecionar para a página da comunidade
+            window.location.href = '/comunidade'; 
         })
         .catch(error => {
             console.error('Erro ao criar post:', error);
@@ -859,6 +859,43 @@ function criarUsuario() {
     });
 }
 
+function editarSenha() {
+    // Verifique se estamos na página
+    if (window.location.pathname !== '/esquecer-senha') {
+        return;
+    }
+    
+    const form = document.getElementById('f2');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita o envio padrão do formulário
+
+        const formData = new FormData(form);
+
+        fetch('http://localhost:8084/esquecer-senha', {
+            method: 'POST',
+            body: new URLSearchParams(formData),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const username = formData.get('username');
+                console.log('Username:', username);
+                window.location.href = `/editar-senha?username=${encodeURIComponent(username)}`;
+            } else {
+                alert('Erro: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao recuperar senha:', error);
+            alert('Ocorreu um erro ao tentar recuperar a senha.');
+        });
+    });
+}
+
 function editarPerfilUsuario(){
     if (!window.location.pathname.includes('/perfil')) {
         return;
@@ -899,22 +936,6 @@ function editarPerfilUsuario(){
         .catch(error => {
             console.error(error);
         });
-    });
-}
-
-function recuperarSenha(){
-    if (!window.location.pathname.includes('/esquecer-senha')) {
-        return;
-    }
-
-    document.getElementById('f2').addEventListener('submit', function(event) {
-        event.preventDefault(); // Evita o envio automático do formulário
-
-        // Obtém o valor do campo de nome de usuário
-        const username = document.getElementById('username').value;
-
-        // Redireciona para a página /editar-senha com o nome de usuário como parâmetro de query
-        window.location.href = `/editar-senha?username=${encodeURIComponent(username)}`;
     });
 }
 
@@ -1104,4 +1125,4 @@ redirecionarAoCriarCarta();
 redirecionarAoAtualizarCarta();
 criarUsuario();
 editarPerfilUsuario();
-recuperarSenha();
+editarSenha();

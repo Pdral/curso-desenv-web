@@ -777,6 +777,39 @@ app.get('/perfil', async (req, res) => {
 	}
 })
 
+app.get('/editar-senha', async (req, res) => {
+    const theme = req.cookies.theme || 'light'; 
+    const selectedCSS = theme === 'dark' ? '/css/produtos2.css' : '/css/produtos.css';
+    const username = req.query.username;
+
+    if (!username) {
+        return res.redirect('/esquecer-senha?erro=usuario-nao-encontrado');
+    }
+
+	try {
+        // Faz a requisição à API para obter os dados do usuário
+        const userResponse = await fetch(api + '/verificar-usuario', {
+			method: 'GET',
+			headers: {
+				'username': username
+			}
+		});
+	
+		if (!userResponse.ok) { // Verifique se a resposta não é OK
+			console.log('Erro ao buscar usuário:', await userResponse.text()); // Verifique a resposta
+			throw new Error('Usuário não encontrado');
+		}
+	
+		const { usuario } = await userResponse.json();
+
+        // Renderiza a view de editar senha com os dados do usuário
+        res.render('editar-senha', {usuario: usuario, header: setHeader("visitante"), navclass: {}, "user": usuario, css: selectedCSS});
+    } catch (error) {
+        console.error('Erro ao obter usuário:', error);
+        res.redirect('/esquecer-senha?erro=usuario-nao-encontrado');
+    }
+});
+
 app.listen(port, function () {
 	console.log(`Server listening on port ${port}`);
 })
