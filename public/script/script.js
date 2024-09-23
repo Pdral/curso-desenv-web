@@ -861,15 +861,8 @@ function criarUsuario() {
             // Usuário criado com sucesso
             const mensagemErro = document.getElementById('mensagemErro');
             mensagemErro.textContent = "";
-            const mensagemSucesso = document.createElement('p');
+            const mensagemSucesso = document.getElementById('mensagem-sucesso');
             mensagemSucesso.textContent = 'Cadastrado com sucesso!';
-            mensagemSucesso.classList.add('mensagem-sucesso');
-            form.appendChild(mensagemSucesso);
-            const loginLink = document.createElement('a');
-            loginLink.href = '/login';
-            loginLink.textContent = 'Faça o login!';
-            loginLink.classList.add('custom-login-link');
-            form.appendChild(loginLink);
         })
         .catch(error => {
             console.error('Erro:', error);
