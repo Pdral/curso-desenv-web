@@ -859,6 +859,8 @@ function criarUsuario() {
         })
         .then(data => {
             // Usuário criado com sucesso
+            const mensagemErro = document.getElementById('mensagemErro');
+            mensagemErro.textContent = "";
             const mensagemSucesso = document.createElement('p');
             mensagemSucesso.textContent = 'Cadastrado com sucesso!';
             mensagemSucesso.classList.add('mensagem-sucesso');

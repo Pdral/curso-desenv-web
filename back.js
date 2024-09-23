@@ -351,7 +351,7 @@ const server = http.createServer((req, res) => {
 					user.moedas = (moedas - 100).toFixed(2).toString().replace(/\./g, ',');
 					user.perfil = 'premium'
 					del(users_path, 'usuarios', user.id, true);
-					save(users_path, 'usuarios', user);
+					save(users_path, 'usuarios', user, true);
 					res.writeHead(200, { 'Content-Type': 'text/html' });
 					res.end();
 				}
@@ -440,7 +440,7 @@ function handleGeneralFiles(req, res, u, fileName, entity){
 				body += data;
 				body = JSON.parse(body);
 				var user = body;
-				save(fileName, entity, user);
+				save(fileName, entity, user, true);
 			}); 
 			req.on('end', function () {
 				res.writeHead(201, { 'Content-Type': 'text/html; charset=utf-8'});
@@ -527,11 +527,11 @@ function find(fileName, entity, id){
 	return data.filter(o => Number(o["id"]) === Number(id))[0];
 }
 
-function save(fileName, entity, data){
+function save(fileName, entity, data, update){
 	if(data.id == undefined){
 		data.id = nextId(entity);
 	}
-	if(entity === 'usuarios' && data.senha !== undefined){
+	if(entity === 'usuarios' && data.senha !== undefined && update == undefined){
 		data.senha = sha512(data.senha, process.env.SECRET_USERS);
 	}
 	var allData = list(fileName, entity);
@@ -935,7 +935,7 @@ function updateUsuario(req, res, u){
 					user.icon = "/img/" + req.files[0].filename;
 				}
 				del(users_path, 'usuarios', user.id, true);
-				save(users_path, 'usuarios', user);
+				save(users_path, 'usuarios', user, true);
 				res.writeHead(201, { 'Content-Type': 'application/json' });
 				return res.end();
 			});break;
@@ -946,5 +946,5 @@ function ganharMoedas(id, moedas){
 	var user = find(users_path, 'usuarios', id);
 	user.moedas = (Number(user.moedas.replace(/,/g, '.')) + moedas).toFixed(2).toString().replace(/\./g, ',');
 	del(users_path, 'usuarios', id, true);
-	save(users_path, 'usuarios', user);
+	save(users_path, 'usuarios', user, true);
 }
