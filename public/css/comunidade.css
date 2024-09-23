@@ -396,3 +396,9 @@ body, html {
     border-radius: 50%; 
     object-fit: cover; 
 }
+
+input{
+    background-color: #CBB7F1;
+    color: #000;
+    text-align: center;
+}
