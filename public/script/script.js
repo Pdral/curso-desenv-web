@@ -369,11 +369,22 @@ function setupCartas() {
                 prodEditavel.classList.add('produto-editavel');
                 const cartaDiv = document.createElement('div');
                 cartaDiv.classList.add('produto');
-                cartaDiv.innerHTML = `
+                if(pageId == undefined || pageId == userId){
+                    cartaDiv.innerHTML = `
                     <img src="${carta.frente}" alt="${carta.nome}" class="carta">
                     <div class="nome">${carta.nome}</div>
                     <div class="preco">Preço: GC$ ${carta.preco}</div>
                 `;
+                } else{
+                    cartaDiv.innerHTML = `
+                    <a href="/produto/${carta.id}">
+                        <img src="${carta.frente}" alt="${carta.nome}" class="carta">
+                    </a>
+                    <div class="nome">${carta.nome}</div>
+                    <div class="preco">Preço: GC$ ${carta.preco}</div>
+                `;
+                }
+                
                 prodEditavel.appendChild(cartaDiv);
 
                 if(pageId == undefined || pageId == userId){
@@ -500,8 +511,6 @@ function setupJogos(filtro, cartaNome) {
     if (window.location.pathname !== '/') {
         return undefined;
     }
-
-    // const userId = getUserId() || "";
     
     if(cartaNome == undefined){
         cartaNome = '';
@@ -663,6 +672,13 @@ function redirecionarAoCriarCarta(){
 
         // Obtém os dados do formulário
         const formData = new FormData(form);
+
+        if(!verificarFormato(formData.get('preco'))){
+            const mensagem = document.getElementById('mensagemErro');
+            mensagem.textContent = 'Formato de preço incorreto (Ex: 00,00)';
+            mensagem.style.display = 'flex'; // Exibe a mensagem
+            return;
+        }
 
         // Cria uma requisição POST para adicionar o comentário ao post com o ID específico
         fetch(`http://localhost:8084/cartas`, {
@@ -1019,7 +1035,8 @@ function configurarLinksNickname() {
 
 // Função para carregar mensagens antigas
 function carregarMensagensAntigas(receiverId) {
-    fetch(`http://localhost:8084/chat/history?receiver=${receiverId}`)
+    var userId = document.getElementById("userId").value;
+    fetch(`http://localhost:8084/chat/history?user=${userId}&receiver=${receiverId}`)
         .then(response => response.json()) 
         .then(data => {
             const chatMessagesUsuario = document.getElementById('chatMessagesUsuario');
@@ -1114,7 +1131,10 @@ function comprarCarta(){
     }
 }
 
-
+function verificarFormato(string) {
+    const padrao = /^\d+,\d+$/;
+    return padrao.test(string);
+}
 
 setupCartas();
 setupUsuarioseJogos();

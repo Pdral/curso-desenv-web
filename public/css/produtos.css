@@ -483,3 +483,9 @@ input{
     border-radius: 50%; 
     object-fit: cover; 
 }
+
+/* Estilo de mensagem de erro no login */
+.error-message {
+    color: red;
+    font-size: 14px; 
+  }
