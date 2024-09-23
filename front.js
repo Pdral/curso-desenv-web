@@ -97,7 +97,17 @@ app.get('/', async (req, res) => {
 app.get('/cadastro', (req, res) => {
 	const theme = req.cookies.theme || 'light'; 
     const selectedCSS = theme === 'dark' ? '/css/style2.css' : '/css/style.css';
-	res.render('cadastro', {layout: "no-header", css: selectedCSS});
+	let errorMessage = null;
+
+	if (req.query.error) {
+        try {
+            errorMessage = decodeURIComponent(req.query.error);
+        } catch (e) {
+            console.error('Erro ao decodificar a mensagem de erro:', e);
+            errorMessage = 'Erro de cadastro'; // mensagem genérica em caso de erro
+        }
+    }
+	res.render('cadastro', {layout: "no-header", css: selectedCSS, error: errorMessage});
 })
 
 app.get('/login', (req, res) => {

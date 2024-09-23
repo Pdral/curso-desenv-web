@@ -219,74 +219,110 @@ const server = http.createServer((req, res) => {
 				res.end('Method Not Allowed');
 			}
 			break;
-			case '/login':
-				if (req.method === 'POST') {
-					let body = '';
-					req.on('data', chunk => {
-						body += chunk.toString(); // Concatena os chunks recebidos
-					});
-					req.on('end', () => {
-						const loginData = new URLSearchParams(body);
-						const username = loginData.get('username');
-						const senha = sha512(loginData.get('senha'), process.env.SECRET_USERS);
-						console.log('Usuário:', username);
-						console.log('Senha (hash):', senha);
-						if (username && senha) {
-							// Authenticação
-							var users = JSON.parse(fs.readFileSync(users_path, 'utf8')).usuarios;
-							var userloc = users.find((item) => {
-								return (item.username === username && item.senha === senha);
-							});
+		case '/cadastro':
+    		if (req.method === 'POST') {
+				let body = '';
+				req.on('data', chunk => {
+					body += chunk.toString();
+				});
 		
-							if (userloc) {
-								const token = jwt.sign(
-									{ id: userloc.id }, // payload
-									process.env.SECRET, // chave definida em .env
-									{ expiresIn: 10800 }  // em segundos
-								);	
-								// Define o cookie com o token
-								res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=10800; SameSite=None; Secure`); // 5 minutos
-								res.writeHead(302, { Location: `http://localhost:8083` }); // Redireciona para a home
-								res.end();
-							} else {
-								console.log('### 0 - erro no login');
-								res.writeHead(302, {
-									'Location': 'http://localhost:8083/login?error=' + encodeURIComponent('Usuário e/ou senha inválidos')
-								});
-								res.end();
-							}
+				req.on('end', () => {
+					const registerData = new URLSearchParams(body);
+					const username = registerData.get('username');
+		
+					if (username) {
+						// Verifica se o nome de usuário já existe
+						const userExists = findUser(username);
+						console.log("Qual o usuario", userExists);
+		
+						if (userExists) {
+							// Mensagem de erro
+							console.log('Erro no cadastro');
+							res.writeHead(409, { 'Content-Type': 'application/json' });
+                    		return res.end(JSON.stringify({ error: 'Nome de usuário já existe! Tente outro.' }));
 						} else {
-							res.writeHead(400, { 'Content-Type': 'text/plain' });
-							res.end('Dados inválidos');
+							// Usuário criado
+							res.writeHead(200);
+							return res.end();
 						}
+					} else {
+						res.writeHead(400, { 'Content-Type': 'application/json' });
+						return res.end(JSON.stringify({ error: 'Dados inválidos' }));
+					}
+				});
+			} else {
+				res.writeHead(405, { 'Content-Type': 'text/plain' });
+				return res.end('Method Not Allowed');
+			}
+			break;
+		case '/login':
+			if (req.method === 'POST') {
+				let body = '';
+				req.on('data', chunk => {
+					body += chunk.toString(); // Concatena os chunks recebidos
+				});
+				req.on('end', () => {
+					const loginData = new URLSearchParams(body);
+					const username = loginData.get('username');
+					const senha = sha512(loginData.get('senha'), process.env.SECRET_USERS);
+					console.log('Usuário:', username);
+					console.log('Senha (hash):', senha);
+					if (username && senha) {
+						// Authenticação
+						var users = JSON.parse(fs.readFileSync(users_path, 'utf8')).usuarios;
+						var userloc = users.find((item) => {
+							return (item.username === username && item.senha === senha);
+						});
+		
+						if (userloc) {
+							const token = jwt.sign(
+								{ id: userloc.id }, // payload
+								process.env.SECRET, // chave definida em .env
+								{ expiresIn: 10800 }  // em segundos
+							);	
+							// Define o cookie com o token
+							res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=10800; SameSite=None; Secure`); // 5 minutos
+							res.writeHead(302, { Location: `http://localhost:8083` }); // Redireciona para a home
+							res.end();
+						} else {
+							console.log('### 0 - erro no login');
+							res.writeHead(302, {
+								'Location': 'http://localhost:8083/login?error=' + encodeURIComponent('Usuário e/ou senha inválidos')
+							});
+							res.end();
+						}
+					} else {
+						res.writeHead(400, { 'Content-Type': 'text/plain' });
+						res.end('Dados inválidos');
+					}
+				});
+			} else {
+				res.writeHead(405, { 'Content-Type': 'text/plain' });
+				res.end('Method Not Allowed');
+			}
+				break;
+			case '/logout':
+				if (req.method === 'POST') {
+					// Função para obter o valor do cookie 'token'
+					const cookies = parseCookies(req);
+					const token = cookies.token; // Pega o token do cookie
+				
+					// Adiciona o token à blacklist se ele existir
+					if (token) {
+						blacklist.push(token); // Adiciona o token à blacklist
+					}
+				
+					// Redireciona o usuário para a página de home
+					res.writeHead(302, {
+						'Location': 'http://localhost:8083',
+						'Set-Cookie': 'token=; HttpOnly; Max-Age=0; Path=/;' // Limpa o cookie de token
 					});
+						res.end();
 				} else {
 					res.writeHead(405, { 'Content-Type': 'text/plain' });
 					res.end('Method Not Allowed');
 				}
-				break;
-				case '/logout':
-					if (req.method === 'POST') {
-						// Função para obter o valor do cookie 'token'
-						const cookies = parseCookies(req);
-						const token = cookies.token; // Pega o token do cookie
-				
-						// Adiciona o token à blacklist se ele existir
-						if (token) {
-							blacklist.push(token); // Adiciona o token à blacklist
-						}
-				
-						// Redireciona o usuário para a página de home
-						res.writeHead(302, {
-							'Location': 'http://localhost:8083',
-							'Set-Cookie': 'token=; HttpOnly; Max-Age=0; Path=/;' // Limpa o cookie de token
-						});
-						res.end();
-					} else {
-						res.writeHead(405, { 'Content-Type': 'text/plain' });
-						res.end('Method Not Allowed');
-					}
-				break;
+			break;
 			case '/updateUsuario':
 				updateUsuario(req, res, u);
 				break;
@@ -610,6 +646,12 @@ function deleteCarta(id){
 			jogo['cartas'] = cartas;
 	})
 	fs.writeFileSync(jogos_path, JSON.stringify({jogos: jogos}, null, 2), 'utf8');
+}
+
+function findUser(username) {
+    const data = fs.readFileSync(users_path, 'utf8');
+    const users = JSON.parse(data).usuarios;
+    return users.find(user => user.username === username);
 }
 
 function getUserData(userId) {

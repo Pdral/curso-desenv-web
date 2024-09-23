@@ -197,6 +197,24 @@ body, html {
   color: #5322ad;
   font-weight: bold;
 }
+
+.mensagem-sucesso {
+  color: green;
+}
+
+.custom-login-link {
+  color: #CBB7F1;
+  font-weight: bold;
+  text-decoration: underline; 
+  text-align: center; 
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-login-link:hover {
+  background-color: #CBB7F1;
+  color: #2b2b2b;
+}
   
 /* Responsividade */
 @media (max-width: 1000px) {

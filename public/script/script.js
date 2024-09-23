@@ -774,7 +774,7 @@ function upgrade(){
     });
 }
 
-function criarUsuario(){
+function criarUsuario() {
     if (!window.location.pathname.includes('/cadastro')) {
         return;
     }
@@ -786,40 +786,76 @@ function criarUsuario(){
 
         // Obtém os dados do formulário
         const formData = new FormData(form);
-
         const senha = document.getElementById("senha").value;
         const confirmarSenha = document.getElementById("confirmar-senha").value;
         const mensagemErro = document.getElementById('mensagemErro');
 
-        if(senha !== confirmarSenha){
+        if (senha !== confirmarSenha) {
             mensagemErro.textContent = 'As senhas não são iguais. Tente novamente.';
-        } else{
+            return; 
+        }
+
+        const username = formData.get("username");
+        
+        // Primeiro, verifique se o nome de usuário já existe
+        fetch(`http://localhost:8084/cadastro`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `username=${encodeURIComponent(username)}`
+        })
+        .then(response => {
+            if (response.status === 409) {
+                // Se o nome de usuário já existir
+                return response.json().then(data => {
+                    mensagemErro.textContent = data.error; 
+                    throw new Error(data.error); 
+                });
+            } else if (!response.ok) {
+                throw new Error('Erro ao verificar o nome de usuário: ' + response.statusText);
+            }
+
+            // Se o nome de usuário não existir, prosseguir para o cadastro
             var user = {
-                "username": formData.get("username"),
+                "username": username,
                 "moedas": "100,00",
                 "perfil": "simples",
                 "icon": "/img/default.png",
                 "cartas-compradas": [],
                 "cartas-vendidas": [],
                 "senha": senha
-            }
-            fetch(`http://localhost:8084/usuarios`, {
+            };
+
+            return fetch(`http://localhost:8084/usuarios`, {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(user)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erro ao criar user: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(id => {
-                this.submit();
-            })
-            .catch(error => {
-                console.error('Erro ao criar carta:', error);
             });
-        }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao criar usuário: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Usuário criado com sucesso
+            const mensagemSucesso = document.createElement('p');
+            mensagemSucesso.textContent = 'Cadastrado com sucesso!';
+            mensagemSucesso.classList.add('mensagem-sucesso');
+            form.appendChild(mensagemSucesso);
+            const loginLink = document.createElement('a');
+            loginLink.href = '/login';
+            loginLink.textContent = 'Faça o login!';
+            loginLink.classList.add('custom-login-link');
+            form.appendChild(loginLink);
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+        });
     });
 }
 
@@ -863,6 +899,22 @@ function editarPerfilUsuario(){
         .catch(error => {
             console.error(error);
         });
+    });
+}
+
+function recuperarSenha(){
+    if (!window.location.pathname.includes('/esquecer-senha')) {
+        return;
+    }
+
+    document.getElementById('f2').addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita o envio automático do formulário
+
+        // Obtém o valor do campo de nome de usuário
+        const username = document.getElementById('username').value;
+
+        // Redireciona para a página /editar-senha com o nome de usuário como parâmetro de query
+        window.location.href = `/editar-senha?username=${encodeURIComponent(username)}`;
     });
 }
 
@@ -1041,6 +1093,8 @@ function comprarCarta(){
     }
 }
 
+
+
 setupCartas();
 setupUsuarioseJogos();
 setupJogos("");
@@ -1050,3 +1104,4 @@ redirecionarAoCriarCarta();
 redirecionarAoAtualizarCarta();
 criarUsuario();
 editarPerfilUsuario();
+recuperarSenha();

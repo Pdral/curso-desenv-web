@@ -177,6 +177,23 @@ body, html {
   box-sizing: border-box;
 }
 
+.custom-login-link {
+  color: #5322ad;
+  font-weight: bold;
+  text-decoration: underline; 
+  text-align: center; 
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-login-link:hover {
+  background-color: #5322ad;
+  color: #fff;
+}
+
+.mensagem-sucesso {
+  color: green;
+}
   /* Responsividade */
   @media (max-width: 600px) {
     .coluna-direita form {
