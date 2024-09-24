@@ -1,44 +1,6 @@
 {
   "jogos": [
     {
-      "id": 0,
-      "nome": "Magic",
-      "cartas": [
-        {
-          "id": 0,
-          "nome": "Vampiro Esquelético",
-          "preco": "1,69",
-          "vendedor": "0",
-          "frente": "/img/magic1.png",
-          "verso": "/img/magic-verso.png"
-        },
-        {
-          "id": 1,
-          "nome": "Especialidade de Rishkar",
-          "preco": "16,99",
-          "vendedor": "0",
-          "frente": "/img/magic2.png",
-          "verso": "/img/magic-verso.png"
-        },
-        {
-          "id": 2,
-          "nome": "Aquisição Hostil",
-          "preco": "0,84",
-          "vendedor": "0",
-          "frente": "/img/magic3.png",
-          "verso": "/img/magic-verso.png"
-        },
-        {
-          "id": 3,
-          "nome": "Guardião das Eras",
-          "preco": "1,27",
-          "vendedor": "0",
-          "frente": "/img/magic4.png",
-          "verso": "/img/magic-verso.png"
-        }
-      ]
-    },
-    {
       "id": 1,
       "nome": "Pokémon",
       "cartas": [
@@ -81,14 +43,6 @@
       "nome": "Yu-gi-oh!",
       "cartas": [
         {
-          "id": 8,
-          "nome": "Monstro Marinho de Teseu",
-          "preco": "11,99",
-          "vendedor": "2",
-          "frente": "/img/yugioh1.png",
-          "verso": "/img/yugioh-verso.png"
-        },
-        {
           "id": 9,
           "nome": "Negrodragão do Trovão",
           "preco": "39,90",
@@ -111,8 +65,59 @@
           "vendedor": "2",
           "frente": "/img/yugioh4.png",
           "verso": "/img/yugioh-verso.png"
+        },
+        {
+          "nome": "Monstro Marinho de Teseu",
+          "vendedor": "2",
+          "preco": "12,06",
+          "id": "8",
+          "frente": "/img/yugioh1.png",
+          "verso": "/img/yugioh-verso.png"
         }
       ]
+    },
+    {
+      "id": 0,
+      "nome": "Magic",
+      "cartas": [
+        {
+          "id": 0,
+          "nome": "Vampiro Esquelético",
+          "preco": "1,69",
+          "vendedor": "0",
+          "frente": "/img/magic1.png",
+          "verso": "/img/magic-verso.png"
+        },
+        {
+          "id": 1,
+          "nome": "Especialidade de Rishkar",
+          "preco": "16,99",
+          "vendedor": "0",
+          "frente": "/img/magic2.png",
+          "verso": "/img/magic-verso.png"
+        },
+        {
+          "id": 2,
+          "nome": "Aquisição Hostil",
+          "preco": "0,84",
+          "vendedor": "0",
+          "frente": "/img/magic3.png",
+          "verso": "/img/magic-verso.png"
+        },
+        {
+          "id": 3,
+          "nome": "Guardião das Eras",
+          "preco": "1,27",
+          "vendedor": "0",
+          "frente": "/img/magic4.png",
+          "verso": "/img/magic-verso.png"
+        }
+      ]
+    },
+    {
+      "nome": "cop",
+      "cartas": [],
+      "id": 4
     }
   ]
 }
