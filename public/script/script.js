@@ -1093,6 +1093,7 @@ function carregarMensagensAntigas(receiverId) {
                 `;
                 chatMessagesUsuario.appendChild(messageElement);
             });
+            chatMessagesUsuario.scrollTop = chatMessagesUsuario.scrollHeight;
         })
         .catch(error => console.error('Erro ao carregar mensagens:', error));
 }
@@ -1126,7 +1127,6 @@ function criarMensagem(receiverId) {
             if (socket && socket.readyState === WebSocket.OPEN) {                
                 socket.send(JSON.stringify(messageData));
                 document.getElementById('messageInput').value = ''; // Limpa o campo de entrada
-                carregarMensagensAntigas(receiverId);
             } else {
                 console.error('WebSocket não está aberto. Mensagem não enviada.');
             }
@@ -1134,14 +1134,16 @@ function criarMensagem(receiverId) {
 
 // Função para exibir mensagem
 function exibirMensagem(data) {
+    console.log('Exibir mensagem:', data);
     const chatMessagesUsuario = document.getElementById('chatMessagesUsuario');
     const messageElement = document.createElement('div');
     messageElement.classList.add('message');
     messageElement.innerHTML = `
         <img src="${data.icon}" alt="Imagem do Usuário" class="user-icon">
-        <span><strong>${data.username}:</strong> ${data.content}</span>
+        <span><strong>${data.username}:</strong> ${data.message}</span>
     `;
     chatMessagesUsuario.appendChild(messageElement);
+    chatMessagesUsuario.scrollTop = chatMessagesUsuario.scrollHeight;
 }
 
 function comprarCarta(){

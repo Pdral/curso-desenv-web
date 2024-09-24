@@ -843,6 +843,13 @@ wss.on('connection', (ws) => {
             fs.writeFileSync(conversas_path, JSON.stringify({ conversas: conversations }, null, 2));
 
             console.log('Mensagem recebida e salva:', newMessage);
+
+			// Envia a mensagem para todos os clientes conectados
+            wss.clients.forEach(client => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify(newMessage));
+                }
+            });
         } catch (error) {
             console.error('Erro ao processar a mensagem:', error);
         }
