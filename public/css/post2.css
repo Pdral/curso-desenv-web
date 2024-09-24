@@ -57,7 +57,7 @@ body, html {
     text-decoration: underline; 
 }
 
-#increaseFont, #decreaseFont {
+#increaseFont, #decreaseFont, #logout {
     color: #cbb7f1;
     background-color: #2b2b2b;
     font-size: 11px;
@@ -384,10 +384,18 @@ border: 1px solid #CBB7F1;
     margin-bottom: 10px;
 }
 
-.header .perfil .usuario .username{
-    color: #2b2b2b;    
-    font-weight: bold;
-    text-decoration: underline;
+.header .perfil .usuario .username {
+    color: #2b2b2b;
+    font-weight: bold; 
+}
+
+.header .perfil .usuario .username a {
+    color: inherit; 
+}
+
+.header .perfil .usuario .username a:hover {
+    background-color: #5322ad;
+    color: #fff;
 }
 
 .user-icon {

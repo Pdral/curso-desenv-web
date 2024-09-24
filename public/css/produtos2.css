@@ -3,6 +3,7 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
+    background-color: #2b2b2b;
 }
 
 .header {
@@ -92,10 +93,18 @@ body, html {
     margin-right: 60px;
 }
 
-.header .perfil .usuario .username{
-    color: #2B2B2B;
-    font-weight: bold;
-    text-decoration: underline;
+.header .perfil .usuario .username {
+    color: #2b2b2b;
+    font-weight: bold; 
+}
+
+.header .perfil .usuario .username a {
+    color: inherit; 
+}
+
+.header .perfil .usuario .username a:hover {
+    background-color: #5322ad;
+    color: #fff;
 }
 
 .user-icon {

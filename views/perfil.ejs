@@ -36,6 +36,8 @@
             <% if (usuario.perfil == "simples") { %>
                 <button type="button" onclick="upgrade()" style="width: 200px;" class="botao-excluir">Torne-se premium</button>
             <% }  %>
+            <button class="botao-excluir" onclick="excluirUsuario(event)" data-userid="<%= usuario["id"] %>">Excluir</button>
+            </div>
         </div>
         <p id="mensagemErro" style="color: red;justify-content: center;"></p>
     </form>

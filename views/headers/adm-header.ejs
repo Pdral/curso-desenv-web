@@ -14,12 +14,12 @@
 		</div>
 		<div class="usuario">
 			<div class="user-icon">
-				<a class="user-icon-link" href="/perfil">
-					<img src=<%= user["icon"] %> alt="User Icon">
-				</a>
+				<img src=<%= user["icon"] %> alt="User Icon">
 			</div>
 			<div class="username">
-				<%= user["username"] %>
+				<a href="/perfil">
+					<%= user["username"] %>
+				</a>
 			</div>
 		</div>
 		<div>

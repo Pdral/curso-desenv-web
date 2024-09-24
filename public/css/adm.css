@@ -14,6 +14,7 @@ body, html {
     color: #fff;
     padding: 20px 20px;
 }
+
 .logo {
     font-size: 1.8em;
     font-weight: bold;
@@ -342,10 +343,17 @@ input{
     margin-right: 60px;
 }
 
-.header .perfil .usuario .username{
-    color: #ffffff;
-    font-weight: bold;
-    text-decoration: underline;
+.header .perfil .usuario .username {
+    color: #ffffff; 
+    font-weight: bold; 
+}
+
+.header .perfil .usuario .username a {
+    color: inherit; 
+}
+
+.header .perfil .usuario .username a:hover {
+    color: #9a6eec;
 }
 
 .user-icon {

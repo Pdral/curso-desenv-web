@@ -257,17 +257,44 @@ function alterarSenha() {
     });
 }
 
-function excluirUsuario() {
-    const userId = window.location.pathname.split("/editar-usuario/").at(-1);
+function excluirUsuario(event) {
+    let userId;
+    event.preventDefault();
+
+    // Obtendo a URL atual
+    const path = window.location.pathname;
+
+    if (path.includes('/editar-usuario')) {
+        userId = path.split("/editar-usuario/").at(-1);
+    } else if (path.includes('/perfil')) {
+        userId = event.currentTarget.getAttribute('data-userid');
+    }
 
     const url = 'http://localhost:8084/usuarios?id=' + userId;
+    console.log('URL de exclusão:', url); // Debug: Verifique a URL
 
-    fetch(url, {method: 'DELETE'}).then(response => {
-        window.location.href = '/adm';
-    }).catch(error => {
-        console.error(error);
-    });
-    
+    fetch(url, { method: 'DELETE' })
+        .then(response => {
+            if (response.ok) {
+                // Se a exclusão foi bem-sucedida e estamos na rota /perfil, faz logout
+                if (path.includes('/perfil')) {
+                    return fetch('http://localhost:8084/logout', { method: 'POST' });
+                } else {
+                    // Se não estiver na rota /perfil, apenas redireciona
+                    window.location.href = '/adm';
+                }
+            } else {
+                throw new Error('Erro ao excluir o usuário');
+            }
+        })
+        .then(logoutResponse => {
+            if (logoutResponse && logoutResponse.ok) {
+                window.location.href = '/';
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+        });
 }
 
 function criarJogo() {

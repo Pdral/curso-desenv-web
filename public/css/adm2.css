@@ -354,8 +354,23 @@ input{
     margin-right: 60px;
 }
 
-.header .perfil .usuario .username{
+.header .perfil .moedas .simbolo-moeda{
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.header .perfil .usuario .username {
     color: #2b2b2b;
+    font-weight: bold; 
+}
+
+.header .perfil .usuario .username a {
+    color: inherit; 
+}
+
+.header .perfil .usuario .username a:hover {
+    background-color: #5322ad;
+    color: #fff;
 }
 
 .user-icon {

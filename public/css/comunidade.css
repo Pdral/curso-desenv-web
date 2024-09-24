@@ -296,7 +296,7 @@ body, html {
     flex: 1;
 }
 
-#closeChat {
+#closeChatUsuario {
     cursor: pointer;
 }
 
@@ -343,12 +343,18 @@ body, html {
     margin-bottom: 10px;
 }
 
-.header .perfil .usuario .username{
-    color: #ffffff;
-    font-weight: bold;
-    text-decoration: underline;
+.header .perfil .usuario .username {
+    color: #ffffff; 
+    font-weight: bold; 
 }
 
+.header .perfil .usuario .username a {
+    color: inherit; 
+}
+
+.header .perfil .usuario .username a:hover {
+    color: #9a6eec;
+}
 .user-icon {
     background-color: #ffffff;
     width: 40px; 
