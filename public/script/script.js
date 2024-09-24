@@ -228,6 +228,35 @@ function editarUsuario() {
     });
 }
 
+function alterarSenha() {
+    const mensagemSucesso = document.getElementById('mensagem-sucesso');
+    mensagemSucesso.textContent = '';
+    const senha = document.getElementById("senha").value;
+    const confirmarSenha = document.getElementById("confirmar-senha").value;
+    const mensagemErro = document.getElementById('mensagemErro');
+
+    if (senha !== confirmarSenha) {
+        mensagemErro.textContent = 'As senhas não são iguais. Tente novamente.';
+        return; 
+    }
+    const userId = document.getElementById("usuarioId").value;
+    const body = {senha: senha};
+
+    fetch('http://localhost:8084/alterarSenha?id=' + userId, {
+        method: 'PUT', 
+        body: JSON.stringify(body)
+    })
+    .then(response => {
+        const mensagemErro = document.getElementById('mensagemErro');
+        mensagemErro.textContent = "";
+        const mensagemSucesso = document.getElementById('mensagem-sucesso');
+        mensagemSucesso.textContent = 'Cadastrado com sucesso!';
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
 function excluirUsuario() {
     const userId = window.location.pathname.split("/editar-usuario/").at(-1);
 
@@ -798,6 +827,8 @@ function criarUsuario() {
     const form = document.getElementById('f2');
 
     form.addEventListener('submit', function(event) {
+        const mensagemSucesso = document.getElementById('mensagem-sucesso');
+        mensagemSucesso.textContent = '';
         event.preventDefault(); // Evita o envio padrão do formulário
 
         // Obtém os dados do formulário

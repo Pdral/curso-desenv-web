@@ -355,7 +355,7 @@ const server = http.createServer((req, res) => {
 					res.writeHead(200, { 'Content-Type': 'text/html' });
 					res.end();
 				}
-			break;
+				break;
 			case '/esquecer-senha':
 				if (req.method === 'POST') {
 					let body = '';
@@ -382,6 +382,9 @@ const server = http.createServer((req, res) => {
 						}
 					});
 				}
+			break;
+		case '/alterarSenha':
+			alterarSenha(req, res, u);
 			break;
 		case '/favicon.ico':
 			const faviconPath = path.join(__dirname, 'public', 'favicon.ico');
@@ -479,6 +482,7 @@ function list(fileName, entity, params){
 }
 
 function listUsuarios(usuarios, params){
+	usuarios = usuarios.filter(user => user["perfil"] !== 'admin');
 	const username = params.get("username");
 	if(username != undefined && username != null && username != ""){
 		usuarios = usuarios.filter(user => user["username"].toLowerCase().includes(username.toLowerCase()));
@@ -947,4 +951,23 @@ function ganharMoedas(id, moedas){
 	user.moedas = (Number(user.moedas.replace(/,/g, '.')) + moedas).toFixed(2).toString().replace(/\./g, ',');
 	del(users_path, 'usuarios', id, true);
 	save(users_path, 'usuarios', user, true);
+}
+
+function alterarSenha(req, res, u){
+	params = u.searchParams;
+	const id = params.get("id");
+	var body = '';
+	req.on('data', function (data) {
+		body += data;
+		body = JSON.parse(body);
+		var senha = body.senha;
+		var user = find(users_path, 'usuarios', id);
+		user.senha = senha;
+		del(users_path, 'usuarios', user.id, true);
+		save(users_path, 'usuarios', user);
+		res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8'});
+	});
+	req.on('end', function () {
+		return res.end();
+	});
 }

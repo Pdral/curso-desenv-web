@@ -490,3 +490,7 @@ input{
     color: red;
     font-size: 14px; 
   }
+
+  .mensagem-sucesso {
+    color: green;
+  }

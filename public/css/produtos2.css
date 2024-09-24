@@ -481,3 +481,7 @@ input{
     border-radius: 50%; 
     object-fit: cover; 
 }
+
+.mensagem-sucesso {
+    color: green;
+  }
