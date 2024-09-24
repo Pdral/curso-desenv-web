@@ -1,36 +1,12 @@
 {
   "posts": [
     {
-      "id": 6,
-      "user": "0",
-      "titulo": "teste",
-      "jogo": "Pokémon",
-      "texto": "testes",
-      "comentarios": []
-    },
-    {
       "id": 3,
       "user": "1",
       "titulo": "teste",
       "jogo": "Magic",
       "texto": "teste",
       "comentarios": [
-        {
-          "user": {
-            "id": 3,
-            "username": "Teste",
-            "icon": "/img/default.png"
-          },
-          "texto": "farmando "
-        },
-        {
-          "user": {
-            "id": 3,
-            "username": "Teste",
-            "icon": "/img/default.png"
-          },
-          "texto": "Teste só q legal"
-        },
         {
           "user": {
             "id": "0",
