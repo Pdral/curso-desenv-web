@@ -401,23 +401,24 @@ const server = http.createServer((req, res) => {
 					res.writeHead(401, { 'Content-Type': 'text/html; charset=utf-8'});	
 					res.write("O usuário não tem moedas suficientes");
 				} else{
-					user.moedas = (moedas - preco).toFixed(2).toString();
+					user.moedas = (moedas - preco).toFixed(2).toString().replace(/\./g, ",");
 					user['cartas-compradas'].push({
 						nome: carta.nome,
 						preco: carta.preco,
 						img: carta.frente
 					})
 					del(users_path, 'usuarios', user.id, true);
-					save(users_path, 'usuarios', user);
+					save(users_path, 'usuarios', user, true);
 					var vendedor = carta.vendedor;
-					vendedor.moedas = (moedas + preco).toFixed(2).toString();
+					var vendedorMoedas = Number(vendedor.moedas.replace(/,/g, '.'));
+					vendedor.moedas = (vendedorMoedas + preco).toFixed(2).toString().replace(/\./g, ",");
 					vendedor['cartas-vendidas'].push({
 						nome: carta.nome,
 						preco: carta.preco,
 						img: carta.frente
 					})
 					del(users_path, 'usuarios', vendedor.id, true);
-					save(users_path, 'usuarios', vendedor);
+					save(users_path, 'usuarios', vendedor, true);
 					deleteCarta(carta.id);
 					res.writeHead(201, { 'Content-Type': 'text/html; charset=utf-8'});
 					res.end();
