@@ -1019,6 +1019,7 @@ function configurarLinksNickname() {
 
     // Função para fechar o chat
     function fecharChat() {
+        document.getElementById('chatIconUsuario').style = 'display:none;';
         fecharWebSocket();
         chatWindowUsuario.style.display = 'none';
         isChatOpen = false;
@@ -1031,6 +1032,7 @@ function configurarLinksNickname() {
     nicknameLinks.forEach(span => {
         span.addEventListener('click', (event) => {
             event.preventDefault();
+            document.getElementById('chatIconUsuario').style = '';
             receiverIdAtual = span.getAttribute('data-receiver-id');
             const receiverName = span.textContent.trim(); 
             console.log('Receiver', receiverIdAtual)
