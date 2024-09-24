@@ -385,7 +385,44 @@ const server = http.createServer((req, res) => {
 			break;
 		case '/alterarSenha':
 			alterarSenha(req, res, u);
-			break;
+		case '/comprarCarta':
+			var body = '';
+			req.on('data', function (data) {
+				body += data;
+				body = JSON.parse(body);
+				var user = find(users_path, 'usuarios', body.user);
+				var carta = getCarta(body.carta);
+				var moedas = Number(user.moedas.replace(/,/g, '.'));
+				var preco = Number(carta.preco.replace(/,/g, '.'));
+				if(moedas < preco){
+					res.writeHead(401, { 'Content-Type': 'text/html; charset=utf-8'});	
+					res.write("O usuário não tem moedas suficientes");
+				} else{
+					user.moedas = (moedas - preco).toFixed(2).toString();
+					user['cartas-compradas'].push({
+						nome: carta.nome,
+						preco: carta.preco,
+						img: carta.frente
+					})
+					del(users_path, 'usuarios', user.id, true);
+					save(users_path, 'usuarios', user);
+					var vendedor = carta.vendedor;
+					vendedor.moedas = (moedas + preco).toFixed(2).toString();
+					vendedor['cartas-vendidas'].push({
+						nome: carta.nome,
+						preco: carta.preco,
+						img: carta.frente
+					})
+					del(users_path, 'usuarios', vendedor.id, true);
+					save(users_path, 'usuarios', vendedor);
+					deleteCarta(carta.id);
+					res.writeHead(201, { 'Content-Type': 'text/html; charset=utf-8'});
+					res.end();
+				}
+			});
+			req.on('end', function () {
+				return res.end();
+			}); break;
 		case '/favicon.ico':
 			const faviconPath = path.join(__dirname, 'public', 'favicon.ico');
             fs.readFile(faviconPath, (err, data) => {
