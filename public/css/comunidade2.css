@@ -3,6 +3,7 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
+    background-color: #2b2b2b;
 }
 .header {
     text-align: center;
@@ -64,7 +65,7 @@ body, html {
     text-decoration: none;
 }
 
-#increaseFont, #decreaseFont {
+#increaseFont, #decreaseFont, #logout {
     color: #cbb7f1;
     background-color: #2b2b2b;
     font-size: 11px;
@@ -217,6 +218,7 @@ body, html {
 }
 
 .post-header .nickname {
+    text-decoration: underline;
     font-weight: bold;
     color: #cbb7f1;
 }
@@ -232,33 +234,9 @@ body, html {
     cursor: pointer;
 }
 
-.post-actions .like {
-    background-color: #F6B7B7;
-    color: #2b2b2b;
-}
-
 .post-actions .comment {
     background-color: #E4BBF7;
     color: #2b2b2b;
-}
-
-.post-actions .share {
-    background-color: #7BDFEF;
-    color: #2b2b2b;
-}
-
-.like:hover {
-    background-color: #ee5e5e;
-}
-
-.heart-icon {
-    width: 15px;
-    height: 15px;
-    fill: #2b2b2b;
-}
-
-.like.active .heart-icon {
-    fill: white;
 }
 
 .comment-icon {
@@ -269,16 +247,6 @@ body, html {
 
 .comment:hover {
     background-color: #6d079c;
-}
-
-.share:hover {
-    background-color: #0056b3;
-}
-
-.share-icon {
-    width: 15px;
-    height: 15px;
-    fill: #2b2b2b;
 }
 
 /* Ícone flutuante */
@@ -333,9 +301,10 @@ body, html {
     max-height: 200px;
     overflow-y: auto;
     flex: 1;
+    color: #cbb7f1;
 }
 
-#closeChat {
+#closeChatUsuario {
     cursor: pointer;
 }
 
@@ -350,20 +319,6 @@ body, html {
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
-}
-
-.chat-details {
-    background-color: #c4c4c4;
-    font-size: 12px;
-    padding: 8px;
-    border-radius: 8px;
-    width: 100%;
-}
-
-.chat-details .nickname {
-    font-weight: bold;
-    margin-bottom: 5px;
-    display: block;
 }
 
 .header .perfil{
@@ -382,8 +337,18 @@ body, html {
     margin-bottom: 10px;
 }
 
-.header .perfil .usuario .username{
+.header .perfil .usuario .username {
     color: #2b2b2b;
+    font-weight: bold; 
+}
+
+.header .perfil .usuario .username a {
+    color: inherit; 
+}
+
+.header .perfil .usuario .username a:hover {
+    background-color: #5322ad;
+    color: #fff;
 }
 
 .user-icon {

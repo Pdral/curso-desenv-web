@@ -65,7 +65,7 @@ body, html {
     text-decoration: underline; 
   }
 
-#increaseFont, #decreaseFont {
+#increaseFont, #decreaseFont, #logout {
     color: #5322ad;
     background-color: #ffffff;
     font-size: 9px;
@@ -411,14 +411,22 @@ input{
     margin-right: 60px;
 }
 
+.header .perfil .usuario .username {
+    color: #ffffff; 
+    font-weight: bold; 
+}
+
+.header .perfil .usuario .username a {
+    color: inherit; 
+}
+
+.header .perfil .usuario .username a:hover {
+    color: #9a6eec;
+}
+
 .header .perfil .moedas .simbolo-moeda{
     font-size: 2.5em;
     margin-bottom: 10px;
-}
-
-.header .perfil .usuario .username{
-    color: #ffffff;
-    font-weight: bold;
 }
 
 .user-icon {

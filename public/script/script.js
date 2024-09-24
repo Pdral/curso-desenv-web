@@ -259,15 +259,30 @@ function alterarSenha() {
 
 function excluirUsuario() {
     const userId = window.location.pathname.split("/editar-usuario/").at(-1);
-
     const url = 'http://localhost:8084/usuarios?id=' + userId;
-
     fetch(url, {method: 'DELETE'}).then(response => {
         window.location.href = '/adm';
     }).catch(error => {
         console.error(error);
     });
-    
+}
+
+function autoExcluirUsuario() {
+    const form = document.getElementById('logout-form');
+    userId = document.getElementById("userId").value;
+    const url = 'http://localhost:8084/usuarios?id=' + userId;
+    console.log('URL de exclusão:', url); // Debug: Verifique a URL
+    fetch(url, { method: 'DELETE' })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro ao excluir o usuário');
+        }
+        form.submit();
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+    });
+    form.submit();
 }
 
 function criarJogo() {
