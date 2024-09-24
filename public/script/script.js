@@ -1126,6 +1126,7 @@ function criarMensagem(receiverId) {
             if (socket && socket.readyState === WebSocket.OPEN) {                
                 socket.send(JSON.stringify(messageData));
                 document.getElementById('messageInput').value = ''; // Limpa o campo de entrada
+                carregarMensagensAntigas(receiverId);
             } else {
                 console.error('WebSocket não está aberto. Mensagem não enviada.');
             }

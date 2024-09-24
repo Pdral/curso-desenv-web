@@ -10,6 +10,7 @@
         <button id="pesquisar" onclick="filtraPostsTitulo()">Pesquisar</button>
         <button id="filterButton">Filtros</button>
         <div class="dropdown-content" id="dropdownContent">
+            <a href="#" onclick="filtraPosts('')">Todos os jogos</a>
             <% for (var i=0; i<jogos.length; i++) {%>
                 <a href="#" onclick="filtraPosts('<%= jogos[i]["nome"] %>')"><%= jogos[i]["nome"] %></a>
             <% } %>

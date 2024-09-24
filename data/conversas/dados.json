@@ -1,36 +1,6 @@
 {
   "conversas": [
     {
-      "id": 1,
-      "users": [
-        "0",
-        "2"
-      ],
-      "messages": [
-        {
-          "sender": "0",
-          "message": "Seja bem-vindo(a) ao GrapeCards! Estou à disposição caso tenha alguma dúvida.",
-          "timestamp": "2024-09-18T14:30:00",
-          "icon": "/img/gato.png",
-          "username": "Carla Mariana"
-        },
-        {
-          "sender": "0",
-          "message": "Olá, como você está?",
-          "timestamp": "2024-09-18T14:20:00",
-          "icon": "/img/gato.png",
-          "username": "Carla Mariana"
-        },
-        {
-          "sender": "2",
-          "message": "Estou bem, e você?",
-          "timestamp": "2024-09-18T14:22:00",
-          "icon": "/img/porco.png",
-          "username": "Joãozinho"
-        }
-      ]
-    },
-    {
       "id": 2,
       "users": [
         "1",
@@ -50,29 +20,13 @@
           "timestamp": "2024-09-18T14:25:00",
           "icon": "/img/cachorro.png",
           "username": "Paulo Davi"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "users": [
-        "1",
-        "2"
-      ],
-      "messages": [
-        {
-          "sender": "1",
-          "message": "Oi",
-          "timestamp": "2024-09-20T14:35:49.281Z",
-          "icon": "/img/cachorro.png",
-          "username": "Paulo Davi"
         },
         {
-          "sender": "2",
-          "message": "Oi! Tudo bem?",
-          "timestamp": "2024-09-20T16:22:45.889Z",
-          "icon": "/img/porco.png",
-          "username": "Joãozinho"
+          "sender": "1",
+          "message": "nem responde",
+          "timestamp": "2024-09-24T18:31:27.931Z",
+          "icon": "/img/cachorro.png",
+          "username": "Paulo Davi"
         }
       ]
     }
