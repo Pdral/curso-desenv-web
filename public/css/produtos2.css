@@ -330,6 +330,11 @@ body, html {
     background-size: cover; 
 }
 
+.usuario-a-editar .cabecalho-descricao{
+    color: #9a6eec;
+    font-weight: bold;
+}
+
 .descricao-produto{
     text-align: center;
     display: flex;
@@ -357,6 +362,10 @@ body, html {
 
 .descricao-produto .descricao{
     color: #CBB7F1;
+}
+
+.descricao-perfil {
+    color: #9a6eec;
 }
 
 .botao-comprar{
