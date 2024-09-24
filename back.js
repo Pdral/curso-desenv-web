@@ -385,6 +385,7 @@ const server = http.createServer((req, res) => {
 			break;
 		case '/alterarSenha':
 			alterarSenha(req, res, u);
+			break;
 		case '/comprarCarta':
 			var body = '';
 			req.on('data', function (data) {
