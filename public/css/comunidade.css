@@ -64,7 +64,7 @@ body, html {
     text-decoration: underline; 
   }
 
-#increaseFont, #decreaseFont {
+#increaseFont, #decreaseFont, #logout {
     color: #5322ad;
     background-color: #ffffff;
     font-size: 9px;
@@ -211,6 +211,7 @@ body, html {
     margin-right: 10px; 
 }
 .post-header .nickname {
+    text-decoration: underline;
     font-weight: bold;
     color: #5322ad;
 }
@@ -226,33 +227,9 @@ body, html {
     cursor: pointer;
 }
 
-.post-actions .like {
-    background-color: #e01c1c;
-    color: #fff;
-}
-
 .post-actions .comment {
     background-color: #8517b8;
     color: #fff;
-}
-
-.post-actions .share {
-    background-color: #17a2b8;
-    color: #fff;
-}
-
-.like:hover {
-    background-color: #6e0505;
-}
-
-.heart-icon {
-    width: 15px;
-    height: 15px;
-    fill: #fff;
-}
-
-.like.active .heart-icon {
-    fill: #4d4a4a;
 }
 
 .comment-icon {
@@ -263,16 +240,6 @@ body, html {
 
 .comment:hover {
     background-color: #6d079c;
-}
-
-.share:hover {
-    background-color: #0056b3;
-}
-
-.share-icon {
-    width: 15px;
-    height: 15px;
-    fill: #fff;
 }
 
 /* Ícone flutuante */
@@ -379,6 +346,7 @@ body, html {
 .header .perfil .usuario .username{
     color: #ffffff;
     font-weight: bold;
+    text-decoration: underline;
 }
 
 .user-icon {

@@ -59,7 +59,7 @@ body, html {
 }
 
 /* Estilo para os botões de fonte */
-#increaseFont, #decreaseFont {
+#increaseFont, #decreaseFont, #logout {
   color: #5322ad;
   background-color: #ffffff;
   font-size: 9px;

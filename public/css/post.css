@@ -193,19 +193,25 @@ body, html {
     margin-top: 30px;
 }
 
-.comment {
-    border-top: 1px solid #ddd;
-    padding: 10px 0;
+#comments {
+    border-top: 1px solid #aca8a8;
 }
 
-.comment p {
+#comments p {
     color: #494848;
-    margin: 0;
+    margin-top: -4px;
+}
+
+.user-comment {
+    display: inline-flex;
+    align-items: center; 
+    gap: 10px;
 }
 
 .comments-section h3{
     color: #424141;
 }
+
 .comment-form {
     margin-top: 30px;
     box-sizing: border-box;
@@ -254,33 +260,9 @@ body, html {
     cursor: pointer;
 }
 
-.post-actions .like {
-    background-color: #e01c1c;
-    color: #fff;
-}
-
 .post-actions .comment-button {
     background-color: #8517b8;
     color: #fff;
-}
-
-.post-actions .share {
-    background-color: #17a2b8;
-    color: #fff;
-}
-
-.like:hover {
-    background-color: #6e0505;
-}
-
-.heart-icon {
-    width: 15px;
-    height: 15px;
-    fill: #fff;
-}
-
-.like.active .heart-icon {
-    fill: #4d4a4a;
 }
 
 .comment-icon {
@@ -291,16 +273,6 @@ body, html {
 
 .comment-button:hover {
     background-color: #6d079c;
-}
-
-.share:hover {
-    background-color: #0056b3;
-}
-
-.share-icon {
-    width: 15px;
-    height: 15px;
-    fill: #fff;
 }
 
 /* Estilo geral do formulário do post */
@@ -407,6 +379,7 @@ body, html {
 .header .perfil .usuario .username{
     color: #ffffff;
     font-weight: bold;
+    text-decoration: underline;
 }
 
 .user-icon {

@@ -29,6 +29,16 @@
       "icon": "/img/porco.png",
       "cartas-compradas": [],
       "cartas-vendidas": []
+    },
+    {
+      "username": "Teste",
+      "moedas": "300,00",
+      "perfil": "premium",
+      "icon": "/img/default.png",
+      "cartas-compradas": [],
+      "cartas-vendidas": [],
+      "senha": "6344bc909fe02810930ffe29e15b938646276f66adb336e6b76ef44f78eb90d45741fcc4e1088ff9e1ac537b88a5467a4c4edd395cf15e87f95ad18777ac8fb3",
+      "id": 3
     }
   ]
 }
