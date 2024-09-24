@@ -305,8 +305,10 @@ const server = http.createServer((req, res) => {
 							res.end();
 						}
 					} else {
-						res.writeHead(400, { 'Content-Type': 'text/plain' });
-						res.end('Dados inválidos');
+						res.writeHead(302, {
+							'Location': 'http://localhost:8083/login?error=' + encodeURIComponent('Dados inválidos')
+						});
+						res.end();
 					}
 				});
 			} else {
